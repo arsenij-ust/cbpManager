@@ -1,0 +1,24 @@
+{
+    "id": "830B2300",
+    "path": "~/R/cbpManager/inst/tabs/validationTab.R",
+    "project_path": "inst/tabs/validationTab.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1604491826552.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "cursorPosition": "7,40",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1604494005,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1604494005484,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,24 @@
+{
+    "id": "09363AFC",
+    "path": "~/R/cbpManager/inst/tabs/timelineTab.R",
+    "project_path": "inst/tabs/timelineTab.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1604493977972.0,
+    "source_on_save": false,
+    "relative_order": 10,
+    "properties": {
+        "cursorPosition": "81,31",
+        "scrollLine": "55"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1604413873,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1604413873,
+    "read_only": false,
+    "read_only_alternatives": []
+}

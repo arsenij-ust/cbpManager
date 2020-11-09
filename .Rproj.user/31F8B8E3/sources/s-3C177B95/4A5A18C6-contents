@@ -1,0 +1,35 @@
+validationTags <- eventReactive(input$runValidation, {
+  req(input$cancer_study_identifier)
+  tags <- list()
+  
+  studyFiles <- list.files(file.path(study_dir, input$cancer_study_identifier))
+  studyFiles <- c(studyFiles, list.files(file.path(study_dir, input$cancer_study_identifier, "case_lists")))
+  requiredFiles <- c(
+    "data_clinical_sample.txt",
+    "data_clinical_patient.txt",
+    "data_mutations_extended.txt",
+    "meta_study.txt",
+    "meta_clinical_sample.txt",
+    "meta_clinical_patient.txt",
+    "meta_mutations_extended.txt",
+    "cases_all.txt"
+  )
+  tags <- rlist::list.append(tags, hr())
+  tags <- rlist::list.append(tags, h4("Required files:"))
+  for (f in requiredFiles){
+    if(f %in% studyFiles){
+      tags <- rlist::list.append(tags, p(paste0(f," exists"), class = "valid"))
+    } else {
+      tags <- rlist::list.append(tags, p(paste0(f," not exists"), class = "invalid"))
+    }
+  }
+  tags <- rlist::list.append(tags, h4("Optional files:"))
+  
+  return(tags)
+})
+
+output$validateUI <- renderUI({
+  tagList(
+    validationTags()
+  )
+})

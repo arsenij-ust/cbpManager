@@ -1,0 +1,24 @@
+{
+    "id": "3974F829",
+    "path": "~/R/cbpManager/R/functions.R",
+    "project_path": "R/functions.R",
+    "type": "r_source",
+    "hash": "1225768533",
+    "contents": "",
+    "dirty": false,
+    "created": 1604308319916.0,
+    "source_on_save": false,
+    "relative_order": 8,
+    "properties": {
+        "cursorPosition": "187,47",
+        "scrollLine": "168"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1604309351,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1604309351358,
+    "read_only": false,
+    "read_only_alternatives": []
+}
