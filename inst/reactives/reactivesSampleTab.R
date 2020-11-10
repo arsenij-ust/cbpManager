@@ -92,10 +92,10 @@ observeEvent(input$ModalbuttonAddSample, {
     }
 
     # add new row
-    loadedData$data_clinical_sample <- rbind(loadedData$data_clinical_sample, addSampleValues)
+    loadedData$data_clinical_sample <- rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
     removeModal()
   } else {
-    loadedData$data_clinical_sample <- rbind(loadedData$data_clinical_sample, addSampleValues)
+    loadedData$data_clinical_sample <- rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
     removeModal()
   }
 })
