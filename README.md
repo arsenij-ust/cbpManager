@@ -1,6 +1,6 @@
 # cbpManager
 
-Description to be done
+This R package provides an R Shiny application that enables the user to generate, manage and edit data and metadata files suitable for the import in cBioPortal for Cancer Genomics. 
 
 ## Install
 
@@ -10,7 +10,10 @@ This project uses [node](http://nodejs.org) and [npm](https://npmjs.com). Go che
 install.packages("devtools")
 
 # exchange "username" and "password" in the following command with your credentials
-devtools::install_git("https://gitlab.miracum.org/mainz/cbpmanager.git", credentials=git2r::cred_user_pass("username", "password"))
+devtools::install_git(
+  "https://gitlab.miracum.org/mainz/cbpmanager.git", 
+  credentials=git2r::cred_user_pass("username", "password")
+)
 ```
 
 ## Usage
