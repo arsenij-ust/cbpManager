@@ -60,7 +60,7 @@ observeEvent(input$ModalbuttonAddPatient, {
   } else if(addPatientValues["PATIENT_ID"] %in% patient_id_list$ids){
     showNotification("PATIENT_ID already exists.", type="error", duration = NULL)
   } else {
-    loadedData$data_clinical_patient <- rbind(loadedData$data_clinical_patient, addPatientValues)
+    loadedData$data_clinical_patient <- rbind(loadedData$data_clinical_patient, addPatientValues[colnames(loadedData$data_clinical_patient)])
     removeModal()
   }
 })
