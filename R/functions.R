@@ -1,4 +1,5 @@
 #' Define the datatype required in cBioPortal file format
+#' NOT WORKING YET
 #'
 #' @param df data.frame
 #' @return String according to the data type of the column
@@ -325,7 +326,6 @@ fncols <- function(data, cname) {
 #' @return data.frame
 generateTimelineUI <- function(colname, mode = c("add", "edit"), data = NULL, selected_row = NULL, patientIDs = NULL){
   mode <- match.arg(mode)
-
 
   fluidRow(column(
         width = 8,
