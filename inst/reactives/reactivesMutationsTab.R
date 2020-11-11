@@ -19,11 +19,11 @@ output$MAFdata <- DT::renderDT({
 observeEvent(input$saveMAF, {
   if (!is.null(input$chooseMAF)){
     # data_mutations_extended
-    write.table(loadedData$data_mutations_extended, file.path("study", input$cancer_study_identifier, "data_mutations_extended.txt.temp"), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
-    file.rename(file.path("study", input$cancer_study_identifier, "data_mutations_extended.txt.temp"), file.path("study", input$cancer_study_identifier, "data_mutations_extended.txt"))
+    write.table(loadedData$data_mutations_extended, file.path(study_dir, input$cancer_study_identifier, "data_mutations_extended.txt.temp"), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
+    file.rename(file.path(study_dir, input$cancer_study_identifier, "data_mutations_extended.txt.temp"), file.path(study_dir, input$cancer_study_identifier, "data_mutations_extended.txt"))
 
     # add cases_sequenced
-    case_list_dir <- file.path(study_dir, input$cancer_study_identifier, "case_list")
+    case_list_dir <- file.path(study_dir, input$cancer_study_identifier, "case_lists")
     ifelse(!dir.exists(case_list_dir), dir.create(case_list_dir), FALSE)
     cases_samples <- loadedData$data_clinical_sample[3:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
     cases_sequenced_df <- data.frame(V1 = c("cancer_study_identifier",

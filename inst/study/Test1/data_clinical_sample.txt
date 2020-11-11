@@ -1,0 +1,7 @@
+#Patient Identifier	Sample Identifier	Oncotree code	Cancer type	Cancer type detailed	Tumor tissue site
+#Patient identifier	Sample identifier	Oncotree code	Cancer type	Cancer type detailed	Tumor tissue site
+#STRING	STRING	STRING	STRING	STRING	STRING
+#1	1	1	1	1	1
+PATIENT_ID	SAMPLE_ID	ONCOTREE_CODE	CANCER_TYPE	CANCER_TYPE_DETAILED	TUMOR_TISSUE_SITE
+Pat1	S1_Pat1	gcb	Mature B-Cell Neoplasms	Germinal Center B-Cell Type	Lymphoid
+Pat1	S2_Pat1	ohnca	Head and Neck Cancer	Head and Neck Carcinoma, Other	Head and Neck
