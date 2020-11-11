@@ -34,16 +34,31 @@
 #   )
 # })
 
-# getPage <- eventReactive(input$runValidation, {
-#   req(input$cancer_study_identifier)
-#
-#   reticulate::use_condaenv("r-reticulate", required = TRUE)
-#   py_modules <- c("requests", "PyYAML", "jinja2", "importer")
-#   for (module in py_modules){
-#     if(reticulate::py_module_available(module)){
-#       reticulate::py_install(module, pip = TRUE)
-#     }
-#   }
+getPage <- eventReactive(input$runValidation, {
+  req(input$cancer_study_identifier)
+
+  cl <- basiliskStart(my_env)
+
+
+  validateStudy <- basiliskRun(cl, function() {
+    reticulate::source_python("inst/python/importer/validateData.py")
+
+    main_validate(error_file=None, html_table='validation_testpatient.html', max_reported_values=3, no_portal_checks=True, portal_info_dir=None, relaxed_clinical_definitions=False, strict_maf_checks=False, study_directory='./testpatient/', url_server='http://localhost:8080', verbose=True)
+
+  })
+  basiliskStop(cl)
+
+
+
+  # reticulate::use_condaenv("r-reticulate", required = TRUE)
+  # py_modules <- c("requests", "PyYAML", "jinja2", "importer")
+  # for (module in py_modules){
+  #   if(reticulate::py_module_available(module)){
+  #     reticulate::py_install(module, pip = TRUE)
+  #   }
+  # }
+
+
 #   validationFile <- paste0(input$cancer_study_identifier,"_validation.html")
 #   validationPath <-file.path(study_dir, input$cancer_study_identifier, validationFile)
 #
@@ -55,10 +70,12 @@
 #   ######
 #
 #   reticulate::use_condaenv("r-reticulate", required = TRUE)
-#   source_python("inst/python/validateDataWrapper.py")
+  # source_python("inst/python/validateDataWrapper.py")
 #   executeScript("test", "hallo")
 #
-#   source_python("inst/python/importer/validateData.py")
+
+
+
   #error_file=None, html_table='validation_testpatient.html', max_reported_values=3, no_portal_checks=True, portal_info_dir=None, relaxed_clinical_definitions=False, strict_maf_checks=False, study_directory='./testpatient/', url_server='http://localhost:8080', verbose=True
 
 

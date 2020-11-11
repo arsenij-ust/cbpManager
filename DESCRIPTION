@@ -30,4 +30,6 @@ Imports:
     plyr,
     rlist,
     magrittr,
+    basilisk,
     reticulate
+StagedInstall: no
