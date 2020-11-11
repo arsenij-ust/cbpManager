@@ -5,6 +5,9 @@ mutationsTab <- tabItem(
     width = 12,
     box(
       title="Description",
+      collapsible = TRUE,
+      collapsed = TRUE,
+      solidHeader = TRUE,
       htmltools::HTML(
         "<p><b>Load a valid Mutation Annotation Format (MAF) file.</b> This file is used in cBioPortal for the mutation panel (see image on the right.)</p>
         <h4>A minimal MAF file with only the columns required for cBioPortal:</h4>

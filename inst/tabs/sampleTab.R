@@ -5,21 +5,29 @@ sampleTab <- tabItem(
     width = 12,
     box(
       title="Description",
+      collapsible = TRUE,
+      collapsed = TRUE,
+      solidHeader = TRUE,
       htmltools::HTML(
-        "<p><b>Add sample data to patients, which are shown in cBioPortal in form of the table</b> (see image on the right.)</br>The first two rows contain a <b>short name</b>  (1st row) and a <b>longer name</b> (2nd row) of the sample attribute.
-        </br>
-        </br>
-        <b>Double-click</b> on a cell in the table to edit the table.
-        </br>
-        To confirm the input press <b>'CTRL+Enter'</b>.
-        </br>
-        Add a new patient (row) by clicking on the button <b>'Add Patient'</b>.
-        </br>
-        <b>'Save changes'</b> saves the edited table to the final file.</p>"
+        "<p><b>Add sample data to patients, which are shown in cBioPortal in form of the table</b> (see image on the right.)</br>The first two rows contain a <b>short name</b>  (1st row) and a <b>longer name</b> (2nd row) of the sample attribute.</p>
+        <p><b>Edit table:</b></p>
+        <ul>
+        <li><b>Add sample:</b> opens a dialog window with input fileds per column of the table.</li>
+        <li><b>Edit sample:</b> select a row by clicking on it and then click on 'Edit patient' to edit the values in this row.</li>
+        <li><b>Delete sample:</b> select a row by clicking on it and then click on 'Delete sample' to delete the selected entry.</li>
+        <li><b>Add column(s):</b> after clicking on 'Add column' choose whether you want to add a pre-defined column or create a custom column. In case of a custom column, you need to provide a 'column name', a 'short name' and a 'long name' for this column.</li>
+        <li><b>Delete column(s):</b> choose the columns you want to delete.</li>
+        <li><b>Save:</b> saves the edited table to the final file.</li>
+        </ul>
+        "
       ),
       width = 6
       ),
     box(
+      title="Sample from cBioPortal",
+      collapsible = TRUE,
+      collapsed = FALSE,
+      solidHeader = TRUE,
       tags$head(
         tags$style(
           type="text/css",
@@ -33,12 +41,15 @@ sampleTab <- tabItem(
     width = 12,
     box(
       title="Columns",
+      collapsible = TRUE,
+      collapsed = TRUE,
+      solidHeader = TRUE,
       column(
         6,
         htmltools::HTML(
           "<h4>Required columns</h4>
           <ul>
-          <li>The first column <b>'Patient_ID'</b> is <b>obligatory</b> and contains patient identifier. (Please do not override the cells containing 'Patient Identifier' and 'Patient identifier' in the first column.) </li><li>The second column <b>'SAMPLE_ID'</b> is also <b>required</b> and contains a unique sample identifier.
+          <li>The first column <b>'PATIENT_ID'</b> is <b>obligatory</b> and contains patient identifier. (Please do not override the cells containing 'Patient Identifier' and 'Patient identifier' in the first column.) </li><li>The second column <b>'SAMPLE_ID'</b> is also <b>required</b> and contains a unique sample identifier.
           </li>
           </ul>
           <p>By adding 'PATIENT_ID' here, cBioPortal will map the given sample to this patient. This enables one to associate multiple samples to one patient. For example, a single patient may have had multiple biopsies, each of which has been genomically profiled. </p>
