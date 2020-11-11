@@ -8,7 +8,7 @@ This project uses [node](http://nodejs.org) and [npm](https://npmjs.com). Go che
 
 ```
 remotes::install_gitlab("arsenij_temp/cbpmanager", host="https://gitlab.miracum.org/")
-)
+
 ```
 
 ## Usage
