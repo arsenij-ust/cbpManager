@@ -171,12 +171,12 @@ observeEvent(input$ModalbuttonEditSample, {
     }
 
     for(i in colnames(loadedData$data_clinical_sample)){
-      loadedData$data_clinical_sample[which(loadedData$data_clinical_sample$SAMPLE_ID == editSampleValues$SAMPLE_ID),i] <- editSampleValues[i]
+      loadedData$data_clinical_sample[input$sampleTable_rows_selected,i] <- editSampleValues[i]
     }
     removeModal()
   } else {
     for(i in colnames(loadedData$data_clinical_sample)){
-      loadedData$data_clinical_sample[which(loadedData$data_clinical_sample$SAMPLE_ID == editSampleValues$SAMPLE_ID),i] <- editSampleValues[i]
+      loadedData$data_clinical_sample[input$sampleTable_rows_selected,i] <- editSampleValues[i]
     }
     removeModal()
   }

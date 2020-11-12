@@ -2,7 +2,8 @@
 % Please edit documentation in R/functions.R
 \name{findDatatype}
 \alias{findDatatype}
-\title{Define the datatype required in cBioPortal file format}
+\title{Define the datatype required in cBioPortal file format
+NOT WORKING YET}
 \usage{
 findDatatype(df)
 }
@@ -14,4 +15,5 @@ String according to the data type of the column
 }
 \description{
 Define the datatype required in cBioPortal file format
+NOT WORKING YET
 }
