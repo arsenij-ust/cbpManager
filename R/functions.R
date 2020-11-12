@@ -137,14 +137,14 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
       width = 8,
       selectInput(inputId=paste0(id_prefix,colname),
                   label = colname,
-                  choices = c("Male", "Female", "Diverse"),
+                  choices = c("Unkown", "Male", "Female", "Diverse"),
                   selected = selected),))
   } else if(colname == "SEX"){
     fluidRow(column(
       width = 8,
       selectInput(inputId=paste0(id_prefix,colname),
                   label = colname,
-                  choices = c("Male", "Female", "Diverse"),
+                  choices = c("Unkown", "Male", "Female", "Diverse"),
                   selected = selected),))
   } else if(colname == "AGE"){
     fluidRow(column(
@@ -197,6 +197,11 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
   }
 }
 
+#' tbd
+#'
+#' @param colname tbd
+#' @param mode tbd
+#' @return tbd
 generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")){
   mode <- match.arg(mode)
 
@@ -239,14 +244,12 @@ generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")){
 
 }
 
-#' Generate UI input widget
+#' tbd
 #'
-#' @param colname A character string - the name of the column, that will be the label of the input
-#' @param mode "add" or "edit" - wether to use existing values or not
-#' @param tab "Patient", "Sample" - The used tab; sets the html id prefix of the input
-#' @param data A data.frame.
-#' @param selected_row A number indicating the row number of the selected row in the data.frame.
-#' @return A sanitized string.
+#' @param session tbd
+#' @param row_last_clicked tbd
+#' @param mode tbd
+#' @return tbd
 updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "edit")){
   mode <- match.arg(mode)
 
@@ -285,7 +288,7 @@ fncols <- function(data, cname) {
   return(data)
 }
 
-#' generate UI elements for the
+
 # timelineModal <- function(data, selected_row = NULL, patIDs, timeline = c("treatment", "surgery", "status"), mode = c("add","edit")){
 #   timeline <- match.arg(timeline)
 #   mode <- match.arg(mode)
@@ -302,34 +305,128 @@ fncols <- function(data, cname) {
 #     }
 #
 #     fluidRow(
-#     column(
-#       width = 8,
-#       selectInput(
-#         "treatmentPatientID",
-#         label = "Select the Patient ID",
-#         choices = c("", unique(patIDs[which(!is.na(patIDs))])),
-#         selected = selectedPatId
-#       ),
-#       dateRangeInput("treatmentRange", "Start and End of treatment"),
-#       selectInput("treatmentType", "Treatment type", choices = c("Medical Therapy", "Radiation Therapy"), selected = selectedTreatmentType),
-#       selectInput("treatmentSubtype", "Treatment subtype", choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"), selected = selectedTreatmentSubtype),
-#       textInput("treatmentAgent", "Agent", placeholder = "e.g. Med_X", value = selectedTreatmentAgent)
-#     ))
+#       column(
+#         width = 8,
+#         selectInput(
+#           "treatmentPatientID",
+#           label = "Select the Patient ID",
+#           choices = c("", unique(patIDs[which(!is.na(patIDs))])),
+#           selected = selectedPatId
+#         ),
+#         dateRangeInput("treatmentRange", "Start and End of treatment"),
+#         selectInput("treatmentType", "Treatment type", choices = c("Medical Therapy", "Radiation Therapy"), selected = selectedTreatmentType),
+#         selectInput("treatmentSubtype", "Treatment subtype", choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"), selected = selectedTreatmentSubtype),
+#         textInput("treatmentAgent", "Agent", placeholder = "e.g. Med_X", value = selectedTreatmentAgent)
+#       ))
 #   }
 #
 # }
 
-#' generate UI elements for timeline modal dialog
+#' tbd
 #'
-#' @param data data.frame
-#' @param cname column name
-#' @return data.frame
+#' @param colname tbd
+#' @param mode tbd
+#' @param data tbd
+#' @param selected_row tbd
+#' @param patientIDs tbd
+#' @return tbd
 generateTimelineUI <- function(colname, mode = c("add", "edit"), data = NULL, selected_row = NULL, patientIDs = NULL){
+  #ns <- NS(id)
   mode <- match.arg(mode)
 
+
   fluidRow(column(
-        width = 8,
-        textInput(inputId=colname,
-                  label = colname,
-                  value = patientIDs),))
+    width = 8,
+    textInput(inputId=colname,
+              label = colname,
+              value = patientIDs),))
 }
+
+#' Convert the cBioPortal sample- and patient-data file format into a data.frame
+#'
+#' This function takes a file object (from read.table), removes the # symbol,
+#' sets the 5th row as the column names of the data.frame
+#' and removes the rows containing the priority, data type and column name.
+#' use read.table as follows: read.table(file, sep="\t", colClasses = "character", comment.char = "")
+#' @param data The data.frame of a cBioPortal sample/patient data file
+#' @return data.frame
+cBioPortalToDataFrame <- function(data){
+  data$V1 <- sub(pattern="^#", replacement="", x=data$V1)
+  colnames(data) <- data[5,]
+  data <- data[-c(3,4,5),]
+  return(data)
+}
+
+#' Get Sample IDs associated with Patient IDs from the data_clinical_sample.txt file
+#'
+#' @param file_path A character string.
+#' @param patIDs A character string.
+#' @return vector with
+getSampleIDs <- function(file_path, patIDs){
+  if (file.exists(file_path)){
+    # read data file
+    whole_data <- read.table(file_path, sep="\t", colClasses = "character", comment.char = "")
+    whole_data <- cBioPortalToDataFrame(whole_data)
+    associatedSampleIDs <- whole_data[whole_data$PATIENT_ID %in% patIDs, "SAMPLE_ID"]
+    if(length(associatedSampleIDs)==0) return(NULL) else return(associatedSampleIDs)
+  } else {
+    return(NULL)
+  }
+}
+
+#' Import patient data into current study data.frames
+#'
+#' @param mode tbd
+#' @param file_name tbd
+#' @param file_path tbd
+#' @param patIDs tbd
+#' @param data tbd
+#' @param associatedSampleIDs tbd
+#' @return a data.frame
+importPatientData <- function(mode=c("patient", "sample", "mutations", "timelines"), file_name, file_path, patIDs, data, associatedSampleIDs = NULL){
+  if (file.exists(file_path)){
+    # read data file
+    whole_data <- NULL
+    if(mode=="patient"|mode=="sample"){
+      whole_data <- read.table(file_path, sep="\t", colClasses = "character", comment.char = "")
+      whole_data <- cBioPortalToDataFrame(whole_data)
+    } else if(mode=="mutations"|mode=="timelines"){
+      whole_data <- as.data.frame(vroom::vroom(file_path, delim = "\t"))
+    }
+
+    # extract rows
+    if(mode=="patient"|mode=="sample"| mode=="timelines"){
+      extracted_data <- whole_data[whole_data$PATIENT_ID %in% patIDs, ]
+      emptyColNames <- setdiff(colnames(extracted_data), colnames(data))
+    } else if(mode=="mutations"){
+      if(is.null(associatedSampleIDs)){
+        return(data)
+      } else {
+        extracted_data <- whole_data[whole_data$Tumor_Sample_Barcode %in% associatedSampleIDs, ]
+      }
+    }
+
+    # add rows to table
+    if(nrow(extracted_data)!=0){
+      data <- dplyr::bind_rows(data, extracted_data)
+    }
+
+    # add missing short- and long column names
+    if(mode=="patient"|mode=="sample"){
+      if(length(emptyColNames)!=0){
+        for (emptyCol in emptyColNames){
+          data[1, emptyCol] <- whole_data[1, emptyCol]
+          data[2, emptyCol] <- whole_data[2, emptyCol]
+        }
+      }
+    }
+
+    showNotification(paste0("Successfully imported data from ",file_name, "!"), type="message", duration = NULL)
+    return(data)
+  } else {
+    showNotification(paste0("File ",file_name," not found in study."), type="warning", duration = NULL)
+    return(data)
+  }
+}
+
+

@@ -181,51 +181,51 @@ observeEvent(input$ModalbuttonImportPatient, {
       file.path(study_dir, input$importStydyID, "data_clinical_sample.txt"),
       input$importPatID)
 
-    # for(mode in modes){
-    #   if (mode == "patient"){
-    #     loadedData$data_clinical_patient <- importPatientData(
-    #       mode = mode,
-    #       file_name = "data_clinical_patient.txt",
-    #       file_path = file.path(study_dir, input$importStydyID, file_name),
-    #       patIDs = input$importPatID,
-    #       data = loadedData$data_clinical_patient,
-    #       associatedSampleIDs = NULL)
-    #   } else if (mode == "sample"){
-    #     loadedData$data_clinical_sample <- importPatientData(
-    #       mode = mode,
-    #       file_name = "data_clinical_sample.txt",
-    #       file_path = file.path(study_dir, input$importStydyID, file_name),
-    #       patIDs = input$importPatID,
-    #       data = loadedData$data_clinical_sample,
-    #       associatedSampleIDs = NULL)
-    #   } else if (mode == "mutations"){
-    #     loadedData$data_mutations_extended <- importPatientData(
-    #       mode = mode,
-    #       file_name = "data_mutations_extended.txt",
-    #       file_path = file.path(study_dir, input$importStydyID, file_name),
-    #       patIDs = input$importPatID,
-    #       data = loadedData$data_mutations_extended,
-    #       associatedSampleIDs = associatedSampleIDs)
-    #   } else if (mode == "timelines"){
-    #     # find all timeline files:
-    #     directory_files <- list.files(file.path(study_dir, input$importStydyID))
-    #     timeline_files <- directory_files[grep("data_timeline_",directory_files)]
-    #
-    #     for (file_name in timeline_files){
-    #       # temporary restriction
-    #       if(file_name == "data_timeline_surgery.txt"| file_name == "data_timeline_status.txt"| file_name == "data_timeline_treatment.txt"){
-    #         timeline_df <- gsub(".txt", "", file_name)
-    #         loadedData[[timeline_df]] <- importPatientData(
-    #           mode = mode,
-    #           file_name = file_name,
-    #           file_path = file.path(study_dir, input$importStydyID, file_name),
-    #           patIDs = input$importPatID,
-    #           data = loadedData[[timeline_df]],
-    #           associatedSampleIDs = NULL)
-    #       }
-    #     }
-    #   }
-    # }
+    for(mode in modes){
+      if (mode == "patient"){
+        loadedData$data_clinical_patient <- importPatientData(
+          mode = mode,
+          file_name = "data_clinical_patient.txt",
+          file_path = file.path(study_dir, input$importStydyID, file_name),
+          patIDs = input$importPatID,
+          data = loadedData$data_clinical_patient,
+          associatedSampleIDs = NULL)
+      } else if (mode == "sample"){
+        loadedData$data_clinical_sample <- importPatientData(
+          mode = mode,
+          file_name = "data_clinical_sample.txt",
+          file_path = file.path(study_dir, input$importStydyID, file_name),
+          patIDs = input$importPatID,
+          data = loadedData$data_clinical_sample,
+          associatedSampleIDs = NULL)
+      } else if (mode == "mutations"){
+        loadedData$data_mutations_extended <- importPatientData(
+          mode = mode,
+          file_name = "data_mutations_extended.txt",
+          file_path = file.path(study_dir, input$importStydyID, file_name),
+          patIDs = input$importPatID,
+          data = loadedData$data_mutations_extended,
+          associatedSampleIDs = associatedSampleIDs)
+      } else if (mode == "timelines"){
+        # find all timeline files:
+        directory_files <- list.files(file.path(study_dir, input$importStydyID))
+        timeline_files <- directory_files[grep("data_timeline_",directory_files)]
+
+        for (file_name in timeline_files){
+          # temporary restriction
+          if(file_name == "data_timeline_surgery.txt"| file_name == "data_timeline_status.txt"| file_name == "data_timeline_treatment.txt"){
+            timeline_df <- gsub(".txt", "", file_name)
+            loadedData[[timeline_df]] <- importPatientData(
+              mode = mode,
+              file_name = file_name,
+              file_path = file.path(study_dir, input$importStydyID, file_name),
+              patIDs = input$importPatID,
+              data = loadedData[[timeline_df]],
+              associatedSampleIDs = NULL)
+          }
+        }
+      }
+    }
 
     # for(mode in modes){
     #   # filename <- switch(mode,

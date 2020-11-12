@@ -12,14 +12,9 @@ LazyData: true
 RoxygenNote: 7.1.1
 URL: tbd
 BugReports: tbd
-Config/reticulate:
-  list(
-    packages = list(
-      list(package = "PyYAML", pip=TRUE),
-      list(package = "jinja2", pip=TRUE),
-      list(package = "requests", pip=TRUE)
-    )
-  )
+Depends:
+    shiny,
+    shinydashboard
 Imports: 
     shiny,
     shinydashboard,

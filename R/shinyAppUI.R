@@ -1,6 +1,5 @@
 #' Shiny app server object
 #'
-#' @importFrom graphics hist
 #' @import shiny
 #' @import shinydashboard
 # create the shiny application user interface
@@ -39,7 +38,7 @@ shinyAppUI <- dashboardPage(
 
       #,
       # Tab 6 Validation - validationTab.R
-      #validationTab
+      # validationTab
     )
   )
 )
