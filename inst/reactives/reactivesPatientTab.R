@@ -126,6 +126,7 @@ observeEvent(input$ImportPatient,{
              mutation data associated with the Sample IDs of the patient,
              and timeline events associated with the Patient ID."),
       tags$p("Note: This step cannot be undone."),
+      tags$p("Note: To make the import permanent (safed to files) the single tables need to be safed ('Save' buttons)!"),
       selectInput(
         "importStydyID",
         "Select study ID",
@@ -163,73 +164,190 @@ output$ImportPatIDUI <- renderUI({
         width = 8,
         tags$br(),
         selectInput("importPatID", "Select Patient ID", choices = importPatientID()),
-        actionButton("importPatientData", "Import patient data", class = "btn-success")
+        actionButton("ModalbuttonImportPatient", "Import patient data", class = "btn-success")
       )
     )
 
 })
 
 # import data of the selected patient into the current study
-observeEvent(input$ModalbuttonEditPatient, {
+observeEvent(input$ModalbuttonImportPatient, {
   if(input$importPatID %in% loadedData$data_clinical_patient$PATIENT_ID){
     showNotification("Patient ID already exists in this study. Please select another Patient ID", type="error", duration = NULL)
   } else {
     modes <- c("patient", "sample", "mutations", "timelines")
 
-    for(mode in modes){
-      # filename <- switch(mode,
-      #                "patient" = "data_clinical_patient.txt",
-      #                "sample" = "data_clinical_sample.txt",
-      #                "mutations" = "data_mutations_extended.txt",
-      #                "timelines" = NULL
-      #
-      # )
+    associatedSampleIDs <- getSampleIDs(
+      file.path(study_dir, input$importStydyID, "data_clinical_sample.txt"),
+      input$importPatID)
 
-      if (mode == "patient"){
-        # read data file
-        file_name <- "data_clinical_patient.txt"
-        file_path <- file.path(study_dir, input$importStydyID, filename)
-        if (file.exists(file_path)){
-          whole_data <- read.table(file_path, sep="\t", colClasses = "character", comment.char = "")
-          whole_data$V1 <- sub(pattern="^#", replacement="", x=whole_data$V1)
-          colnames(whole_data) <- whole_data[5,]
-          whole_data <- whole_data[-c(3,4,5),]
+    # for(mode in modes){
+    #   if (mode == "patient"){
+    #     loadedData$data_clinical_patient <- importPatientData(
+    #       mode = mode,
+    #       file_name = "data_clinical_patient.txt",
+    #       file_path = file.path(study_dir, input$importStydyID, file_name),
+    #       patIDs = input$importPatID,
+    #       data = loadedData$data_clinical_patient,
+    #       associatedSampleIDs = NULL)
+    #   } else if (mode == "sample"){
+    #     loadedData$data_clinical_sample <- importPatientData(
+    #       mode = mode,
+    #       file_name = "data_clinical_sample.txt",
+    #       file_path = file.path(study_dir, input$importStydyID, file_name),
+    #       patIDs = input$importPatID,
+    #       data = loadedData$data_clinical_sample,
+    #       associatedSampleIDs = NULL)
+    #   } else if (mode == "mutations"){
+    #     loadedData$data_mutations_extended <- importPatientData(
+    #       mode = mode,
+    #       file_name = "data_mutations_extended.txt",
+    #       file_path = file.path(study_dir, input$importStydyID, file_name),
+    #       patIDs = input$importPatID,
+    #       data = loadedData$data_mutations_extended,
+    #       associatedSampleIDs = associatedSampleIDs)
+    #   } else if (mode == "timelines"){
+    #     # find all timeline files:
+    #     directory_files <- list.files(file.path(study_dir, input$importStydyID))
+    #     timeline_files <- directory_files[grep("data_timeline_",directory_files)]
+    #
+    #     for (file_name in timeline_files){
+    #       # temporary restriction
+    #       if(file_name == "data_timeline_surgery.txt"| file_name == "data_timeline_status.txt"| file_name == "data_timeline_treatment.txt"){
+    #         timeline_df <- gsub(".txt", "", file_name)
+    #         loadedData[[timeline_df]] <- importPatientData(
+    #           mode = mode,
+    #           file_name = file_name,
+    #           file_path = file.path(study_dir, input$importStydyID, file_name),
+    #           patIDs = input$importPatID,
+    #           data = loadedData[[timeline_df]],
+    #           associatedSampleIDs = NULL)
+    #       }
+    #     }
+    #   }
+    # }
 
-          # extract row
-          extracted_data <- whole_data[whole_data$PATIENT_ID==input$importPatID, ]
-
-          # add rows to table
-        }
-
-      }
-
-    }
-
+    # for(mode in modes){
+    #   # filename <- switch(mode,
+    #   #                "patient" = "data_clinical_patient.txt",
+    #   #                "sample" = "data_clinical_sample.txt",
+    #   #                "mutations" = "data_mutations_extended.txt",
+    #   #                "timelines" = NULL
+    #   #
+    #   # )
+    #
+    #   if (mode == "patient"){
+    #     # read data file
+    #     file_name <- "data_clinical_patient.txt"
+    #     file_path <- file.path(study_dir, input$importStydyID, file_name)
+    #     if (file.exists(file_path)){
+    #       whole_data <- read.table(file_path, sep="\t", colClasses = "character", comment.char = "")
+    #       whole_data$V1 <- sub(pattern="^#", replacement="", x=whole_data$V1)
+    #       colnames(whole_data) <- whole_data[5,]
+    #       whole_data <- whole_data[-c(3,4,5),]
+    #
+    #       # extract row
+    #       extracted_data <- whole_data[whole_data$PATIENT_ID %in% input$importPatID, ]
+    #       emptyColNames <- setdiff(colnames(extracted_data), colnames(loadedData$data_clinical_patient))
+    #
+    #       # add rows to table
+    #       loadedData$data_clinical_patient <- dplyr::bind_rows(loadedData$data_clinical_patient, extracted_data)
+    #
+    #       # add missing short- and long column names
+    #       if(length(emptyColNames)!=0){
+    #         for (emptyCol in emptyColNames){
+    #           loadedData$data_clinical_patient[1, emptyCol] <- whole_data[1, emptyCol]
+    #           loadedData$data_clinical_patient[2, emptyCol] <- whole_data[2, emptyCol]
+    #         }
+    #       }
+    #       showNotification("Successfully imported patient data!", type="message", duration = NULL)
+    #     } else {
+    #       showNotification("File 'data_clinical_patient.txt' not found in study.", type="warning", duration = NULL)
+    #     }
+    #   } else if (mode == "sample"){
+    #     # read data file
+    #     file_name <- "data_clinical_sample.txt"
+    #     file_path <- file.path(study_dir, input$importStydyID, file_name)
+    #
+    #     if (file.exists(file_path)){
+    #       whole_data <- read.table(file_path, sep="\t", colClasses = "character", comment.char = "")
+    #       whole_data$V1 <- sub(pattern="^#", replacement="", x=whole_data$V1)
+    #       colnames(whole_data) <- whole_data[5,]
+    #       whole_data <- whole_data[-c(3,4,5),]
+    #
+    #       # extract row
+    #       extracted_data <- whole_data[whole_data$PATIENT_ID %in% input$importPatID, ]
+    #       associatedSampleIDs <- extracted_data$SAMPLE_ID # cache SAMPLE_IDs for filtering the mutation data
+    #       emptyColNames <- setdiff(colnames(extracted_data), colnames(loadedData$data_clinical_sample))
+    #
+    #       # add rows to table
+    #       loadedData$data_clinical_sample <- dplyr::bind_rows(loadedData$data_clinical_sample, extracted_data)
+    #
+    #       # add missing short- and long column names
+    #       if(length(emptyColNames)!=0){
+    #         for (emptyCol in emptyColNames){
+    #           loadedData$data_clinical_sample[1, emptyCol] <- whole_data[1, emptyCol]
+    #           loadedData$data_clinical_sample[2, emptyCol] <- whole_data[2, emptyCol]
+    #         }
+    #       }
+    #       showNotification("Successfully imported sample data!", type="message", duration = NULL)
+    #     } else {
+    #       showNotification("File 'data_clinical_sample.txt' not found in study.", type="warning", duration = NULL)
+    #     }
+    #   } else if (mode == "mutations"){
+    #     # read data file
+    #     file_name <- "data_mutations_extended.txt"
+    #     file_path <- file.path(study_dir, input$importStydyID, file_name)
+    #
+    #     if (file.exists(file_path)){
+    #       whole_data <- as.data.frame(vroom::vroom(file_path, delim = "\t"))
+    #       requiredCols <- c("Hugo_Symbol", "Tumor_Sample_Barcode", "Variant_Classification", "HGVSp_Short")
+    #       if(any(!requiredCols %in% colnames(whole_data))){
+    #         showNotification("One or more of the required columns in the mutations file are missing.", type="error", duration = NULL)
+    #       } else {
+    #         # extract row
+    #         extracted_data <- whole_data[whole_data$Tumor_Sample_Barcode %in% associatedSampleIDs, ]
+    #         if(nrow(extracted_data)!=0){
+    #           # add rows to table
+    #           loadedData$data_mutations_extended <- dplyr::bind_rows(loadedData$data_mutations_extended, extracted_data)
+    #           showNotification("Successfully imported mutation data!", type="message", duration = NULL)
+    #         } else {
+    #           showNotification("No corresponding entries in the mutation file found.", type="error", duration = NULL)
+    #         }
+    #       }
+    #     } else {
+    #       showNotification("File 'data_mutations_extended.txt' not found in study.", type="warning", duration = NULL)
+    #     }
+    #   } else if (mode == "timelines"){
+    #     # find all timeline files:
+    #     directory_files <- list.files(file.path(study_dir, input$importStydyID))
+    #     timeline_files <- directory_files[grep("data_timeline_",directory_files)]
+    #
+    #     for (file_name in timeline_files){
+    #       # read data file
+    #       # temporary restriction
+    #       if(file_name == "data_timeline_surgery.txt"| file_name == "data_timeline_status.txt"| file_name == "data_timeline_treatment.txt"){
+    #         file_path <- file.path(study_dir, input$importStydyID, file_name)
+    #         whole_data <- as.data.frame(vroom::vroom(file_path, delim = "\t"))
+    #
+    #         # extract row
+    #         extracted_data <- whole_data[whole_data$PATIENT_ID %in% input$importPatID, ]
+    #         if(nrow(extracted_data)!=0){
+    #           # add rows to table
+    #           timeline_df <-  gsub(".txt", "", file_name)
+    #           loadedData[[timeline_df]] <- dplyr::bind_rows(loadedData[[timeline_df]], extracted_data)
+    #           showNotification(paste0("Successfully imported timeline data from ",file_name," !"), type="message", duration = NULL)
+    #         } else {
+    #           showNotification(paste0("No corresponding entries in ", file_name," file found."), type="error", duration = NULL)
+    #         }
+    #       }
+    #     }
+    #   }
+    # }
+    removeModal()
   }
 
 })
-
-
-
-# validate edits and change values in the table
-# observeEvent(input$ModalbuttonEditPatient, {
-#   all_reactive_inputs <- reactiveValuesToList(input)
-#   editPatientValues <- all_reactive_inputs[grep("editPatientInput_",names(all_reactive_inputs))]
-#   names(editPatientValues) <- gsub("editPatientInput_", "", names(editPatientValues))
-#   if(editPatientValues["PATIENT_ID"]==""){
-#     showNotification("PATIENT_ID cannot be empty.", type="error", duration = NULL)
-#   }
-#   # else if(editPatientValues["PATIENT_ID"] %in% patient_id_list$ids[-which(patient_id_list$ids == editPatientValues$PATIENT_ID)]){
-#   #   showNotification("PATIENT_ID already exists.", type="error", duration = NULL)
-#   # }
-#   else {
-#     for(i in colnames(loadedData$data_clinical_patient)){
-#       loadedData$data_clinical_patient[input$patientTable_rows_selected,i] <- editPatientValues[i]
-#     }
-#     removeModal()
-#   }
-# })
-
 
 # delete patient ####
 observeEvent(input$DeletePatient, {
