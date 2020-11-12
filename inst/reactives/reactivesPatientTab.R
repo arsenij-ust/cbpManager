@@ -186,7 +186,7 @@ observeEvent(input$ModalbuttonImportPatient, {
         loadedData$data_clinical_patient <- importPatientData(
           mode = mode,
           file_name = "data_clinical_patient.txt",
-          file_path = file.path(study_dir, input$importStydyID, file_name),
+          file_path = file.path(study_dir, input$importStydyID, "data_clinical_patient.txt"),
           patIDs = input$importPatID,
           data = loadedData$data_clinical_patient,
           associatedSampleIDs = NULL)
@@ -194,7 +194,7 @@ observeEvent(input$ModalbuttonImportPatient, {
         loadedData$data_clinical_sample <- importPatientData(
           mode = mode,
           file_name = "data_clinical_sample.txt",
-          file_path = file.path(study_dir, input$importStydyID, file_name),
+          file_path = file.path(study_dir, input$importStydyID, "data_clinical_sample.txt"),
           patIDs = input$importPatID,
           data = loadedData$data_clinical_sample,
           associatedSampleIDs = NULL)
@@ -202,7 +202,7 @@ observeEvent(input$ModalbuttonImportPatient, {
         loadedData$data_mutations_extended <- importPatientData(
           mode = mode,
           file_name = "data_mutations_extended.txt",
-          file_path = file.path(study_dir, input$importStydyID, file_name),
+          file_path = file.path(study_dir, input$importStydyID, "data_mutations_extended.txt"),
           patIDs = input$importPatID,
           data = loadedData$data_mutations_extended,
           associatedSampleIDs = associatedSampleIDs)
