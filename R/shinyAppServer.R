@@ -22,7 +22,7 @@ shinyAppServer <- function(input, output, session) {
   ) {
     study_dir <<- .GlobalEnv$cbpManager.options$studyDir
 
-  ## if none of the above apply, get path of example data set
+  ## if none of the above apply, get path of example study dir
   } else {
     study_dir <<- system.file("study", package = "cbpManager")
   }
