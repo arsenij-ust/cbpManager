@@ -2,13 +2,25 @@
 % Please edit documentation in R/launchApp.R
 \name{launchApp}
 \alias{launchApp}
-\title{launches the shinyAppDemo app}
+\title{Launch cbpManager}
 \usage{
-launchApp()
+launchApp(studyDir = NULL, ...)
+}
+\arguments{
+\item{...}{Further parameters that are used by \code{shiny::runApp}, e.g.
+\code{host} or \code{port}.}
+
+\item{studyPath}{Path to study folder containing studies of cBioPortal.}
 }
 \value{
 shiny application object
 }
 \description{
-launches the shinyAppDemo app
+Launch the cbpManager Shiny application.
+}
+\examples{
+if ( interactive() ) {
+  launchApp()
+}
+
 }

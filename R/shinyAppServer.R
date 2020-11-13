@@ -14,7 +14,19 @@ shinyAppServer <- function(input, output, session) {
     Sys.time()
   })
 
-  study_dir <<- file.path(system.file(package = "cbpManager"), "study")
+  ## take path from 'cbpManager.options' if it is set
+  if (
+    exists('cbpManager.options') &&
+    !is.null(cbpManager.options[["studyDir"]]) &&
+    dir.exists(cbpManager.options[["studyDir"]])
+  ) {
+    study_dir <<- .GlobalEnv$cbpManager.options$studyDir
+
+  ## if none of the above apply, get path of example data set
+  } else {
+    study_dir <<- system.file("study", package = "cbpManager")
+  }
+
 
   # Tab 1 Study Metadata ---------------------------------------------------------------
 
