@@ -2,24 +2,20 @@
 % Please edit documentation in R/functions.R
 \name{updateOncotreeUIwidgets}
 \alias{updateOncotreeUIwidgets}
-\title{Generate UI input widget}
+\title{tbd}
 \usage{
 updateOncotreeUIwidgets(session, row_last_clicked, mode = c("add", "edit"))
 }
 \arguments{
-\item{mode}{"add" or "edit" - wether to use existing values or not}
+\item{session}{tbd}
 
-\item{colname}{A character string - the name of the column, that will be the label of the input}
+\item{row_last_clicked}{tbd}
 
-\item{tab}{"Patient", "Sample" - The used tab; sets the html id prefix of the input}
-
-\item{data}{A data.frame.}
-
-\item{selected_row}{A number indicating the row number of the selected row in the data.frame.}
+\item{mode}{tbd}
 }
 \value{
-A sanitized string.
+tbd
 }
 \description{
-Generate UI input widget
+tbd
 }

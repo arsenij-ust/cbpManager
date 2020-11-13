@@ -2,8 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{generateTimelineUI}
 \alias{generateTimelineUI}
-\title{generate UI elements for the
-generate UI elements for timeline modal dialog}
+\title{tbd}
 \usage{
 generateTimelineUI(
   colname,
@@ -14,14 +13,19 @@ generateTimelineUI(
 )
 }
 \arguments{
-\item{data}{data.frame}
+\item{colname}{tbd}
 
-\item{cname}{column name}
+\item{mode}{tbd}
+
+\item{data}{tbd}
+
+\item{selected_row}{tbd}
+
+\item{patientIDs}{tbd}
 }
 \value{
-data.frame
+tbd
 }
 \description{
-generate UI elements for the
-generate UI elements for timeline modal dialog
+tbd
 }
