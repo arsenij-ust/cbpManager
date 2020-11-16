@@ -19,6 +19,10 @@ timelineTab <- tabItem(
     ),
     column(width = 8,
            box(width = NULL,
+               title="Sample from cBioPortal",
+               collapsible = TRUE,
+               collapsed = FALSE,
+               solidHeader = TRUE,
                tags$head(
                  tags$style(
                    type="text/css",

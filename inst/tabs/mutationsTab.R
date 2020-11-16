@@ -31,6 +31,10 @@ mutationsTab <- tabItem(
       width = 6
       ),
     box(
+      title="Sample from cBioPortal",
+      collapsible = TRUE,
+      collapsed = FALSE,
+      solidHeader = TRUE,
       tags$head(
         tags$style(
           type="text/css",
