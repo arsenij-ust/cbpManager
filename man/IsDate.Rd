@@ -7,9 +7,9 @@
 IsDate(mydate, date.format = "\%Y-\%m-\%d")
 }
 \arguments{
-\item{date.format}{string describig the date format}
+\item{mydate}{date}
 
-\item{df}{date}
+\item{date.format}{string describig the date format}
 }
 \description{
 Check if input is in the appropriate date format

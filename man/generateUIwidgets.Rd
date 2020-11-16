@@ -23,6 +23,8 @@ generateUIwidgets(
 \item{data}{A data.frame.}
 
 \item{selected_row}{A number indicating the row number of the selected row in the data.frame.}
+
+\item{patientIDs}{Vector of patient IDs used for drop down menu of the PATIENT_ID column}
 }
 \value{
 A sanitized string.

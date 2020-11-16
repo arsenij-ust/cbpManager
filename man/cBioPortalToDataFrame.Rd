@@ -16,5 +16,5 @@ data.frame
 This function takes a file object (from read.table), removes the # symbol,
 sets the 5th row as the column names of the data.frame
 and removes the rows containing the priority, data type and column name.
-use read.table as follows: read.table(file, sep="\t", colClasses = "character", comment.char = "")
+use read.table as follows: \code{read.table(file, sep='\t', colClasses = 'character', comment.char = '')}
 }

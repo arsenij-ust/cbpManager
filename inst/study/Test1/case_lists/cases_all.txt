@@ -2,5 +2,5 @@ cancer_study_identifier: Test1
 stable_id: Test1_all
 case_list_category: all_cases_in_study
 case_list_name: All Tumors
-case_list_description: All tumor samples (2 samples)
-case_list_ids: S_Pat1	S2_Pat1
+case_list_description: All tumor samples (3 samples)
+case_list_ids: S1_Pat1	S2_Pat1	S1_Pat2

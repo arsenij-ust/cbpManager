@@ -30,7 +30,7 @@ convertDataFrame <- function(df){
 
 #' Check if input is in the appropriate date format
 #'
-#' @param df date
+#' @param mydate date
 #' @param date.format string describig the date format
 IsDate <- function(mydate, date.format = "%Y-%m-%d") {
   tryCatch(!is.na(as.Date(mydate, date.format)),
@@ -73,6 +73,7 @@ check_input_dates <- function(diagnosisDate, startDate=NULL, endDate=NULL){
 #' @param tab "Patient", "Sample" - The used tab; sets the html id prefix of the input
 #' @param data A data.frame.
 #' @param selected_row A number indicating the row number of the selected row in the data.frame.
+#' @param patientIDs Vector of patient IDs used for drop down menu of the PATIENT_ID column
 #' @return A sanitized string.
 generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient", "Sample"), data = NULL, selected_row = NULL, patientIDs = NULL){
 
@@ -347,7 +348,7 @@ generateTimelineUI <- function(colname, mode = c("add", "edit"), data = NULL, se
 #' This function takes a file object (from read.table), removes the # symbol,
 #' sets the 5th row as the column names of the data.frame
 #' and removes the rows containing the priority, data type and column name.
-#' use read.table as follows: read.table(file, sep="\t", colClasses = "character", comment.char = "")
+#' use read.table as follows: \code{read.table(file, sep='\t', colClasses = 'character', comment.char = '')}
 #' @param data The data.frame of a cBioPortal sample/patient data file
 #' @return data.frame
 cBioPortalToDataFrame <- function(data){
