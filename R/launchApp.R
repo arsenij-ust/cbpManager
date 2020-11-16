@@ -44,8 +44,8 @@ launchApp <- function(
       '##---------------------------------------------------------------------------##'
     )
   )
-  shiny::shinyApp(
+  app <- shiny::shinyApp(
     ui = shinyAppUI,
-    server = shinyAppServer,
-    ...)
+    server = shinyAppServer)
+  runApp(app, ...)
 }
