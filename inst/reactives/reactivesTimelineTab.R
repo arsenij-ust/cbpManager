@@ -1,6 +1,6 @@
 # image
 output$timelineDataImg <- renderImage({
-  return(list(src = system.file("www", "timeline.PNG", package = "cbpManager"),contentType = "image/png",alt = "timeline-example", width="auto"))
+  return(list(src = system.file("www", "timeline.png", package = "cbpManager"),contentType = "image/png",alt = "timeline-example", width="auto"))
 }, deleteFile = FALSE)
 
 # dates of first diagnosis ####
