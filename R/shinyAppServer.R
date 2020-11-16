@@ -24,24 +24,24 @@ shinyAppServer <- function(input, output, session) {
     !is.null(cbpManager.options[["studyDir"]]) &&
     dir.exists(cbpManager.options[["studyDir"]])
   ) {
-    study_dir <- cbpManager.options$studyDir
+    study_dir <<- cbpManager.options$studyDir
 
   ## if none of the above apply, get path of example study dir
   } else {
-    study_dir <- system.file("study", package = "cbpManager")
+    study_dir <<- system.file("study", package = "cbpManager")
   }
 
 
   # Tab 1 Study Metadata ---------------------------------------------------------------
 
   # oncotree cancer types
-  oncotree <- jsonlite::fromJSON(system.file("www", "oncotree.json", package = "cbpManager"))
-  oncotree$code <- tolower(oncotree$code)
+  oncotree <<- jsonlite::fromJSON(system.file("www", "oncotree.json", package = "cbpManager"))
+  oncotree$code <<- tolower(oncotree$code)
   unique(oncotree$tissue)
-  tumor_tissue_site <- unique(oncotree$tissue[which(!is.na(oncotree$tissue))])
-  cancer_type <- unique(oncotree$mainType[which(!is.na(oncotree$mainType))])
-  oncotree_code <- unique(oncotree$code[which(!is.na(oncotree$code))])
-  cancer_type_detailed <- unique(oncotree$name[which(!is.na(oncotree$name))])
+  tumor_tissue_site <<- unique(oncotree$tissue[which(!is.na(oncotree$tissue))])
+  cancer_type <<- unique(oncotree$mainType[which(!is.na(oncotree$mainType))])
+  oncotree_code <<- unique(oncotree$code[which(!is.na(oncotree$code))])
+  cancer_type_detailed <<- unique(oncotree$name[which(!is.na(oncotree$name))])
 
   # generate study-wide patient list
 
