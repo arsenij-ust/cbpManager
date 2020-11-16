@@ -29,7 +29,7 @@ launchApp <- function(
   ## Create global variable with options that need to be available inside the
   ## Shiny app.
   ##--------------------------------------------------------------------------##
-  cbpManager.options <- list(
+  cbpManager.options <<- list(
     "studyDir" = studyDir,
     "cbpManager_root" = system.file(package="cbpManager")
   )

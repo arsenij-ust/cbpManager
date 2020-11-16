@@ -24,7 +24,7 @@ shinyAppServer <- function(input, output, session) {
     !is.null(cbpManager.options[["studyDir"]]) &&
     dir.exists(cbpManager.options[["studyDir"]])
   ) {
-    study_dir <- .GlobalEnv$cbpManager.options$studyDir
+    study_dir <- cbpManager.options$studyDir
 
   ## if none of the above apply, get path of example study dir
   } else {
