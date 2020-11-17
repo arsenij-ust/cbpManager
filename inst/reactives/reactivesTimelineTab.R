@@ -511,7 +511,7 @@ selectedTrack <- eventReactive(input$editTrack, {
   return(input$selectTrack)
 })
 
-# UI modules for table modification
+UI modules for table modification
 output$customTracksUI <- renderUI({
   req(input$editTrack)
   tagList(
@@ -542,7 +542,6 @@ output$customTimeline <- DT::renderDT({
   )
 })
 
-
 # add custom entry ---------------------------------------------------------------
 
 custom_addRow <- callModule(
@@ -553,9 +552,11 @@ custom_addRow <- callModule(
   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
   mode = "timepoint"
 )
-# observe({
-#   loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
-# })
+observe({
+  #loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
+  print(loadedData[[paste0("data_timeline_", selectedTrack())]])
+  print(custom_addRow())
+})
 
 # # edit custom entry ---------------------------------------------------------------
 # status_editRow <- callModule(
