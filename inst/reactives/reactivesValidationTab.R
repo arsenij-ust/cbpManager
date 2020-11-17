@@ -69,18 +69,18 @@
 
   #reticulate::py_run_file(system.file("python", "importer", "validateData.py", package = "cbpManager"))
 
-  return(includeHTML(validationPath))
-})
+#   return(includeHTML(validationPath))
+# })
 
 output$validation<-renderUI({getPage()})
 output$downloadValidation <- downloadHandler(
   filename <- function() {
-    paste0(input$cancer_study_identifier,"_validation.html")
+    paste0(loadedData$studyID,"_validation.html")
   },
 
   content <- function(file) {
-    validationFile <- paste0(input$cancer_study_identifier,"_validation.html")
-    validationPath <-file.path(study_dir, input$cancer_study_identifier, validationFile)
+    validationFile <- paste0(loadedData$studyID,"_validation.html")
+    validationPath <-file.path(study_dir, loadedData$studyID, validationFile)
     file.copy(validationPath, file)
   },
   contentType = NULL

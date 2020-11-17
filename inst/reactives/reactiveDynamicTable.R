@@ -1,4 +1,4 @@
-# add column ####
+# add column ---------------------------------------------------------------
 add_columnUI <- function(id, label = "Add column") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
@@ -53,7 +53,7 @@ add_columnServer <- function(input, output, session, data){
   return(reactive({params$df}))
 
 }
-# delete column ####
+# delete column ---------------------------------------------------------------
 delete_columnUI <- function(id, label = "Delete column(s)") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
@@ -94,7 +94,7 @@ delete_columnServer <- function(input, output, session, data, exclude){
 
 }
 
-# delete entry ####
+# delete entry ---------------------------------------------------------------
 delete_rowUI <- function(id, label = "Delete") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
@@ -131,7 +131,7 @@ delete_rowServer <- function(input, output, session, data, selected_row){
   return(reactive({params$df}))
 }
 
-# add entry ####
+# add entry ---------------------------------------------------------------
 add_rowUI <- function(id, label = "Add") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
@@ -261,7 +261,7 @@ add_rowServer <- function(input, output, session, data, patient_ids = NULL, date
   return(reactive({params$df}))
 }
 
-# edit entry ####
+# edit entry ---------------------------------------------------------------
 edit_rowUI <- function(id, label = "Edit") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
@@ -401,7 +401,7 @@ edit_rowServer <- function(input, output, session, data, patient_ids = NULL, dat
   return(reactive({params$df}))
 }
 
-# save timeline table ####
+# save timeline table ---------------------------------------------------------------
 save_timelineUI <- function(id, label = "Save") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.

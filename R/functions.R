@@ -56,7 +56,7 @@ check_input_dates <- function(diagnosisDate, startDate=NULL, endDate=NULL){
   return(0)
 }
 
-#' Sanitize component names
+#' Sanitize names
 #'
 #' This function takes a character string, replaces spaces by underscores and runs make.names.
 #' @param x A character string.
