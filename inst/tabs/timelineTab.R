@@ -110,10 +110,11 @@ timelineTab <- tabItem(
         actionButton("addTrack", "Add track")),
       div(
         style="display: inline-block;vertical-align:top; width: 200px;",
-        selectInput( "selectTrack", label = NULL, choices = c("a", "b", "c"), width = "400px")),
+        uiOutput("selectTrackUI")),
       div(
         style="display: inline-block;vertical-align:top; width: 200px;",
         actionButton("editTrack", "Edit track", class = "btn-success")),
-      uiOutput("customTracksUI"))
+      uiOutput("customTracksUI")
+    )
   )
 )

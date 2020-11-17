@@ -457,72 +457,7 @@ callModule(
 
 
 # custom tracks ---------------------------------------------------------------
-
-# min_timeline_df <- data.frame(
-#   PATIENT_ID = character(),
-#   START_DATE = numeric(),
-#   STOP_DATE = numeric(),
-#   EVENT_TYPE = character()
-# )
-# tracks_rc <- reactiveValues(tables = list())
-#
-# observeEvent(input$addTrack,{
-#   if(input$customTrackID == ""){
-#     showNotification("Provide track name first.", type="error", duration = NULL)
-#   } else {
-#     tracks_rc$tables[[input$customTrackID]] <- min_timeline_df
-#     # lapply(
-#     #   tracks_rc$tables, function(table){
-#     #     createCustomTable(table = table, ID = names(table))
-#     #   }
-#     # )
-#   }
-# })
-#
-# observeEvent(input$addTrack,{
-#   if(length(tracks_rc$tables) != 0){
-#     purrr::iwalk(tracks_rc$tables, ~{
-#       ID <- paste0(.y, "_table")
-#       print(ID)
-#       print(.x)
-#       output[[ID]] <- renderDT({
-#         hidenColsSurgery <-  which(colnames(.x) %in% c("EVENT_TYPE"))-1
-#         datatable(.x,
-#                   selection = "single",
-#                   rownames = F,
-#                   options = list(pageLength = 25, columnDefs = list(list(visible=FALSE, targets=c(hidenColsSurgery)))))
-#       })
-#     })
-#     output$customTracksUI <- renderUI({
-#       purrr::iwalk(tracks_rc$tables, ~{
-#         ID <- paste0(.y, "_table")
-#         print(ID)
-#         DT::dataTableOutput(ID)
-#       })
-#     })
-#   }
-# })
-
-
-#if(length(tracks_rc$tables) != 0){
-
-# createCustomTable <- function(table, ID){
-#   output[[paste0(ID, "_table")]] <- renderDT({
-#     hidenColsSurgery <-  which(colnames(loadedData$data_timeline_status) %in% c("EVENT_TYPE"))-1
-#     datatable(table,
-#               selection = "single",
-#               rownames = F,
-#               options = list(pageLength = 25, columnDefs = list(list(visible=FALSE, targets=c(hidenColsSurgery)))))
-#   })
-# }
-
-# output$customTracksUI <- renderUI({
-#   req(input$addTrack)
-#   purrr::iwalk(tracks_rc$tables, ~{
-#     DT::dataTableOutput(paste0(names(.x), "_table"))
-#   })
-# })
-
+# minimal data.frame of a timeline track
 min_timeline_df <- data.frame(
   PATIENT_ID = character(),
   START_DATE = numeric(),
@@ -530,54 +465,148 @@ min_timeline_df <- data.frame(
   EVENT_TYPE = character()
 )
 
+# get custom timeline names from the reactive study object
 timelineIDs <- reactive({
-  directory_files <-
-    list.files(file.path(study_dir, input$cancer_study_identifier))
-  timeline_files <-
-    directory_files[grep("data_timeline_", directory_files)]
+  timeline_dfs <- names(loadedData)[grep("data_timeline_", names(loadedData))]
   excludeTimelines <-
-    c(
-      "data_timeline_surgery.txt",
-      "data_timeline_status.txt",
-      "data_timeline_treatment.txt"
-    )
-  timeline_files <- timeline_files[-which(excludeTimelines)]
-
-  return(timeline_files)
+      c(
+        "data_timeline_surgery",
+        "data_timeline_status",
+        "data_timeline_treatment"
+      )
+  timeline_dfs <- timeline_dfs[-which(timeline_dfs %in% excludeTimelines)]
+  timeline_names <- gsub("data_timeline_", "", timeline_dfs)
+  return(timeline_names)
 })
 
+# add new custom track
 observeEvent(input$addTrack, {
+  # check if name for new track exists
   if (input$customTrackID == "") {
     showNotification("Provide track name first.",
                      type = "error",
                      duration = NULL)
   } else {
+    # sanitize track name
     ID <- .create_name(input$customTrackID, toupper = FALSE)
-    if (ID %in% timelineIDs)
+
+    #check if track name already exists
+    if (ID %in% timelineIDs()){
+      showNotification("Name for timeline already exists",
+                       type = "error",
+                       duration = NULL)
+    # add track to the reactive study object
+    } else {
       loadedData[[paste0("data_timeline_", ID)]] <- min_timeline_df
+    }
   }
 })
 
-test_vec <- c("data_a.txt", "data_b.txt", "data_c.txt")
-lapply(test_vec, function(vec) {
-  vec <- gsub("data_", "", vec)
-  vec <- gsub(".txt", "", vec)
-  vec
+# UI for timeline drop-down widget
+output$selectTrackUI <- renderUI({
+  selectInput("selectTrack", width = "400px", label = NULL, choices = timelineIDs())
 })
 
+selectedTrack <- eventReactive(input$editTrack, {
+  return(input$selectTrack)
+})
 
+# UI modules for table modification
 output$customTracksUI <- renderUI({
+  req(input$editTrack)
   tagList(
-    add_rowUI("Status"),
-    edit_rowUI("Status"),
-    delete_rowUI("Status"),
-    add_columnUI("Status"),
-    delete_columnUI("Status"),
-    save_timelineUI("Status"),
+    add_rowUI("customTimeline"),
+    edit_rowUI("customTimeline"),
+    delete_rowUI("customTimeline"),
+    add_columnUI("customTimeline"),
+    delete_columnUI("customTimeline"),
+    save_timelineUI("customTimeline"),
     br(),
     br(),
-    DT::DTOutput("statusTable")
+    DT::DTOutput("customTimeline")
+  )
+})
+
+# Data table output
+output$customTimeline <- DT::renderDT({
+  hidenCols <-
+    which(colnames(loadedData[[paste0("data_timeline_", selectedTrack())]]) %in% c("EVENT_TYPE")) - 1
+
+  DT::datatable(
+    loadedData[[paste0("data_timeline_", selectedTrack())]],
+    selection = "single",
+    rownames = F,
+    options = list(pageLength = 25, columnDefs = list(list(
+      visible = FALSE, targets = c(hidenCols)
+    )))
   )
 })
 
 
+# add custom entry ---------------------------------------------------------------
+
+custom_addRow <- callModule(
+  module = add_rowServer,
+  id = "customTimeline",
+  data = reactive(loadedData[[paste0("data_timeline_", selectedTrack())]]),
+  patient_ids = reactive(patient_id_list$ids),
+  dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
+  mode = "timepoint"
+)
+# observe({
+#   loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
+# })
+
+# # edit custom entry ---------------------------------------------------------------
+# status_editRow <- callModule(
+#   module = edit_rowServer,
+#   id = "Status",
+#   data = reactive(loadedData$data_timeline_status),
+#   patient_ids = reactive(patient_id_list$ids),
+#   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
+#   selected_row = reactive(input$statusTable_rows_selected),
+#   mode = "timepoint"
+# )
+# observe({
+#   loadedData$data_timeline_status <- status_editRow()
+# })
+#
+# # delete custom entry ---------------------------------------------------------------
+# status_delRow <- callModule(
+#   module = delete_rowServer,
+#   id = "Status",
+#   data = reactive(loadedData$data_timeline_status),
+#   selected_row = reactive(input$statusTable_rows_selected)
+# )
+# observe({
+#   loadedData$data_timeline_status <- status_delRow()
+# })
+#
+# # delete custom column ---------------------------------------------------------------
+# status_delCol <- callModule(
+#   module = delete_columnServer,
+#   id = "Status",
+#   data = reactive(loadedData$data_timeline_status),
+#   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
+# )
+# observe({
+#   loadedData$data_timeline_status <- status_delCol()
+# })
+#
+# # add custom column ---------------------------------------------------------------
+# status_addCol <- callModule(
+#   module = add_columnServer,
+#   id = "Status",
+#   data = reactive(loadedData$data_timeline_status)
+# )
+# observe({
+#   loadedData$data_timeline_status <- status_addCol()
+# })
+#
+# # save custom data ---------------------------------------------------------------
+# callModule(
+#   module = save_timelineServer,
+#   id = "Status",
+#   study_id = reactive(loadedData$studyID),
+#   data = reactive(loadedData$data_timeline_status)
+# )
