@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{.create_name}
 \alias{.create_name}
-\title{Sanitize component names}
+\title{Sanitize names}
 \usage{
 .create_name(x)
 }
