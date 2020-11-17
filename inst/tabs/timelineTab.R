@@ -96,14 +96,24 @@ timelineTab <- tabItem(
                        )
               )
   )
-  # ,
-  # fluidRow(
-  #   width = 12,
-  #   box(
-  #     width = 12,
-  #     title="Add custom timeline track",
-  #     div(style="display: inline-block;vertical-align:top; width: 200px;",textInput("customTrackID", label = NULL, width = "400px", placeholder = "Name of timeline track")),
-  #     div(style="display: inline-block;vertical-align:top; width: 200px;",actionButton("addTrack", "Add track")),
-  #     uiOutput("customTracksUI"))
-  # )
+  ,
+  fluidRow(
+    width = 12,
+    box(
+      width = 12,
+      title="Add/ Edit custom timeline tracks",
+      div(
+        style="display: inline-block;vertical-align:top; width: 200px;",
+        textInput("customTrackID", label = NULL, width = "400px", placeholder = "Name of timeline track")),
+      div(
+        style="display: inline-block;vertical-align:top; width: 200px;",
+        actionButton("addTrack", "Add track")),
+      div(
+        style="display: inline-block;vertical-align:top; width: 200px;",
+        selectInput( "selectTrack", label = NULL, choices = c("a", "b", "c"), width = "400px")),
+      div(
+        style="display: inline-block;vertical-align:top; width: 200px;",
+        actionButton("editTrack", "Edit track", class = "btn-success")),
+      uiOutput("customTracksUI"))
+  )
 )

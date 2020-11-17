@@ -391,8 +391,52 @@ callModule(
 #   })
 # })
 
+min_timeline_df <- data.frame(
+  PATIENT_ID = character(),
+  START_DATE = numeric(),
+  STOP_DATE = numeric(),
+  EVENT_TYPE = character()
+)
+
+timelineIDs <- reactive({
+  directory_files <- list.files(file.path(study_dir, input$cancer_study_identifier))
+  timeline_files <- directory_files[grep("data_timeline_",directory_files)]
+  excludeTimelines <- c("data_timeline_surgery.txt","data_timeline_status.txt","data_timeline_treatment.txt")
+  timeline_files <- timeline_files[-which(excludeTimelines)]
+
+  return(timeline_files)
+})
+
+observeEvent(input$addTrack,{
+  if(input$customTrackID == ""){
+    showNotification("Provide track name first.", type="error", duration = NULL)
+  } else {
+    ID <- .create_name(input$customTrackID, toupper = FALSE)
+    if(ID %in% timelineIDs)
+    loadedData[[paste0("data_timeline_",ID)]] <- min_timeline_df
+  }
+})
+
+test_vec <- c("data_a.txt", "data_b.txt", "data_c.txt")
+lapply(test_vec, function(vec){
+   vec <- gsub("data_", "", vec)
+   vec <- gsub(".txt", "", vec)
+   vec
+})
 
 
+output$customTracksUI <- renderUI({
+  tagList(
+    add_rowUI("Status"),
+    edit_rowUI("Status"),
+    delete_rowUI("Status"),
+    add_columnUI("Status"),
+    delete_columnUI("Status"),
+    save_timelineUI("Status"),
+    br(), br(),
+    DT::DTOutput("statusTable")
+  )
+})
 
 
 
