@@ -176,7 +176,7 @@ observeEvent(input$ImportPatient, {
       selectInput(
         "importStydyID",
         "Select study ID",
-        choices = c("", cancer_study_rc()),
+        choices = c("", list.files(study_dir)),
         selected = 1
       ),
       actionButton("ConfirmStudy", "Confirm study"),

@@ -60,7 +60,7 @@ mutationsTab <- tabItem(
                              ".tsv", ".txt", ".maf", ".MAF"
                   )
         ),
-        actionButton("saveMAF", "Submit MAF file", class = "btn-success")
+        actionButton("saveMAF", "Save MAF file", class = "btn-success")
       ),
       column(
         9,
