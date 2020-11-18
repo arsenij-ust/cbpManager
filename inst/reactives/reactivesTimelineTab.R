@@ -191,7 +191,7 @@ observeEvent(input$datesSave, {
     ),
     append = FALSE,
     sep = "\t",
-    row.names = F,
+    row.names = FALSE,
     col.names = TRUE,
     quote = FALSE
   )
@@ -508,10 +508,11 @@ output$selectTrackUI <- renderUI({
 })
 
 selectedTrack <- eventReactive(input$editTrack, {
+  print(input$selectTrack)
   return(input$selectTrack)
 })
 
-UI modules for table modification
+#UI modules for table modification
 output$customTracksUI <- renderUI({
   req(input$editTrack)
   tagList(
@@ -529,6 +530,8 @@ output$customTracksUI <- renderUI({
 
 # Data table output
 output$customTimeline <- DT::renderDT({
+  print(selectedTrack())
+  print(loadedData[[paste0("data_timeline_", selectedTrack())]])
   hidenCols <-
     which(colnames(loadedData[[paste0("data_timeline_", selectedTrack())]]) %in% c("EVENT_TYPE")) - 1
 
@@ -552,10 +555,14 @@ custom_addRow <- callModule(
   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
   mode = "timepoint"
 )
+
 observe({
-  #loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
-  print(loadedData[[paste0("data_timeline_", selectedTrack())]])
-  print(custom_addRow())
+  if(!is.null(custom_addRow())){
+    loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
+  }
+
+  #print(loadedData[[paste0("data_timeline_", selectedTrack())]])
+  #print(custom_addRow())
 })
 
 # # edit custom entry ---------------------------------------------------------------
