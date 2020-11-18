@@ -10,7 +10,7 @@ output$MutDataImg <- renderImage({
   )
 }, deleteFile = FALSE)
 
-# save upload file ---------------------------------------------------------------
+# upload file ---------------------------------------------------------------
 observeEvent(input$chooseMAF, {
   uploaded_data <-
     as.data.frame(vroom::vroom(input$chooseMAF$datapath, delim = "\t"))
@@ -38,15 +38,11 @@ output$MAFdata <- DT::renderDT({
 
 # save data ---------------------------------------------------------------
 observeEvent(input$saveMAF, {
-  if (!is.null(input$chooseMAF)) {
+  #if (!is.null(input$chooseMAF)) {
     # data_mutations_extended
     write.table(
       loadedData$data_mutations_extended,
-      file.path(
-        study_dir,
-        loadedData$studyID,
-        "data_mutations_extended.txt.temp"
-      ),
+      file.path(study_dir,loadedData$studyID,"data_mutations_extended.txt.temp"),
       append = FALSE,
       sep = "\t",
       row.names = FALSE,
@@ -54,24 +50,14 @@ observeEvent(input$saveMAF, {
       quote = FALSE
     )
     file.rename(
-      file.path(
-        study_dir,
-        loadedData$studyID,
-        "data_mutations_extended.txt.temp"
-      ),
-      file.path(
-        study_dir,
-        loadedData$studyID,
-        "data_mutations_extended.txt"
-      )
+      file.path(study_dir,loadedData$studyID,"data_mutations_extended.txt.temp"),
+      file.path(study_dir,loadedData$studyID,"data_mutations_extended.txt")
     )
 
     # add cases_sequenced
     case_list_dir <-
       file.path(study_dir, loadedData$studyID, "case_lists")
-    ifelse(!dir.exists(case_list_dir),
-           dir.create(case_list_dir),
-           FALSE)
+    if(!dir.exists(case_list_dir)) dir.create(case_list_dir)
     cases_samples <-
       loadedData$data_clinical_sample[3:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
     cases_sequenced_df <-
@@ -137,11 +123,7 @@ observeEvent(input$saveMAF, {
       )
     write.table(
       meta_mutations_extended_df,
-      file.path(
-        study_dir,
-        loadedData$studyID,
-        "meta_mutations_extended.txt.temp"
-      ),
+      file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt.temp"),
       append = FALSE,
       sep = ": ",
       row.names = FALSE,
@@ -149,23 +131,15 @@ observeEvent(input$saveMAF, {
       quote = FALSE
     )
     file.rename(
-      file.path(
-        study_dir,
-        loadedData$studyID,
-        "meta_mutations_extended.txt.temp"
-      ),
-      file.path(
-        study_dir,
-        loadedData$studyID,
-        "meta_mutations_extended.txt"
-      )
+      file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt.temp"),
+      file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt")
     )
     showNotification("MAF file submitted successfully!",
                      type = "message",
                      duration = 10)
-  } else {
-    showNotification("Please select a valid MAF file.",
-                     type = "warning",
-                     duration = NULL)
-  }
+  # } else {
+  #   showNotification("Please select a valid MAF file.",
+  #                    type = "warning",
+  #                    duration = NULL)
+  # }
 })
