@@ -185,22 +185,18 @@ observeEvent(input$datesSave, {
   write.table(
     loadedData$dates_first_diagnosis,
     file.path(
-      "study",
+      study_dir,
       loadedData$studyID,
       "dates_first_diagnosis.txt.temp"
     ),
     append = FALSE,
     sep = "\t",
-    row.names = F,
+    row.names = FALSE,
     col.names = TRUE,
     quote = FALSE
   )
   file.rename(
-    file.path(
-      study_dir,
-      loadedData$studyID,
-      "dates_first_diagnosis.txt.temp"
-    ),
+    file.path(study_dir,loadedData$studyID,"dates_first_diagnosis.txt.temp"),
     file.path(study_dir, loadedData$studyID, "dates_first_diagnosis.txt")
   )
   showNotification("Diagnosis dates saved successfully!",
