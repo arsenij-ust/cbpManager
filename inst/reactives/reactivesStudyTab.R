@@ -282,7 +282,11 @@ observeEvent(input$upload, {
     data_mutations_extended <-
       read.table(data_mutations_extended_file,
                  sep = "\t",
-                 header = TRUE)
+                 header = TRUE,
+                 comment.char = "#",
+                 stringsAsFactors = FALSE,
+                 quote = "",
+                 fill = FALSE)
     loadedData$data_mutations_extended <- data_mutations_extended
   }
 

@@ -10,7 +10,7 @@ output$sampleDataImg <- renderImage({
   )
 }, deleteFile = FALSE)
 
-#Data table output
+#Data table output ---------------------------------------------------------------
 output$sampleTable <- DT::renderDT({
   if (!is.null(loadedData$data_clinical_sample)) {
     DT::datatable(
@@ -18,8 +18,7 @@ output$sampleTable <- DT::renderDT({
       selection = 'single',
       rownames = F,
       options = list(
-        pageLength = 25,
-        dom = 'ltipr',
+        pageLength = 15,
         scrollX = TRUE
       )
     ) %>%

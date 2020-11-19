@@ -33,7 +33,8 @@ observeEvent(input$chooseMAF, {
 
 # show table ---------------------------------------------------------------
 output$MAFdata <- DT::renderDT({
-  loadedData$data_mutations_extended
+  DT::datatable(loadedData$data_mutations_extended,
+                options = list(scrollX = TRUE))
 })
 
 # save data ---------------------------------------------------------------

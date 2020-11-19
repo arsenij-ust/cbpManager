@@ -18,7 +18,7 @@ observeEvent(loadedData$data_clinical_patient, {
   patient_id_list$ids <- ids[!is.na(ids)]
 })
 
-#Data table output
+#Data table output ---------------------------------------------------------------
 output$patientTable <- DT::renderDT({
   if (!is.null(loadedData$data_clinical_patient)) {
     DT::datatable(
@@ -26,8 +26,7 @@ output$patientTable <- DT::renderDT({
       selection = 'single',
       rownames = F,
       options = list(
-        pageLength = 25,
-        dom = 'ltipr',
+        pageLength = 15,
         scrollX = TRUE
       )
     ) %>%
