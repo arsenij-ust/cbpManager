@@ -185,7 +185,7 @@ observeEvent(input$datesSave, {
   write.table(
     loadedData$dates_first_diagnosis,
     file.path(
-      study_dir,
+      "study",
       loadedData$studyID,
       "dates_first_diagnosis.txt.temp"
     ),
@@ -196,7 +196,11 @@ observeEvent(input$datesSave, {
     quote = FALSE
   )
   file.rename(
-    file.path(study_dir,loadedData$studyID,"dates_first_diagnosis.txt.temp"),
+    file.path(
+      study_dir,
+      loadedData$studyID,
+      "dates_first_diagnosis.txt.temp"
+    ),
     file.path(study_dir, loadedData$studyID, "dates_first_diagnosis.txt")
   )
   showNotification("Diagnosis dates saved successfully!",
@@ -504,9 +508,17 @@ output$selectTrackUI <- renderUI({
 })
 
 selectedTrack <- eventReactive(input$editTrack, {
-  print(input$selectTrack)
   return(input$selectTrack)
 })
+
+# rc_val <- reactiveValues()
+# rc_val$rc <- min_timeline_df
+#
+#
+# observeEvent(input$editTrack, {
+#   rc_val$rc <- loadedData[[paste0("data_timeline_", input$selectTrack)]]
+#   rc_val$name <- input$selectTrack
+# })
 
 #UI modules for table modification
 output$customTracksUI <- renderUI({
@@ -526,13 +538,11 @@ output$customTracksUI <- renderUI({
 
 # Data table output
 output$customTimeline <- DT::renderDT({
-  print(selectedTrack())
-  print(loadedData[[paste0("data_timeline_", selectedTrack())]])
   hidenCols <-
-    which(colnames(loadedData[[paste0("data_timeline_", selectedTrack())]]) %in% c("EVENT_TYPE")) - 1
+    which(colnames(rc_val$rc) %in% c("EVENT_TYPE")) - 1
 
   DT::datatable(
-    loadedData[[paste0("data_timeline_", selectedTrack())]],
+    rc_val$rc,
     selection = "single",
     rownames = F,
     options = list(pageLength = 25, columnDefs = list(list(
@@ -542,11 +552,10 @@ output$customTimeline <- DT::renderDT({
 })
 
 # add custom entry ---------------------------------------------------------------
-
 custom_addRow <- callModule(
   module = add_rowServer,
   id = "customTimeline",
-  data = reactive(loadedData[[paste0("data_timeline_", selectedTrack())]]),
+  data = reactive(rc_val$rc),
   patient_ids = reactive(patient_id_list$ids),
   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
   mode = "timepoint"
@@ -554,12 +563,13 @@ custom_addRow <- callModule(
 
 observe({
   if(!is.null(custom_addRow())){
-    loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
+    rc_val$rc <- custom_addRow()
+    loadedData[[paste0("data_timeline_", rc_val$name)]] <- rc_val$rc
   }
 
-  #print(loadedData[[paste0("data_timeline_", selectedTrack())]])
-  #print(custom_addRow())
 })
+
+
 
 # # edit custom entry ---------------------------------------------------------------
 # status_editRow <- callModule(

@@ -1,0 +1,5 @@
+PATIENT_ID	START_DATE	STOP_DATE	EVENT_TYPE	TREATMENT_TYPE	SUBTYPE	AGENT
+Testpatient	125	145	CUSTOM	Medical Therapy	Chemotherapy	Med_X
+Testpatient	145	160	CUSTOM	Medical Therapy		Med_X + Med_Y
+Testpatient	180	210	CUSTOM	Medical Therapy		Med_X + Med_Z
+Testpatient	125	200	CUSTOM	Radiation Therapy	Rad_X	
