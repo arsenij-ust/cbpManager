@@ -176,6 +176,7 @@ loadedData <- reactiveValues()
 
 # load data of selected study ---------------------------------------------------------------
 observeEvent(input$upload, {
+  req(input$cancer_study_identifier)
   # check if empty study ID ---------------------------------------------------------------
   if (input$cancer_study_identifier == "") {
     showNotification("Please select a cancer study ID",
@@ -184,7 +185,7 @@ observeEvent(input$upload, {
     return()
   }
 
-  # Fill reactive object ---------------------------------------------------------------
+  # fill reactive object ---------------------------------------------------------------
   loadedData$studyID <- NULL
   loadedData$data_clinical_patient <- data.frame(
     PATIENT_ID = c("Patient Identifier", "Patient identifier", "e.g. JohnDoe"),
@@ -323,7 +324,8 @@ observeEvent(input$upload, {
   }
 
   # read custum data_timeline_ ---------------------------------------------------------------
-  timeline_files <- cancer_study_rc()[grep("data_timeline_", cancer_study_rc())]
+  all_study_files <- list.files(file.path(study_dir, loadedData$studyID))
+  timeline_files <- all_study_files[grep("data_timeline_", all_study_files)]
   exclude_tls <-
     c(
       "data_timeline_surgery.txt",

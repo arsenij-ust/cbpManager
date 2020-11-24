@@ -117,15 +117,16 @@ timelineTab <- tabItem(
       #uiOutput("customTracksUI")
     ),
     box(width = 12,
-        add_rowUI("customTimeline"),
-        edit_rowUI("customTimeline"),
-        delete_rowUI("customTimeline"),
-        add_columnUI("customTimeline"),
-        delete_columnUI("customTimeline"),
-        save_timelineUI("customTimeline"),
-        br(),
-        br(),
-        DT::DTOutput("customTable")
+        dynamicTableUI("customTimelines")
+        # add_rowUI("customTimeline"),
+        # edit_rowUI("customTimeline"),
+        # delete_rowUI("customTimeline"),
+        # add_columnUI("customTimeline"),
+        # delete_columnUI("customTimeline"),
+        # save_timelineUI("customTimeline"),
+        # br(),
+        # br(),
+        # DT::DTOutput("customTable")
     )
   )
 )

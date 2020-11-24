@@ -191,7 +191,7 @@ observeEvent(input$datesSave, {
     ),
     append = FALSE,
     sep = "\t",
-    row.names = F,
+    row.names = FALSE,
     col.names = TRUE,
     quote = FALSE
   )
@@ -400,6 +400,9 @@ status_addRow <- callModule(
 observe({
   loadedData$data_timeline_status <- status_addRow()
 })
+observe({
+  print(status_addRow())
+})
 
 # edit status entry ---------------------------------------------------------------
 status_editRow <- callModule(
@@ -479,10 +482,8 @@ min_timeline_df <- data.frame(
 #   return(timeline_names)
 # })
 
-# add new custom track
-observeEvent(input$addTrack, {
-
-  # get custom timeline names
+# get custom timeline names from the reactive study object
+observe({
   timeline_dfs <- names(loadedData)[grep("data_timeline_", names(loadedData))]
   excludeTimelines <-
     c(
@@ -492,7 +493,11 @@ observeEvent(input$addTrack, {
     )
   timeline_dfs <- timeline_dfs[-which(timeline_dfs %in% excludeTimelines)]
   timeline_names <- gsub("data_timeline_", "", timeline_dfs)
+  loadedData$custom_timeline_names <- timeline_names
+})
 
+# add new custom track
+observeEvent(input$addTrack, {
   # check if name for new track exists
   if (input$customTrackID == "") {
     showNotification("Provide track name first.",
@@ -503,17 +508,15 @@ observeEvent(input$addTrack, {
     ID <- .create_name(input$customTrackID, toupper = FALSE)
 
     #check if track name already exists
-    if (ID %in% timeline_names){
+    if (ID %in% loadedData$custom_timeline_names){
       showNotification("Name for timeline already exists",
                        type = "error",
                        duration = NULL)
     # add track to the reactive study object
     } else {
       loadedData[[paste0("data_timeline_", ID)]] <- min_timeline_df
-      timeline_names <- c(timeline_names, ID)
     }
   }
-  loadedData$custom_timeline_names <- timeline_names
 })
 
 # UI for timeline drop-down widget
@@ -524,6 +527,16 @@ output$selectTrackUI <- renderUI({
 selectedTrack <- eventReactive(input$editTrack, {
   return(input$selectTrack)
 })
+
+callModule(
+  module = dynamicTableUI,
+  id = "customTimeline"
+  # data = reactive(loadedData[[paste0("data_timeline_", selectedTrack())]]),
+  # patient_ids = reactive(patient_id_list$ids),
+  # dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
+  # mode = "timepoint"
+)
+
 
 # UI modules for table modification
 # output$customTracksUI <- renderUI({
@@ -542,22 +555,22 @@ selectedTrack <- eventReactive(input$editTrack, {
 # })
 
 # Data table output
-output$customTable <- DT::renderDT({
-  hidenCols <-
-    which(colnames(loadedData[[paste0("data_timeline_", selectedTrack())]]) %in% c("EVENT_TYPE")) - 1
-
-  DT::datatable(
-    loadedData[[paste0("data_timeline_", selectedTrack())]],
-    selection = "single",
-    rownames = F,
-    options = list(pageLength = 25, columnDefs = list(list(
-      visible = FALSE, targets = c(hidenCols)
-    )))
-  )
-})
-
-# add custom entry ---------------------------------------------------------------
-
+# output$customTable <- DT::renderDT({
+#   hidenCols <-
+#     which(colnames(loadedData[[paste0("data_timeline_", selectedTrack())]]) %in% c("EVENT_TYPE")) - 1
+#
+#   DT::datatable(
+#     loadedData[[paste0("data_timeline_", selectedTrack())]],
+#     selection = "single",
+#     rownames = F,
+#     options = list(pageLength = 25, columnDefs = list(list(
+#       visible = FALSE, targets = c(hidenCols)
+#     )))
+#   )
+# })
+#
+# # add custom entry ---------------------------------------------------------------
+#
 # custom_addRow <- callModule(
 #   module = add_rowServer,
 #   id = "customTimeline",
@@ -567,9 +580,9 @@ output$customTable <- DT::renderDT({
 #   mode = "timepoint"
 # )
 # observe({
-#   #loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
-#   print(loadedData[[paste0("data_timeline_", selectedTrack())]])
-#   print(custom_addRow())
+#   if(!is.null(custom_addRow())){
+#     loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
+#   }
 # })
 
 # # edit custom entry ---------------------------------------------------------------
