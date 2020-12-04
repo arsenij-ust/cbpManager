@@ -113,11 +113,12 @@ timelineTab <- tabItem(
         uiOutput("selectTrackUI")),
       div(
         style="display: inline-block;vertical-align:top; width: 200px;",
-        actionButton("editTrack", "Edit track", class = "btn-success"))
-      #uiOutput("customTracksUI")
+        actionButton("editTrack", "Edit track", class = "btn-success")),
+
     ),
     box(width = 12,
-        dynamicTableUI("customTimelines")
+        uiOutput("customTracksUI")
+        #dynamicTableUI("customTimelines")
         # add_rowUI("customTimeline"),
         # edit_rowUI("customTimeline"),
         # delete_rowUI("customTimeline"),
