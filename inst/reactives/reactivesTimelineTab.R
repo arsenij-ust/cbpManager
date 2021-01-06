@@ -226,7 +226,7 @@ output$treatmentTable <- DT::renderDT({
 
 # add treatmemt entry ---------------------------------------------------------------
 treatment_addRow <- callModule(
-  module = add_rowServer,
+  module = addRow_Server,
   id = "Treatment",
   data = reactive(loadedData$data_timeline_treatment),
   patient_ids = reactive(patient_id_list$ids),
@@ -238,7 +238,7 @@ observe({
 
 # edit treatment entry ---------------------------------------------------------------
 treatment_editRow <- callModule(
-  module = edit_rowServer,
+  module = editRow_Server,
   id = "Treatment",
   data = reactive(loadedData$data_timeline_treatment),
   patient_ids = reactive(patient_id_list$ids),
@@ -251,7 +251,7 @@ observe({
 
 # delete treatmemt entry ---------------------------------------------------------------
 treatment_delRow <- callModule(
-  module = delete_rowServer,
+  module = deleteRow_Server,
   id = "Treatment",
   data = reactive(loadedData$data_timeline_treatment),
   selected_row = reactive(input$treatmentTable_rows_selected)
@@ -263,7 +263,7 @@ observe({
 # delete treatmemt column ---------------------------------------------------------------
 
 treatment_delCol <- callModule(
-  module = delete_columnServer,
+  module = deleteColumn_Server,
   id = "Treatment",
   data = reactive(loadedData$data_timeline_treatment),
   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
@@ -275,7 +275,7 @@ observe({
 # add treatmemt column ---------------------------------------------------------------
 
 treatment_addCol <- callModule(
-  module = add_columnServer,
+  module = addColumn_Server,
   id = "Treatment",
   data = reactive(loadedData$data_timeline_treatment)
 )
@@ -285,7 +285,7 @@ observe({
 
 # save treatment data ---------------------------------------------------------------
 callModule(
-  module = save_timelineServer,
+  module = saveTimeline_Server,
   id = "Treatment",
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_treatment)
@@ -308,7 +308,7 @@ output$surgeryTable <- DT::renderDT({
 
 # add surgery entry ---------------------------------------------------------------
 surgery_addRow <- callModule(
-  module = add_rowServer,
+  module = addRow_Server,
   id = "Surgery",
   data = reactive(loadedData$data_timeline_surgery),
   patient_ids = reactive(patient_id_list$ids),
@@ -321,7 +321,7 @@ observe({
 
 # edit surgery entry ---------------------------------------------------------------
 surgery_editRow <- callModule(
-  module = edit_rowServer,
+  module = editRow_Server,
   id = "Surgery",
   data = reactive(loadedData$data_timeline_surgery),
   patient_ids = reactive(patient_id_list$ids),
@@ -335,7 +335,7 @@ observe({
 
 # delete surgery entry ---------------------------------------------------------------
 surgery_delRow <- callModule(
-  module = delete_rowServer,
+  module = deleteRow_Server,
   id = "Surgery",
   data = reactive(loadedData$data_timeline_surgery),
   selected_row = reactive(input$surgeryTable_rows_selected)
@@ -346,7 +346,7 @@ observe({
 
 # delete surgery column ---------------------------------------------------------------
 surgery_delCol <- callModule(
-  module = delete_columnServer,
+  module = deleteColumn_Server,
   id = "Surgery",
   data = reactive(loadedData$data_timeline_surgery),
   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
@@ -357,7 +357,7 @@ observe({
 
 # add surgery column ---------------------------------------------------------------
 surgery_addCol <- callModule(
-  module = add_columnServer,
+  module = addColumn_Server,
   id = "Surgery",
   data = reactive(loadedData$data_timeline_surgery)
 )
@@ -367,7 +367,7 @@ observe({
 
 # save surgery data ---------------------------------------------------------------
 callModule(
-  module = save_timelineServer,
+  module = saveTimeline_Server,
   id = "Surgery",
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_surgery)
@@ -390,7 +390,7 @@ output$statusTable <- DT::renderDT({
 
 # add status entry ---------------------------------------------------------------
 status_addRow <- callModule(
-  module = add_rowServer,
+  module = addRow_Server,
   id = "Status",
   data = reactive(loadedData$data_timeline_status),
   patient_ids = reactive(patient_id_list$ids),
@@ -403,7 +403,7 @@ observe({
 
 # edit status entry ---------------------------------------------------------------
 status_editRow <- callModule(
-  module = edit_rowServer,
+  module = editRow_Server,
   id = "Status",
   data = reactive(loadedData$data_timeline_status),
   patient_ids = reactive(patient_id_list$ids),
@@ -417,7 +417,7 @@ observe({
 
 # delete status entry ---------------------------------------------------------------
 status_delRow <- callModule(
-  module = delete_rowServer,
+  module = deleteRow_Server,
   id = "Status",
   data = reactive(loadedData$data_timeline_status),
   selected_row = reactive(input$statusTable_rows_selected)
@@ -428,7 +428,7 @@ observe({
 
 # delete status column ---------------------------------------------------------------
 status_delCol <- callModule(
-  module = delete_columnServer,
+  module = deleteColumn_Server,
   id = "Status",
   data = reactive(loadedData$data_timeline_status),
   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
@@ -439,7 +439,7 @@ observe({
 
 # add status column ---------------------------------------------------------------
 status_addCol <- callModule(
-  module = add_columnServer,
+  module = addColumn_Server,
   id = "Status",
   data = reactive(loadedData$data_timeline_status)
 )
@@ -449,12 +449,11 @@ observe({
 
 # save status data ---------------------------------------------------------------
 callModule(
-  module = save_timelineServer,
+  module = saveTimeline_Server,
   id = "Status",
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_status)
 )
-
 
 # custom tracks ---------------------------------------------------------------
 # minimal data.frame of a timeline track
@@ -465,34 +464,31 @@ min_timeline_df <- data.frame(
   EVENT_TYPE = character()
 )
 
-# get custom timeline names from the reactive study object
-# timelineIDs <- reactive({
+# create reactive data.frame with timeline metadata
+
+
+# get custom timeline names and timeline modes from the reactive study object and fill the data.frame
+# observe({
 #   timeline_dfs <- names(loadedData)[grep("data_timeline_", names(loadedData))]
 #   excludeTimelines <-
-#       c(
-#         "data_timeline_surgery",
-#         "data_timeline_status",
-#         "data_timeline_treatment"
-#       )
-#   timeline_dfs <- timeline_dfs[-which(timeline_dfs %in% excludeTimelines)]
-#   timeline_names <- gsub("data_timeline_", "", timeline_dfs)
-#   return(timeline_names)
+#     c(
+#       "data_timeline_surgery",
+#       "data_timeline_status",
+#       "data_timeline_treatment"
+#     )
+#   timeline_names <- timeline_dfs[-which(timeline_dfs %in% excludeTimelines)]
+#   lapply(timeline_names, function(name){
+#     if(!name %in% colnames(customTimelines$timelines)){
+#       if(all(is.na(loadedData[[name]][,"STOP_DATE"]))){
+#         mode <- "timepoint"
+#       } else {
+#         mode <- "timeline"
+#       }
+#       customTimelines$timelines[name,] <- list(name=name, shortName=gsub("data_timeline_", "", name), mode=mode)
+#     }
+#   })
+#   print(customTimelines$timelines)
 # })
-
-customTimelines <- reactiveValues()
-# get custom timeline names from the reactive study object
-observe({
-  timeline_dfs <- names(loadedData)[grep("data_timeline_", names(loadedData))]
-  excludeTimelines <-
-    c(
-      "data_timeline_surgery",
-      "data_timeline_status",
-      "data_timeline_treatment"
-    )
-  timeline_dfs <- timeline_dfs[-which(timeline_dfs %in% excludeTimelines)]
-  timeline_names <- gsub("data_timeline_", "", timeline_dfs)
-  customTimelines$timeline_names <- timeline_names
-})
 
 # add new custom track
 observeEvent(input$addTrack, {
@@ -506,169 +502,245 @@ observeEvent(input$addTrack, {
     ID <- .create_name(input$customTrackID, toupper = FALSE)
 
     #check if track name already exists
-    if (ID %in% customTimelines$timeline_names){
+    if (ID %in% customTimelines$timelines$shortName){
       showNotification("Name for timeline already exists",
                        type = "error",
                        duration = NULL)
     # add track to the reactive study object
     } else {
       loadedData[[paste0("data_timeline_", ID)]] <- min_timeline_df
+      mode <- input$timelineMode
+      customTimelines$timelines[paste0("data_timeline_", ID),] <- list(name=paste0("data_timeline_", ID), shortName=ID, mode=mode, trigger=0)
     }
   }
 })
 
 # UI for timeline drop-down widget
 output$selectTrackUI <- renderUI({
-  selectInput("selectTrack", width = "400px", label = NULL, choices = customTimelines$timeline_names)
+  selectInput("selectTrack", width = "400px", label = NULL, choices = customTimelines$timelines$shortName)
 })
 
 
 observeEvent(input$editTrack, {
-  customTimelines$selectedTrack <- input$selectTrack
-})
-
-# callModule(
-#   module = dynamicTableUI,
-#   id = "customTimeline"
-#   # data = reactive(loadedData[[paste0("data_timeline_", selectedTrack())]]),
-#   # patient_ids = reactive(patient_id_list$ids),
-#   # dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
-#   # mode = "timepoint"
-# )
-
-
-# UI modules for table modification
-output$customTracksUI <- renderUI({
-  req(input$editTrack)
-  tagList(
-    actionButton("AddCTimelineEntry", label = "Add", icon=icon("plus",lib="glyphicon")),
-    # add_rowUI("customTimeline"),
-    # edit_rowUI("customTimeline"),
-    # delete_rowUI("customTimeline"),
-    # add_columnUI("customTimeline"),
-    # delete_columnUI("customTimeline"),
-    # save_timelineUI("customTimeline"),
-    br(),
-    br(),
-    DT::DTOutput("customTimeline")
-  )
+  customTimelines$selectedTrack <- customTimelines$timelines[customTimelines$timelines$shortName==input$selectTrack,]$name
 })
 
 # Data table output
-output$customTimeline <- DT::renderDT({
-  hidenCols <-
-    which(colnames(loadedData[[paste0("data_timeline_", customTimelines$selectedTrack)]]) %in% c("EVENT_TYPE")) - 1
+output$Table_ct <- DT::renderDT({
+  req(customTimelines$selectedTrack)
+
+  if(customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$mode == "timeline"){
+    colsToHide <- c("EVENT_TYPE")
+  } else {
+    colsToHide <- c("STOP_DATE","EVENT_TYPE")
+  }
+  # find the index of the columns to hide
+  hiddenCols <-
+    which(colnames(loadedData[[customTimelines$selectedTrack]]) %in% colsToHide) - 1
 
   DT::datatable(
-    loadedData[[paste0("data_timeline_", customTimelines$selectedTrack)]],
+    loadedData[[customTimelines$selectedTrack]],
     selection = "single",
     rownames = F,
     options = list(pageLength = 25, columnDefs = list(list(
-      visible = FALSE, targets = c(hidenCols)
+      visible = FALSE, targets = c(hiddenCols)
     )))
   )
 })
 
-# add custom entry ---------------------------------------------------------------
-
-observeEvent(input$AddCTimelineEntry,{
+# add custom column ---------------------------------------------------------------
+observeEvent(input$AddColumn_ct,{
+  req(customTimelines$selectedTrack)
   showModal(
     modalDialog(
-      title = "New entry",
-      uiOutput("addCTimelineUI"),
+      title = "Add new column",
+      #uiOutput(paste0("AddCol",id,"UI")),
+      uiOutput("ct_AddCol_UI"),
       easyClose = FALSE,
       footer = tagList(
         modalButton("Cancel"),
-        actionButton("ModalbuttonAddCT", "Add")
+        actionButton("ct_ModalbuttonAddCol", "Add column")
       )
     )
   )
 })
 
-output$addCTimelineUI <- renderUI({
-  data <- loadedData[[paste0("data_timeline_", customTimelines$selectedTrack)]]
-  patient_ids <- patient_id_list$ids
-  lapply(colnames(data),
+output$ct_AddCol_UI <- renderUI({
+  fluidRow(column(
+    width = 8,
+    textInput(inputId="ct_colname",
+              label = "Column name:",
+              placeholder = "e.g. ATTRIBUTE"
+    ))
+  )
+})
+
+observeEvent(input$ct_ModalbuttonAddCol, {
+  data <- loadedData[[customTimelines$selectedTrack]]
+  if(input$ct_colname == ""){
+    showNotification("Column name cannot be empty.", type="error", duration = NULL)
+  } else if(toupper(input$ct_colname) %in% colnames(data)){
+    showNotification("Column already exists.", type="error", duration = NULL)
+  } else {
+    ct_colname <- .create_name(input$ct_colname)
+    data %>% dplyr::mutate(!!(ct_colname) := "") -> loadedData[[customTimelines$selectedTrack]]
+    removeModal()
+  }
+})
+
+# delete custom column ---------------------------------------------------------------
+observeEvent(input$DeleteColumn_ct, {
+  req(customTimelines$selectedTrack)
+  exclude <- c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
+
+  showModal(
+    modalDialog(
+      title = "Delete column(s)",
+      fluidRow(column(
+        width = 8,
+        selectInput(
+          inputId = "ct_DelColname",
+          label = "Select column(s) for deletion:",
+          choices = setdiff(colnames(loadedData[[customTimelines$selectedTrack]]), exclude),
+          multiple = TRUE
+        )
+      )),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ct_ModalbuttonDeleteCol", "Delete column(s)")
+      )
+    )
+  )
+})
+
+observeEvent(input$ct_ModalbuttonDeleteCol, {
+  loadedData[[customTimelines$selectedTrack]] <-
+    loadedData[[customTimelines$selectedTrack]][, !(names(loadedData[[customTimelines$selectedTrack]]) %in% input$ct_DelColname), drop = FALSE]
+  removeModal()
+})
+
+# delete custom entry ---------------------------------------------------------------
+
+observeEvent(input$DeleteEntry_ct, {
+  req(customTimelines$selectedTrack)
+  if(is.null(input$Table_ct_rows_selected)){
+    showNotification("Please select a row", type="warning", duration = NULL)
+  } else {
+    showModal(modalDialog(
+      "Do you want to delete the selected entry?",
+      title = "Delete",
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ct_ModalbuttonDeleteEntry", "Delete")
+      )
+    ))
+  }
+})
+
+observeEvent(input$ct_ModalbuttonDeleteEntry, {
+  entry <- input$Table_ct_rows_selected
+
+  loadedData[[customTimelines$selectedTrack]] <- loadedData[[customTimelines$selectedTrack]][-entry,,drop = FALSE]
+  removeModal()
+})
+
+# add custom entry ---------------------------------------------------------------
+
+observeEvent(input$AddEntry_ct,{
+  req(customTimelines$selectedTrack)
+  showModal(
+    modalDialog(
+      title = "New entry",
+      uiOutput("ct_addEntry_UI"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ct_ModalbuttonAdd", "Add")
+      )
+    )
+  )
+})
+
+output$ct_addEntry_UI <- renderUI({
+  lapply(colnames(loadedData[[customTimelines$selectedTrack]]),
          function(colname){
 
-           # if(colname == "PATIENT_ID"){
-           #   fluidRow(column(
-           #     width = 8,
-           #     selectInput(
-           #       inputId=colname,
-           #       label = "Select the Patient ID",
-           #       choices = unique(patient_ids[which(!is.na(patient_ids))]),
-           #       selected = 1
-           #     ),
-           #   ))
-           # } else if (colname == "EVENT_TYPE") {
-           #
-           # } else if (colname == "START_DATE") {
-           #   fluidRow(column(
-           #     width = 8,
-           #     dateInput(
-           #       inputId=colname,
-           #       label = colname,
-           #       format = "dd.mm.yyyy"
-           #     ),
-           #   ))
-           # } else if (colname == "STOP_DATE") {
-           #   if(mode == "timeline"){
-           #     fluidRow(column(
-           #       width = 8,
-           #       dateInput(
-           #         inputId=colname,
-           #         label = colname,
-           #         format = "dd.mm.yyyy"
-           #       ),
-           #     ))
-           #   }
-           # # } else if (colname == "TREATMENT_TYPE") {
-           # #   fluidRow(column(
-           # #     width = 8,
-           # #     selectInput(
-           # #       inputId=colname,
-           # #       label = colname,
-           # #       choices = c("Medical Therapy", "Radiation Therapy"),
-           # #       selected = 1),
-           # #   ))
-           # # }
-           # else if (colname == "SUBTYPE") {
-           #   fluidRow(column(
-           #     width = 8,
-           #     selectInput(
-           #       inputId=ns(colname),
-           #       label = colname,
-           #       choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"),
-           #       selected = 1),
-           #   ))
-           # } else {
-           #   fluidRow(column(
-           #     width = 8,
-           #     textInput(inputId=ns(colname),
-           #               label = colname,
-           #               value = ""),))
-           # }
-           fluidRow(column(
+           if(colname == "PATIENT_ID"){
+             fluidRow(column(
+               width = 8,
+               selectInput(
+                 inputId=colname,
+                 label = "Select the Patient ID",
+                 choices = unique(patient_id_list$ids[which(!is.na(patient_id_list$ids))]),
+                 selected = 1
+               ),
+             ))
+           } else if (colname == "EVENT_TYPE") {
+
+           } else if (colname == "START_DATE") {
+             fluidRow(column(
+               width = 8,
+               dateInput(
+                 inputId=colname,
+                 label = colname,
+                 format = "dd.mm.yyyy"
+               ),
+             ))
+           } else if (colname == "STOP_DATE") {
+             if(customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$mode == "timeline"){
+               fluidRow(column(
                  width = 8,
-                 textInput(inputId=colname,
-                           label = colname,
-                           value = ""),))
+                 dateInput(
+                   inputId=colname,
+                   label = colname,
+                   format = "dd.mm.yyyy"
+                 ),
+               ))
+             }
+           } else if (colname == "TREATMENT_TYPE") {
+             fluidRow(column(
+               width = 8,
+               selectInput(
+                 inputId=colname,
+                 label = colname,
+                 choices = c("Medical Therapy", "Radiation Therapy"),
+                 selected = 1),
+             ))
+           } else if (colname == "SUBTYPE") {
+             fluidRow(column(
+               width = 8,
+               selectInput(
+                 inputId=colname,
+                 label = colname,
+                 choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"),
+                 selected = 1),
+             ))
+           } else {
+             fluidRow(column(
+               width = 8,
+               textInput(inputId=colname,
+                         label = colname,
+                         value = ""),))
+           }
          })
 })
 
 # validate inputs in modalDialog and add new entry to table
-observeEvent(input$ModalbuttonAddCT, {
+observeEvent(input$ct_ModalbuttonAdd, {
+  data <- loadedData[[customTimelines$selectedTrack]]
+  dates <- loadedData$dates_first_diagnosis
   all_reactive_inputs <- reactiveValuesToList(input)
-  addPatientValues <-  all_reactive_inputs[names(all_reactive_inputs) %in% names(data())]
-  addPatientValues$EVENT_TYPE <- toupper(gsub("-", "", session$ns("")))
+  addPatientValues <-  all_reactive_inputs[names(all_reactive_inputs) %in% names(data)]
+  addPatientValues$EVENT_TYPE <- toupper(customTimelines$timelines[customTimelines$timelines$name == customTimelines$selectedTrack,]$shortName)
   if(addPatientValues["PATIENT_ID"] == ""){
     showNotification("'Patient ID' is requiered.", type="error", duration = NULL)
-  } else if(!addPatientValues["PATIENT_ID"] %in% dates_first_diagnosis()$PATIENT_ID){
+  } else if(!addPatientValues["PATIENT_ID"] %in% dates$PATIENT_ID){
     showNotification("Please provide a valid diagnosis date for this 'Patient ID'.", type="error", duration = NULL)
   } else {
-    diagnosisDate <- dates_first_diagnosis()[which(dates_first_diagnosis()$PATIENT_ID == addPatientValues["PATIENT_ID"]),"DATE"]
-    if(mode=="timeline") stopDate <- as.Date(addPatientValues[["STOP_DATE"]]) else stopDate <- NULL
+    diagnosisDate <- dates[which(dates$PATIENT_ID == addPatientValues["PATIENT_ID"]),"DATE"]
+    if(customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$mode =="timeline") stopDate <- as.Date(addPatientValues[["STOP_DATE"]]) else stopDate <- NULL
     failed <- check_input_dates(
       as.Date(diagnosisDate),
       as.Date(addPatientValues[["START_DATE"]]),
@@ -681,82 +753,190 @@ observeEvent(input$ModalbuttonAddCT, {
     } else {
       # add row to data_timeline_treatment
       start <- as.numeric(as.Date(addPatientValues[["START_DATE"]]) - as.Date(diagnosisDate))
-      if(mode=="timeline") end <- as.numeric(as.Date(addPatientValues[["STOP_DATE"]]) - as.Date(diagnosisDate)) else end <- ""
+      if(customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$mode =="timeline") end <- as.numeric(as.Date(addPatientValues[["STOP_DATE"]]) - as.Date(diagnosisDate)) else end <- ""
       addPatientValues$START_DATE <- start
       addPatientValues$STOP_DATE <- end
-      params$df <- plyr::rbind.fill(data(), as.data.frame(addPatientValues))
+      loadedData[[customTimelines$selectedTrack]] <- plyr::rbind.fill(data, as.data.frame(addPatientValues))
       removeModal()
     }
   }
 })
 
+# edit custom entry ---------------------------------------------------------------
+observeEvent(input$EditEntry_ct,{
+  req(customTimelines$selectedTrack)
+  if(is.null(input$Table_ct_rows_selected)){
+    showNotification("Please select a row.", type="warning", duration = NULL)
+  } else {
+    showModal(
+      modalDialog(
+        title = "Edit entry",
+        uiOutput("ct_editEntry_UI"),
+        easyClose = FALSE,
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton("ct_ModalbuttonEdit", "Edit")
+        )
+      )
+    )
+  }
+})
 
+output$ct_editEntry_UI <- renderUI({
+  selected_row <- input$Table_ct_rows_selected
+  data <- loadedData[[customTimelines$selectedTrack]]
+  patient_ids <- patient_id_list$ids
+  lapply(colnames(data),
+         function(colname){
 
-#
-# custom_addRow <- callModule(
-#   module = add_rowServer,
-#   id = "customTimeline",
-#   data = reactive(loadedData[[paste0("data_timeline_", selectedTrack())]]),
-#   patient_ids = reactive(patient_id_list$ids),
-#   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
-#   mode = "timepoint"
-# )
-# observe({
-#   if(!is.null(custom_addRow())){
-#     loadedData[[paste0("data_timeline_", selectedTrack())]] <- custom_addRow()
-#   }
-# })
+           if(colname == "PATIENT_ID"){
+             fluidRow(column(
+               width = 8,
+               selectInput(
+                 inputId=colname,
+                 label = "Select the Patient ID",
+                 choices = unique(patient_ids[which(!is.na(patient_ids))]),
+                 selected = data[selected_row, colname]
+               ),
+             ))
+           } else if (colname == "EVENT_TYPE") {
 
-# # edit custom entry ---------------------------------------------------------------
-# status_editRow <- callModule(
-#   module = edit_rowServer,
-#   id = "Status",
-#   data = reactive(loadedData$data_timeline_status),
-#   patient_ids = reactive(patient_id_list$ids),
-#   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
-#   selected_row = reactive(input$statusTable_rows_selected),
-#   mode = "timepoint"
-# )
-# observe({
-#   loadedData$data_timeline_status <- status_editRow()
-# })
-#
-# # delete custom entry ---------------------------------------------------------------
-# status_delRow <- callModule(
-#   module = delete_rowServer,
-#   id = "Status",
-#   data = reactive(loadedData$data_timeline_status),
-#   selected_row = reactive(input$statusTable_rows_selected)
-# )
-# observe({
-#   loadedData$data_timeline_status <- status_delRow()
-# })
-#
-# # delete custom column ---------------------------------------------------------------
-# status_delCol <- callModule(
-#   module = delete_columnServer,
-#   id = "Status",
-#   data = reactive(loadedData$data_timeline_status),
-#   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
-# )
-# observe({
-#   loadedData$data_timeline_status <- status_delCol()
-# })
-#
-# # add custom column ---------------------------------------------------------------
-# status_addCol <- callModule(
-#   module = add_columnServer,
-#   id = "Status",
-#   data = reactive(loadedData$data_timeline_status)
-# )
-# observe({
-#   loadedData$data_timeline_status <- status_addCol()
-# })
-#
-# # save custom data ---------------------------------------------------------------
-# callModule(
-#   module = save_timelineServer,
-#   id = "Status",
-#   study_id = reactive(loadedData$studyID),
-#   data = reactive(loadedData$data_timeline_status)
-# )
+           } else if (colname == "START_DATE") {
+             fluidRow(column(
+               width = 8,
+               dateInput(
+                 inputId = colname,
+                 label = colname,
+                 format = "dd.mm.yyyy"
+               ),
+             ))
+           } else if (colname == "STOP_DATE") {
+             if(customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$mode == "timeline"){
+               fluidRow(column(
+                 width = 8,
+                 dateInput(
+                   inputId = colname,
+                   label = colname,
+                   format = "dd.mm.yyyy"
+                 ),
+               ))
+             }
+           } else if (colname == "TREATMENT_TYPE") {
+             fluidRow(column(
+               width = 8,
+               selectInput(
+                 inputId=colname,
+                 label = colname,
+                 choices = c("Medical Therapy", "Radiation Therapy"),
+                 selected = data[selected_row, colname]),
+             ))
+           } else if (colname == "SUBTYPE") {
+             fluidRow(column(
+               width = 8,
+               selectInput(
+                 inputId=colname,
+                 label = colname,
+                 choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"),
+                 selected = data[selected_row, colname]),
+             ))
+           } else {
+             fluidRow(column(
+               width = 8,
+               textInput(inputId=colname,
+                         label = colname,
+                         value = data[selected_row, colname]),))
+           }
+         })
+})
+
+# validate inputs in modalDialog and edit entry to table
+observeEvent(input$ct_ModalbuttonEdit, {
+  selected_row <- input$Table_ct_rows_selected
+  data <- loadedData[[customTimelines$selectedTrack]]
+  dates <- loadedData$dates_first_diagnosis
+  all_reactive_inputs <- reactiveValuesToList(input)
+  editValues <-  all_reactive_inputs[names(all_reactive_inputs) %in% names(data)]
+  editValues$EVENT_TYPE <- toupper(customTimelines$timelines[customTimelines$timelines$name == customTimelines$selectedTrack,]$shortName)
+  if(editValues["PATIENT_ID"] == ""){
+    showNotification("'Patient ID' is requiered.", type="error", duration = NULL)
+  } else if(!editValues["PATIENT_ID"] %in% dates$PATIENT_ID){
+    showNotification("Please provide a valid diagnosis date for this 'Patient ID'.", type="error", duration = NULL)
+  } else {
+    diagnosisDate <- dates[which(dates$PATIENT_ID == editValues["PATIENT_ID"]),"DATE"]
+    if(customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$mode =="timeline") stopDate <- as.Date(editValues[["STOP_DATE"]]) else stopDate <- NULL
+    failed <- check_input_dates(
+      as.Date(diagnosisDate),
+      as.Date(editValues[["START_DATE"]]),
+      stopDate
+    )
+    if(failed == 1){
+      showNotification("'End date' cannot be earlier as 'start date'.", type="error", duration = NULL)
+    } else if(failed == 2){
+      showNotification("'Start date' and 'End date' cannot be earlier as diagnosis date.", type="error", duration = NULL)
+    } else {
+      # edit row to data_timeline_treatment
+      start <- as.numeric(as.Date(editValues[["START_DATE"]]) - as.Date(diagnosisDate))
+      if(customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$mode =="timeline") end <- as.numeric(as.Date(editValues[["STOP_DATE"]]) - as.Date(diagnosisDate)) else end <- ""
+      editValues$START_DATE <- start
+      editValues$STOP_DATE <- end
+
+      #data()[selected_row(),1] <- editValues[[1]]
+      for(i in colnames(data)){
+        #print(editValues[[i]])
+        loadedData[[customTimelines$selectedTrack]][selected_row,i] <- editValues[i]
+      }
+      removeModal()
+    }
+  }
+})
+
+# save custom timeline table ---------------------------------------------------------------
+observeEvent(input$SaveTimeline_ct, {
+  req(customTimelines$selectedTrack)
+  timeline_id <- customTimelines$timelines[customTimelines$timelines$name==customTimelines$selectedTrack,]$shortName
+  data <- loadedData[[customTimelines$selectedTrack]]
+  data_timeline <- data
+  data_filename_temp <- paste0("data_timeline_", timeline_id, ".txt.temp")
+  meta_filename_temp <- paste0("meta_timeline_", timeline_id, ".txt.temp")
+  data_filename <- paste0("data_timeline_", timeline_id, ".txt")
+  meta_filename <- paste0("meta_timeline_", timeline_id, ".txt")
+
+  # write data
+  write.table(
+    data_timeline,
+    file.path(study_dir, loadedData$studyID, data_filename_temp),
+    append = FALSE,
+    sep = "\t",
+    row.names = FALSE,
+    col.names = TRUE,
+    quote = FALSE
+  )
+
+  # write meta
+  meta_timeline <- data.frame(
+    V1 = c("cancer_study_identifier", "genetic_alteration_type", "datatype", "data_filename"),
+    V2 = c(loadedData$studyID, "CLINICAL", "TIMELINE", data_filename)
+  )
+
+  write.table(
+    meta_timeline,
+    file.path(study_dir, loadedData$studyID, meta_filename_temp),
+    append = FALSE,
+    sep = ": ",
+    row.names = FALSE,
+    col.names = FALSE,
+    quote = FALSE
+  )
+
+  # rename
+  file.rename(
+    file.path(study_dir, loadedData$studyID, data_filename_temp),
+    file.path(study_dir, loadedData$studyID, data_filename)
+  )
+  file.rename(
+    file.path(study_dir, loadedData$studyID, meta_filename_temp),
+    file.path(study_dir, loadedData$studyID, meta_filename)
+  )
+  showNotification("Data saved successfully!", type="message", duration = 10)
+})
+
