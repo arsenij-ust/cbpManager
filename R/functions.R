@@ -402,7 +402,7 @@ importPatientData <- function(mode=c("patient", "sample", "mutations", "timeline
 
 #' Write a line to a logfile containing the date, time, username (from Shinyproxy), and the name of the modified file.
 #'
-#' @param output directory, where the logfile should be saved
+#' @param outdir directory, where the logfile should be saved
 #' @param modified_file Name of the modified file
 #' @param log_filename Name of the logfile
 #' @return Nothing to return
@@ -411,6 +411,7 @@ writeLogfile <- function(outdir, modified_file, log_filename="cbpManager_logfile
   if(userName=="") userName <- "NO_USERNAME"
   timepoint <- Sys.time()
   log <- paste0(timepoint, "   User: ", userName, " modified file '", modified_file, "'")
+  print(file.path(outdir, log_filename))
   write(log, file=file.path(outdir, log_filename), append=TRUE)
 }
 
