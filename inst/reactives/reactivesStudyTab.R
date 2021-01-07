@@ -173,9 +173,11 @@ output$ui_cancer_study_identifier <- renderUI({
 
 # Initiate a reactive object
 loadedData <- reactiveValues()
+customTimelines <- reactiveValues()
 
 # load data of selected study ---------------------------------------------------------------
 observeEvent(input$upload, {
+  req(input$cancer_study_identifier)
   # check if empty study ID ---------------------------------------------------------------
   if (input$cancer_study_identifier == "") {
     showNotification("Please select a cancer study ID",
@@ -184,7 +186,7 @@ observeEvent(input$upload, {
     return()
   }
 
-  # Fill reactive object ---------------------------------------------------------------
+  # fill reactive object ---------------------------------------------------------------
   loadedData$studyID <- NULL
   loadedData$data_clinical_patient <- data.frame(
     PATIENT_ID = c("Patient Identifier", "Patient identifier", "e.g. JohnDoe"),
@@ -232,6 +234,11 @@ observeEvent(input$upload, {
   )
   loadedData$dates_first_diagnosis <-
     data.frame(PATIENT_ID = character(), DATE = character())
+
+
+  customTimelines$timelines <- data.frame(name = character(),
+                                          shortName = character(),
+                                          mode = factor(levels = c("timeline", "timepoint")))
 
   # set studyID ---------------------------------------------------------------
   loadedData$studyID <- input$cancer_study_identifier
@@ -326,8 +333,9 @@ observeEvent(input$upload, {
     loadedData$data_timeline_surgery <- data_timeline_surgery
   }
 
-  # read custum data_timeline_ ---------------------------------------------------------------
-  timeline_files <- cancer_study_rc()[grep("data_timeline_", cancer_study_rc())]
+  # read custom data_timeline_ files ---------------------------------------------------------------
+  all_study_files <- list.files(file.path(study_dir, loadedData$studyID))
+  timeline_files <- all_study_files[grep("data_timeline_", all_study_files)]
   exclude_tls <-
     c(
       "data_timeline_surgery.txt",
@@ -341,7 +349,16 @@ observeEvent(input$upload, {
     track <- read.table(tl_file, sep = "\t", header = TRUE)
     track_var <- gsub(".txt", "", tl_filename)
     loadedData[[track_var]] <- track
+
+    if(all(is.na(loadedData[[track_var]][,"STOP_DATE"]))){
+      mode <- "timepoint"
+    } else {
+      mode <- "timeline"
+    }
+    customTimelines$timelines[track_var,] <- list(name=track_var, shortName=gsub("data_timeline_", "", track_var), mode=mode)
   }
+  customTimelines$selectedTrack <- NULL
+
 
   # read diagnosis_dates ---------------------------------------------------------------
   dates_first_diagnosis_file <-

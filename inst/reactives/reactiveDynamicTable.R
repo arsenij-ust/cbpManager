@@ -1,5 +1,5 @@
 # add column ---------------------------------------------------------------
-add_columnUI <- function(id, label = "Add column") {
+addColumn_UI <- function(id, label = "Add column") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
   ns <- NS(id)
@@ -7,7 +7,7 @@ add_columnUI <- function(id, label = "Add column") {
   actionButton(ns("AddColumn"), label, icon=icon("plus-sign",lib="glyphicon"))
 
 }
-add_columnServer <- function(input, output, session, data){
+addColumn_Server <- function(input, output, session, data){
 
   observeEvent(input$AddColumn,{
     ns <- session$ns
@@ -54,7 +54,7 @@ add_columnServer <- function(input, output, session, data){
 
 }
 # delete column ---------------------------------------------------------------
-delete_columnUI <- function(id, label = "Delete column(s)") {
+deleteColumn_UI <- function(id, label = "Delete column(s)") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
   ns <- NS(id)
@@ -62,7 +62,7 @@ delete_columnUI <- function(id, label = "Delete column(s)") {
   actionButton(ns("DeleteColumn"), label, icon=icon("minus-sign",lib="glyphicon"))
 
 }
-delete_columnServer <- function(input, output, session, data, exclude){
+deleteColumn_Server <- function(input, output, session, data, exclude){
 
   observeEvent(input$DeleteColumn, {
     ns <- session$ns
@@ -95,7 +95,7 @@ delete_columnServer <- function(input, output, session, data, exclude){
 }
 
 # delete entry ---------------------------------------------------------------
-delete_rowUI <- function(id, label = "Delete") {
+deleteRow_UI <- function(id, label = "Delete") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
   ns <- NS(id)
@@ -103,7 +103,7 @@ delete_rowUI <- function(id, label = "Delete") {
   actionButton(ns("DeleteEntry"), label, icon=icon("remove",lib="glyphicon"))
 
 }
-delete_rowServer <- function(input, output, session, data, selected_row){
+deleteRow_Server <- function(input, output, session, data, selected_row){
 
   observeEvent(input$DeleteEntry, {
     ns <- session$ns
@@ -132,7 +132,7 @@ delete_rowServer <- function(input, output, session, data, selected_row){
 }
 
 # add entry ---------------------------------------------------------------
-add_rowUI <- function(id, label = "Add") {
+addRow_UI <- function(id, label = "Add") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
   ns <- NS(id)
@@ -141,7 +141,7 @@ add_rowUI <- function(id, label = "Add") {
 
 }
 
-add_rowServer <- function(input, output, session, data, patient_ids = NULL, dates_first_diagnosis = NULL, mode = c("timeline", "timepoint")){
+addRow_Server <- function(input, output, session, data, patient_ids = NULL, dates_first_diagnosis = NULL, mode = c("timeline", "timepoint")){
 
   mode <- match.arg(mode)
 
@@ -262,7 +262,7 @@ add_rowServer <- function(input, output, session, data, patient_ids = NULL, date
 }
 
 # edit entry ---------------------------------------------------------------
-edit_rowUI <- function(id, label = "Edit") {
+editRow_UI <- function(id, label = "Edit") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
   ns <- NS(id)
@@ -271,7 +271,7 @@ edit_rowUI <- function(id, label = "Edit") {
 
 }
 
-edit_rowServer <- function(input, output, session, data, patient_ids = NULL, dates_first_diagnosis = NULL, selected_row = NULL, mode = c("timeline", "timepoint")){
+editRow_Server <- function(input, output, session, data, patient_ids = NULL, dates_first_diagnosis = NULL, selected_row = NULL, mode = c("timeline", "timepoint")){
 
   mode <- match.arg(mode)
 
@@ -402,7 +402,7 @@ edit_rowServer <- function(input, output, session, data, patient_ids = NULL, dat
 }
 
 # save timeline table ---------------------------------------------------------------
-save_timelineUI <- function(id, label = "Save") {
+saveTimeline_UI <- function(id, label = "Save") {
   # `NS(id)` returns a namespace function, which was save as `ns` and will
   # invoke later.
   ns <- NS(id)
@@ -411,7 +411,7 @@ save_timelineUI <- function(id, label = "Save") {
 
 }
 
-save_timelineServer <- function(input, output, session, data, study_id){
+saveTimeline_Server <- function(input, output, session, data, study_id){
 
   observeEvent(input$SaveTimeline, {
     ns <- session$ns

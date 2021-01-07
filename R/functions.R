@@ -60,10 +60,16 @@ check_input_dates <- function(diagnosisDate, startDate=NULL, endDate=NULL){
 #'
 #' This function takes a character string, replaces spaces by underscores and runs make.names.
 #' @param x A character string.
+#' @param toupper If TRUE, the name wil be upper-case; if FALSE, the name will be lower-case.
 #' @return A sanitized string.
-.create_name <- function(x) {
+.create_name <- function(x, toupper = TRUE) {
   . = NULL # workaround for R CMD check note: no visible binding for global variable '.'
-  x %>% toupper %>% gsub(x = ., pattern = " ", replacement = "_") %>% make.names %>% return
+  if(toupper){
+    x %>% toupper %>% gsub(x = ., pattern = " ", replacement = "_") %>% make.names %>% return()
+  } else {
+    x %>% tolower %>% gsub(x = ., pattern = " ", replacement = "_") %>% make.names %>% return()
+  }
+
 }
 
 #' Generate UI input widget

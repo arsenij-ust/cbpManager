@@ -4,10 +4,12 @@
 \alias{.create_name}
 \title{Sanitize names}
 \usage{
-.create_name(x)
+.create_name(x, toupper = TRUE)
 }
 \arguments{
 \item{x}{A character string.}
+
+\item{toupper}{If TRUE, the name wil be upper-case; if FALSE, the name will be lower-case.}
 }
 \value{
 A sanitized string.
