@@ -47,7 +47,7 @@ observeEvent(input$add_study, {
   }
 
   # Sanitize study ID
-  studyID <- .create_name(input$add_study_identifier)
+  studyID <- .create_name(input$add_study_identifier, toupper = FALSE)
 
   # check if provided study ID already exists
   if (studyID %in% list.files(study_dir)) {
@@ -107,6 +107,9 @@ observeEvent(input$add_study, {
     showNotification("Study added successfully!",
                      type = "message",
                      duration = 10)
+
+    # logging
+    writeLogfile(outdir = study_dir, modified_file = file.path(studyID, "meta_study.txt"))
   }
 })
 
@@ -157,6 +160,10 @@ observeEvent(input$overwrite_study, {
   showNotification("Study updated successfully!",
                    type = "message",
                    duration = 10)
+
+  # logging
+  writeLogfile(outdir = study_dir, modified_file = file.path(studyID, "meta_study.txt"))
+
   removeModal()
 })
 
