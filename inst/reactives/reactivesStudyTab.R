@@ -3,6 +3,9 @@ cancer_study_rc <- reactive({
   list.files(study_dir)
 })
 
+userName <- Sys.getenv("SHINYPROXY_USERNAME")
+print(userName)
+
 # dynamic cancer type selection with table ---------------------------------------------------------------
 # UI of cancer type
 output$ui_type_of_cancer <- renderUI({
