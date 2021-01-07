@@ -203,6 +203,11 @@ observeEvent(input$datesSave, {
     ),
     file.path(study_dir, loadedData$studyID, "dates_first_diagnosis.txt")
   )
+  # logging
+  writeLogfile(
+    outdir = study_dir,
+    modified_file = file.path(loadedData$studyID, "dates_first_diagnosis.txt")
+  )
   showNotification("Diagnosis dates saved successfully!",
                    type = "message",
                    duration = 10)
@@ -290,7 +295,15 @@ callModule(
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_treatment)
 )
-
+# logging
+writeLogfile(
+  outdir = study_dir,
+  modified_file = file.path(loadedData$studyID, "data_timeline_treatment.txt")
+)
+writeLogfile(
+  outdir = study_dir,
+  modified_file = file.path(loadedData$studyID, "meta_timeline_treatment.txt")
+)
 # surgery timeline ---------------------------------------------------------------
 # Data table output
 output$surgeryTable <- DT::renderDT({
@@ -372,7 +385,15 @@ callModule(
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_surgery)
 )
-
+# logging
+writeLogfile(
+  outdir = study_dir,
+  modified_file = file.path(loadedData$studyID, "data_timeline_surgery.txt")
+)
+writeLogfile(
+  outdir = study_dir,
+  modified_file = file.path(loadedData$studyID, "meta_timeline_surgery.txt")
+)
 # status timeline ---------------------------------------------------------------
 # Data table output
 output$statusTable <- DT::renderDT({
@@ -454,7 +475,15 @@ callModule(
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_status)
 )
-
+# logging
+writeLogfile(
+  outdir = study_dir,
+  modified_file = file.path(loadedData$studyID, "data_timeline_status.txt")
+)
+writeLogfile(
+  outdir = study_dir,
+  modified_file = file.path(loadedData$studyID, "meta_timeline_status.txt")
+)
 # custom tracks ---------------------------------------------------------------
 # minimal data.frame of a timeline track
 min_timeline_df <- data.frame(
@@ -554,7 +583,6 @@ observeEvent(input$AddColumn_ct,{
   showModal(
     modalDialog(
       title = "Add new column",
-      #uiOutput(paste0("AddCol",id,"UI")),
       uiOutput("ct_AddCol_UI"),
       easyClose = FALSE,
       footer = tagList(
@@ -936,6 +964,15 @@ observeEvent(input$SaveTimeline_ct, {
   file.rename(
     file.path(study_dir, loadedData$studyID, meta_filename_temp),
     file.path(study_dir, loadedData$studyID, meta_filename)
+  )
+  # logging
+  writeLogfile(
+    outdir = study_dir,
+    modified_file = file.path(loadedData$studyID, data_filename)
+  )
+  writeLogfile(
+    outdir = study_dir,
+    modified_file = file.path(loadedData$studyID, meta_filename)
   )
   showNotification("Data saved successfully!", type="message", duration = 10)
 })
