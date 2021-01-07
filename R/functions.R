@@ -204,11 +204,11 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
   }
 }
 
-#' tbd
+#' Create shiny UI-widget for specific columns of oncotree entries
 #'
-#' @param colname tbd
-#' @param mode tbd
-#' @return tbd
+#' @param colname column name
+#' @param mode determines the inputId prefix of the UI-widget
+#' @return A oncotree specific shiny UI-widget
 generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")){
   mode <- match.arg(mode)
 
@@ -248,15 +248,14 @@ generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")){
                   selected = 1),
     ))
   }
-
 }
 
-#' tbd
+#' Updates UI-widgets for specific columns of oncotree entries
 #'
-#' @param session tbd
-#' @param row_last_clicked tbd
-#' @param mode tbd
-#' @return tbd
+#' @param session Shiny session
+#' @param row_last_clicked the index of the row last clicked in the oncotree_table
+#' @param mode determines the inputId prefix of the UI-widget
+#' @return nothing to return
 updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "edit")){
   mode <- match.arg(mode)
 
@@ -295,40 +294,6 @@ fncols <- function(data, cname) {
   return(data)
 }
 
-
-# timelineModal <- function(data, selected_row = NULL, patIDs, timeline = c("treatment", "surgery", "status"), mode = c("add","edit")){
-#   timeline <- match.arg(timeline)
-#   mode <- match.arg(mode)
-#
-#   if(timeline == "treatment"){
-#     if(mode == "add"){
-#       selectedPatId <- selectedTreatmentType <- selectedTreatmentSubtype <- 1
-#       selectedTreatmentAgent <- NULL
-#     } else if (mode == "edit"){
-#       selectedPatId <- data[selected_row, "PATIENT_ID"]
-#       selectedTreatmentType <- data[selected_row, "TREATMENT_TYPE"]
-#       selectedTreatmentSubtype <- data[selected_row, "SUBTYPE"]
-#       selectedTreatmentAgent <- data[selected_row, "AGENT"]
-#     }
-#
-#     fluidRow(
-#       column(
-#         width = 8,
-#         selectInput(
-#           "treatmentPatientID",
-#           label = "Select the Patient ID",
-#           choices = c("", unique(patIDs[which(!is.na(patIDs))])),
-#           selected = selectedPatId
-#         ),
-#         dateRangeInput("treatmentRange", "Start and End of treatment"),
-#         selectInput("treatmentType", "Treatment type", choices = c("Medical Therapy", "Radiation Therapy"), selected = selectedTreatmentType),
-#         selectInput("treatmentSubtype", "Treatment subtype", choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"), selected = selectedTreatmentSubtype),
-#         textInput("treatmentAgent", "Agent", placeholder = "e.g. Med_X", value = selectedTreatmentAgent)
-#       ))
-#   }
-#
-# }
-
 #' tbd
 #'
 #' @param colname tbd
@@ -338,7 +303,6 @@ fncols <- function(data, cname) {
 #' @param patientIDs tbd
 #' @return tbd
 generateTimelineUI <- function(colname, mode = c("add", "edit"), data = NULL, selected_row = NULL, patientIDs = NULL){
-  #ns <- NS(id)
   mode <- match.arg(mode)
 
 
