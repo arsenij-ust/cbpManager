@@ -332,7 +332,7 @@ cBioPortalToDataFrame <- function(data){
 #'
 #' @param file_path A character string.
 #' @param patIDs A character string.
-#' @return vector with
+#' @return vector with Sample IDs
 getSampleIDs <- function(file_path, patIDs){
   if (file.exists(file_path)){
     # read data file
@@ -347,13 +347,13 @@ getSampleIDs <- function(file_path, patIDs){
 
 #' Import patient data into current study data.frames
 #'
-#' @param mode tbd
-#' @param file_name tbd
-#' @param file_path tbd
-#' @param patIDs tbd
-#' @param data tbd
-#' @param associatedSampleIDs tbd
-#' @return a data.frame
+#' @param mode Defines the type of imported data
+#' @param file_name Filename of source data
+#' @param file_path Filepath with filename of source data
+#' @param patIDs PATIENT_IDs of patients that should be imported
+#' @param data Source data ,to be subsetted according to patIDs
+#' @param associatedSampleIDs The sample IDs associated to the patIDs
+#' @return data.frame
 importPatientData <- function(mode=c("patient", "sample", "mutations", "timelines"), file_name, file_path, patIDs, data, associatedSampleIDs = NULL){
   if (file.exists(file_path)){
     # read data file
