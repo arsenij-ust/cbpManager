@@ -464,31 +464,6 @@ min_timeline_df <- data.frame(
   EVENT_TYPE = character()
 )
 
-# create reactive data.frame with timeline metadata
-
-
-# get custom timeline names and timeline modes from the reactive study object and fill the data.frame
-# observe({
-#   timeline_dfs <- names(loadedData)[grep("data_timeline_", names(loadedData))]
-#   excludeTimelines <-
-#     c(
-#       "data_timeline_surgery",
-#       "data_timeline_status",
-#       "data_timeline_treatment"
-#     )
-#   timeline_names <- timeline_dfs[-which(timeline_dfs %in% excludeTimelines)]
-#   lapply(timeline_names, function(name){
-#     if(!name %in% colnames(customTimelines$timelines)){
-#       if(all(is.na(loadedData[[name]][,"STOP_DATE"]))){
-#         mode <- "timepoint"
-#       } else {
-#         mode <- "timeline"
-#       }
-#       customTimelines$timelines[name,] <- list(name=name, shortName=gsub("data_timeline_", "", name), mode=mode)
-#     }
-#   })
-#   print(customTimelines$timelines)
-# })
 
 # add new custom track
 observeEvent(input$addTrack, {

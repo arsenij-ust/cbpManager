@@ -2,18 +2,18 @@
 % Please edit documentation in R/functions.R
 \name{generateOncotreeUIwidgets}
 \alias{generateOncotreeUIwidgets}
-\title{tbd}
+\title{Create shiny UI-widget for specific columns of oncotree entries}
 \usage{
 generateOncotreeUIwidgets(colname, mode = c("add", "edit"))
 }
 \arguments{
-\item{colname}{tbd}
+\item{colname}{column name}
 
-\item{mode}{tbd}
+\item{mode}{determines the inputId prefix of the UI-widget}
 }
 \value{
-tbd
+A oncotree specific shiny UI-widget
 }
 \description{
-tbd
+Create shiny UI-widget for specific columns of oncotree entries
 }

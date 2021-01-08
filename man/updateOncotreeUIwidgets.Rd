@@ -2,20 +2,20 @@
 % Please edit documentation in R/functions.R
 \name{updateOncotreeUIwidgets}
 \alias{updateOncotreeUIwidgets}
-\title{tbd}
+\title{Updates UI-widgets for specific columns of oncotree entries}
 \usage{
 updateOncotreeUIwidgets(session, row_last_clicked, mode = c("add", "edit"))
 }
 \arguments{
-\item{session}{tbd}
+\item{session}{Shiny session}
 
-\item{row_last_clicked}{tbd}
+\item{row_last_clicked}{the index of the row last clicked in the oncotree_table}
 
-\item{mode}{tbd}
+\item{mode}{determines the inputId prefix of the UI-widget}
 }
 \value{
-tbd
+nothing to return
 }
 \description{
-tbd
+Updates UI-widgets for specific columns of oncotree entries
 }
