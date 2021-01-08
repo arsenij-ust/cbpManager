@@ -516,7 +516,7 @@ output$Table_ct <- DT::renderDT({
   DT::datatable(
     loadedData[[customTimelines$selectedTrack]],
     selection = "single",
-    rownames = F,
+    rownames = FALSE,
     options = list(pageLength = 25, columnDefs = list(list(
       visible = FALSE, targets = c(hiddenCols)
     )))

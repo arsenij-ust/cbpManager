@@ -14,8 +14,6 @@
 #'   launchApp()
 #' }
 #'
-#' @import shiny
-#' @import shinydashboard
 #' @export launchApp
 
 

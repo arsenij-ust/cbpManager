@@ -1,8 +1,5 @@
 #' Shiny app server object
-#'
-#' @import shiny
-#' @import shinydashboard
-# create the shiny application user interface
+#' create the shiny application user interface
 
 shinyAppUI <- dashboardPage(
   dashboardHeader(title = "cBioPortal Manager"),
