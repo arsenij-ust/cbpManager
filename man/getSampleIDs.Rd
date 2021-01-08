@@ -12,7 +12,7 @@ getSampleIDs(file_path, patIDs)
 \item{patIDs}{A character string.}
 }
 \value{
-vector with
+vector with Sample IDs
 }
 \description{
 Get Sample IDs associated with Patient IDs from the data_clinical_sample.txt file

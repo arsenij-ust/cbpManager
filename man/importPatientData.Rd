@@ -14,20 +14,20 @@ importPatientData(
 )
 }
 \arguments{
-\item{mode}{tbd}
+\item{mode}{Defines the type of imported data}
 
-\item{file_name}{tbd}
+\item{file_name}{Filename of source data}
 
-\item{file_path}{tbd}
+\item{file_path}{Filepath with filename of source data}
 
-\item{patIDs}{tbd}
+\item{patIDs}{PATIENT_IDs of patients that should be imported}
 
-\item{data}{tbd}
+\item{data}{Source data ,to be subsetted according to patIDs}
 
-\item{associatedSampleIDs}{tbd}
+\item{associatedSampleIDs}{The sample IDs associated to the patIDs}
 }
 \value{
-a data.frame
+data.frame
 }
 \description{
 Import patient data into current study data.frames

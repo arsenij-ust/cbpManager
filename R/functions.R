@@ -294,24 +294,16 @@ fncols <- function(data, cname) {
   return(data)
 }
 
-#' tbd
-#'
-#' @param colname tbd
-#' @param mode tbd
-#' @param data tbd
-#' @param selected_row tbd
-#' @param patientIDs tbd
-#' @return tbd
-generateTimelineUI <- function(colname, mode = c("add", "edit"), data = NULL, selected_row = NULL, patientIDs = NULL){
-  mode <- match.arg(mode)
-
-
-  fluidRow(column(
-    width = 8,
-    textInput(inputId=colname,
-              label = colname,
-              value = patientIDs),))
-}
+# generateTimelineUI <- function(colname, mode = c("add", "edit"), data = NULL, selected_row = NULL, patientIDs = NULL){
+#   mode <- match.arg(mode)
+#
+#
+#   fluidRow(column(
+#     width = 8,
+#     textInput(inputId=colname,
+#               label = colname,
+#               value = patientIDs),))
+# }
 
 #' Convert the cBioPortal sample- and patient-data file format into a data.frame
 #'
