@@ -295,15 +295,8 @@ callModule(
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_treatment)
 )
-# logging
-writeLogfile(
-  outdir = study_dir,
-  modified_file = file.path(loadedData$studyID, "data_timeline_treatment.txt")
-)
-writeLogfile(
-  outdir = study_dir,
-  modified_file = file.path(loadedData$studyID, "meta_timeline_treatment.txt")
-)
+
+
 # surgery timeline ---------------------------------------------------------------
 # Data table output
 output$surgeryTable <- DT::renderDT({
@@ -385,15 +378,7 @@ callModule(
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_surgery)
 )
-# logging
-writeLogfile(
-  outdir = study_dir,
-  modified_file = file.path(loadedData$studyID, "data_timeline_surgery.txt")
-)
-writeLogfile(
-  outdir = study_dir,
-  modified_file = file.path(loadedData$studyID, "meta_timeline_surgery.txt")
-)
+
 # status timeline ---------------------------------------------------------------
 # Data table output
 output$statusTable <- DT::renderDT({
@@ -475,15 +460,7 @@ callModule(
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_status)
 )
-# logging
-writeLogfile(
-  outdir = study_dir,
-  modified_file = file.path(loadedData$studyID, "data_timeline_status.txt")
-)
-writeLogfile(
-  outdir = study_dir,
-  modified_file = file.path(loadedData$studyID, "meta_timeline_status.txt")
-)
+
 # custom tracks ---------------------------------------------------------------
 # minimal data.frame of a timeline track
 min_timeline_df <- data.frame(
@@ -493,31 +470,6 @@ min_timeline_df <- data.frame(
   EVENT_TYPE = character()
 )
 
-# create reactive data.frame with timeline metadata
-
-
-# get custom timeline names and timeline modes from the reactive study object and fill the data.frame
-# observe({
-#   timeline_dfs <- names(loadedData)[grep("data_timeline_", names(loadedData))]
-#   excludeTimelines <-
-#     c(
-#       "data_timeline_surgery",
-#       "data_timeline_status",
-#       "data_timeline_treatment"
-#     )
-#   timeline_names <- timeline_dfs[-which(timeline_dfs %in% excludeTimelines)]
-#   lapply(timeline_names, function(name){
-#     if(!name %in% colnames(customTimelines$timelines)){
-#       if(all(is.na(loadedData[[name]][,"STOP_DATE"]))){
-#         mode <- "timepoint"
-#       } else {
-#         mode <- "timeline"
-#       }
-#       customTimelines$timelines[name,] <- list(name=name, shortName=gsub("data_timeline_", "", name), mode=mode)
-#     }
-#   })
-#   print(customTimelines$timelines)
-# })
 
 # add new custom track
 observeEvent(input$addTrack, {

@@ -459,6 +459,16 @@ saveTimeline_Server <- function(input, output, session, data, study_id){
       file.path(study_dir, study_id(), meta_filename)
     )
     showNotification("Data saved successfully!", type="message", duration = 10)
+
+    # logging
+    # writeLogfile(
+    #   outdir = study_dir,
+    #   modified_file = file.path(study_id(), data_filename)
+    # )
+    # writeLogfile(
+    #   outdir = study_dir,
+    #   modified_file = file.path(study_id(), meta_filename)
+    # )
   })
 }
 

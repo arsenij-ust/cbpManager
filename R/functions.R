@@ -411,7 +411,6 @@ writeLogfile <- function(outdir, modified_file, log_filename="cbpManager_logfile
   if(userName=="") userName <- "NO_USERNAME"
   timepoint <- Sys.time()
   log <- paste0(timepoint, "   User: ", userName, " modified file '", modified_file, "'")
-  print(file.path(outdir, log_filename))
   write(log, file=file.path(outdir, log_filename), append=TRUE)
 }
 
