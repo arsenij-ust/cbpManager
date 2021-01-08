@@ -21,8 +21,8 @@ Imports:
     DT,
     htmltools,
     vroom,
-    dplyr,
     plyr,
+    dplyr,
     rlist,
     magrittr,
     jsonlite
