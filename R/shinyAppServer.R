@@ -7,6 +7,18 @@
 # Define server logic required to draw a histogram
 shinyAppServer <- function(input, output, session) {
 
+  # logo  ---------------------------------------------------------------
+  output$logo <- renderImage({
+    return(
+      list(
+        src = system.file("www", "logo.png", package = "cbpManager"),
+        contentType = "image/png",
+        alt = "cbpManager_logo",
+        width = "150px", height = "auto", style="display: block; margin-left: auto; margin-right: auto;"
+      )
+    )
+  }, deleteFile = FALSE)
+
   # workaround for websocket connection timeout ####
   output$clock <- renderText({
     invalidateLater(5000)
