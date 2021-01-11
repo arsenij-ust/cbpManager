@@ -27,4 +27,12 @@ Imports:
     rlist,
     magrittr,
     jsonlite
+Collate:
+    'dynamicTable.R'
+    'cbpManager-pkg.R'
+    'functions.R' 
+    'global.R'
+    'launchApp.R'
+    'shinyAppServer.R'
+    'shinyAppUI.R'
 biocViews: ImmunoOncology, DataImport, DataRepresentation, GUI, ThirdPartyClient, Preprocessing, Visualization

@@ -16,7 +16,7 @@ output$sampleTable <- DT::renderDT({
     DT::datatable(
       loadedData$data_clinical_sample,
       selection = 'single',
-      rownames = F,
+      rownames = FALSE,
       options = list(
         pageLength = 15,
         scrollX = TRUE

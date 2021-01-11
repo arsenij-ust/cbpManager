@@ -3,7 +3,7 @@
 #' @param input provided by shiny
 #' @param output provided by shiny
 #' @param session provided by shiny
-#'
+#' @return nothing to return
 # Define server logic required to draw a histogram
 shinyAppServer <- function(input, output, session) {
 

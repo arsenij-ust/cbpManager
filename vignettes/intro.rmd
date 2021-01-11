@@ -1,0 +1,78 @@
+---
+title: "cbpManager: Managing cancer studies and generating files for cBioPortal"
+author:
+- name: Arsenij Ustjanzew
+  affiliation: 
+  email: arsenij.ustjanzew@gmail.com
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('i2dash')`"
+output: 
+  rmarkdown::html_document:
+    toc: true
+    toc_float: true
+    fig_caption: true
+vignette: >
+  %\VignetteIndexEntry{cbpManager: Managing cancer studies and generating files for cBioPortal}
+  %\VignettePackage{cbpManager}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Vignette last complied on `r Sys.Date()`. i2dash is licenced under `r utils::packageDescription("i2dash")[["License"]]`.
+
+```{r style, echo = FALSE, results = 'asis', include = FALSE}
+BiocStyle::markdown()
+```
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    error = FALSE,
+    warning = FALSE,
+    message = FALSE
+)
+stopifnot(requireNamespace("htmltools"))
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+<img src="images/i2dash_logo.png" align="center" width="150px"/>
+
+# Introduction and scope
+
+Scientific communication and data visualization are important aspects to illustrate complex concepts and results from data analyses. [R Markdown](https://rmarkdown.rstudio.com) enables weaving together narrative text and code into rich and reproducible documents, that can also run interactive widgets from [R Shiny](https://shiny.rstudio.com/).
+R Studio's [Flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) introduces dashboards to publish a group of related data visualizations, tables, images and narrative text in row and column-based layouts. Both, R Markdown and R Studio's Flexdashboard require authors to manually create Markdown documents and assemble content at the right position in the file.
+The R package **i2dash** provides classes and functionality to programatically create customized, web-based flexdashboards for data presentation, exploration and sharing. This enables users from different scientific disciplines to present their diverse data to the public in the form of organized dashboards. Dashboard content is organised in so-called **components** and can be added iteratively to the dashboard, *i.e.* as data or visualizations become available along the analysis pipeline. Components are reusable and can be distributed across different dashboard **pages** to organize scientific findings thematically. Ultimately, i2dash supports a wide range of R objects (e.g. 'htmlwidgets') and custom content generating functions as input and therefore integrates well into existing data analysis pipelines.
+
+## Installation
+
+The package can be installed with the `r BiocStyle::CRANpkg("remotes")` library:
+
+```{r, eval=FALSE}
+install.packages("i2dash", dependencies = TRUE)
+```
+
+or the development version:
+
+```{r, eval=FALSE}
+remotes::install_git(url = "https://gitlab.gwdg.de/loosolab/software/i2dash.git", repos = BiocManager::repositories())
+```
+
+Once installed, the package can be loaded and attached to your current workspace as follows:
+
+```{r, eval=TRUE}
+library(i2dash)
+```
+
+For this tutorial we need to install the following packages:
+```{r, eval=FALSE}
+install.packages(c("leaflet", "plotly", "ggplot2", "RColorBrewer"))
+```
+
+
+
+# Session Info {.unnumbered}
+
+```{r sessioninfo}
+sessionInfo()
+```

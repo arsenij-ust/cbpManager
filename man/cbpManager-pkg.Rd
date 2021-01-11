@@ -9,5 +9,5 @@
  graphical user interface for...
 }
 \author{
-Arsenij Ustjanzew \email{arsenij.ustjanzew@uni-mainz.de}
+Arsenij Ustjanzew \email{arsenij.ustjanzew@gmail.com}
 }

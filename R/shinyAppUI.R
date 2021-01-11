@@ -2,7 +2,7 @@
 #' create the shiny application user interface
 
 shinyAppUI <- dashboardPage(
-  dashboardHeader(title = "cBioPortal Manager"),
+  dashboardHeader(title = "cbpManager"),
   dashboardSidebar(
     sidebarMenu(
       tags$div(style = "position: absolute; top: -100px;",textOutput("clock")),

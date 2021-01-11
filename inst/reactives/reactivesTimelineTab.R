@@ -216,7 +216,7 @@ output$treatmentTable <- DT::renderDT({
   DT::datatable(
     loadedData$data_timeline_treatment,
     selection = "single",
-    rownames = F,
+    rownames = FALSE,
     options = list(pageLength = 25, columnDefs = list(list(
       visible = FALSE,
       targets = c(hidenColsTreatment)
@@ -299,7 +299,7 @@ output$surgeryTable <- DT::renderDT({
   DT::datatable(
     loadedData$data_timeline_surgery,
     selection = "single",
-    rownames = F,
+    rownames = FALSE,
     options = list(pageLength = 25, columnDefs = list(list(
       visible = FALSE, targets = c(hidenColsSurgery)
     )))
@@ -381,7 +381,7 @@ output$statusTable <- DT::renderDT({
   DT::datatable(
     loadedData$data_timeline_status,
     selection = "single",
-    rownames = F,
+    rownames = FALSE,
     options = list(pageLength = 25, columnDefs = list(list(
       visible = FALSE, targets = c(hidenColsSurgery)
     )))

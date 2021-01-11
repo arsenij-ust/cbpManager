@@ -122,8 +122,6 @@ timelineTab <- tabItem(
 
     ),
     box(width = 12,
-        #uiOutput("customTracksUI")
-        #dynamicTableUI("customTimelines")
         actionButton("AddEntry_ct", label = "Add", icon=icon("plus",lib="glyphicon")),
         actionButton("EditEntry_ct", label = "Edit", icon=icon("pencil",lib="glyphicon")),
         actionButton("DeleteEntry_ct", label = "Delete", icon=icon("remove",lib="glyphicon")),
