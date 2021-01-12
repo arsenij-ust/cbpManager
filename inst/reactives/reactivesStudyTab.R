@@ -8,7 +8,7 @@ cancer_study_rc <- reactive({
 output$ui_type_of_cancer <- renderUI({
   selectInput("type_of_cancer",
               label = "Select the cancer type",
-              choices = c("mixed", oncotree$code))
+              choices = c("mixed", oncotree$code), width="200px")
 })
 
 # show table of oncotree codes
@@ -47,7 +47,7 @@ observeEvent(input$add_study, {
   }
 
   # Sanitize study ID
-  studyID <- .create_name(input$add_study_identifier)
+  studyID <- .create_name(input$add_study_identifier, toupper=FALSE)
 
   # check if provided study ID already exists
   if (studyID %in% list.files(study_dir)) {
@@ -73,7 +73,11 @@ observeEvent(input$add_study, {
         "name",
         "description",
         "short_name",
-        "add_global_case_list"
+        "add_global_case_list",
+        "citation",
+        "pmid",
+        "groups",
+        "reference_genome"
       ),
       V2 = c(
         input$type_of_cancer,
@@ -81,7 +85,11 @@ observeEvent(input$add_study, {
         input$add_study_name,
         input$description,
         input$add_short_name,
-        "false"
+        "false",
+        input$citation,
+        input$pmid,
+        input$groups,
+        input$reference_genome
       )
     )
     # write meta_study.txt
@@ -113,7 +121,7 @@ observeEvent(input$add_study, {
 # overwrite existing study ---------------------------------------------------------------
 observeEvent(input$overwrite_study, {
   # Sanitize study ID
-  studyID <- .create_name(input$add_study_identifier)
+  studyID <- .create_name(input$add_study_identifier, toupper=FALSE)
 
   # create meta_study data.frame
   meta_study_df <- data.frame(
@@ -123,7 +131,11 @@ observeEvent(input$overwrite_study, {
       "name",
       "description",
       "short_name",
-      "add_global_case_list"
+      "add_global_case_list",
+      "citation",
+      "pmid",
+      "groups",
+      "reference_genome"
     ),
     V2 = c(
       input$type_of_cancer,
@@ -131,7 +143,11 @@ observeEvent(input$overwrite_study, {
       input$add_study_name,
       input$description,
       input$add_short_name,
-      "false"
+      "false",
+      input$citation,
+      input$pmid,
+      input$groups,
+      input$reference_genome
     )
   )
   # write meta_study.txt

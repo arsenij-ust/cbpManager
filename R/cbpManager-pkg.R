@@ -19,6 +19,7 @@
 #' @import shinydashboard
 #' @import rlist
 #' @import DT
+#' @importFrom shinyBS popify bsButton
 #'
 #' @name cbpManager-pkg
 #' @docType package

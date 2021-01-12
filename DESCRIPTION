@@ -17,7 +17,8 @@ URL: https://gitlab.miracum.org/arsenij_temp/cbpmanager
 BugReports: https://gitlab.miracum.org/arsenij_temp/cbpmanager/issues
 Depends:
     shiny,
-    shinydashboard
+    shinydashboard,
+    shinyBS
 Imports:
     utils,
     DT,
