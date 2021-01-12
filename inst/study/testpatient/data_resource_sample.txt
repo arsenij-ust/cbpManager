@@ -1,0 +1,4 @@
+PATIENT_ID	SAMPLE_ID	RESOURCE_ID	URL
+Testpatient	Testpatient_01	PATHOLOGY_SLIDE	http://url-to-slide-sample1
+Testpatient	Testpatient_02	PATHOLOGY_SLIDE	http://url-to-slide-sample2
+Testpatient	Testpatient_02	PATHOLOGY_SLIDE	http://url-to-slide-sample3
