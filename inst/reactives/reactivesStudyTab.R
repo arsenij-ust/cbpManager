@@ -199,6 +199,7 @@ observeEvent(input$upload, {
     ATTRIBUTE = c("Name of attr.", "Longer name of attr.", "Value of attr."),
     stringsAsFactors = FALSE
   )
+  loadedData$data_mutations_filename <- "data_mutations_extended.txt"
   loadedData$data_mutations_extended <- data.frame(
     Hugo_Symbol = character(),
     Tumor_Sample_Barcode = character(),
@@ -281,10 +282,18 @@ observeEvent(input$upload, {
   }
 
   # read data_mutations_extended ---------------------------------------------------------------
+  meta_mutations_extended <-
+    file.path(study_dir, loadedData$studyID, "meta_mutations_extended.txt")
+  if (file.exists(meta_mutations_extended)) {
+    meta_mutations <- read.table(meta_mutations_extended, sep = ":")
+    loadedData$data_mutations_filename <-
+      gsub(" ", "", meta_mutations[meta_mutations$V1 == "data_filename", ]$V2)
+  }
+
   data_mutations_extended_file <-
     file.path(study_dir,
               loadedData$studyID,
-              "data_mutations_extended.txt")
+              loadedData$data_mutations_filename)
   if (file.exists(data_mutations_extended_file)) {
     data_mutations_extended <-
       read.table(data_mutations_extended_file,

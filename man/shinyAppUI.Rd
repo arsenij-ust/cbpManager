@@ -3,7 +3,8 @@
 \docType{data}
 \name{shinyAppUI}
 \alias{shinyAppUI}
-\title{Shiny app server object}
+\title{Shiny app server object
+create the shiny application user interface}
 \format{
 An object of class \code{shiny.tag} of length 3.
 }
@@ -12,5 +13,6 @@ shinyAppUI
 }
 \description{
 Shiny app server object
+create the shiny application user interface
 }
 \keyword{datasets}

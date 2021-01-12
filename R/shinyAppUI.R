@@ -1,14 +1,26 @@
 #' Shiny app server object
-#'
-#' @import shiny
-#' @import shinydashboard
-# create the shiny application user interface
+#' create the shiny application user interface
 
 shinyAppUI <- dashboardPage(
-  dashboardHeader(title = "cBioPortal Manager"),
+  dashboardHeader(title = "cbpManager"),
   dashboardSidebar(
     sidebarMenu(
+      # logo
       tags$div(style = "position: absolute; top: -100px;",textOutput("clock")),
+      tags$head(
+        tags$style(
+          type="text/css",
+          "#logo {
+          max-width: 150px;
+          width: 150px;
+          height: auto;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;}"
+        )
+      ),
+      imageOutput("logo", height = "auto", width = "150px"),
+      # Sidebar items
       menuItem("Study Metadata", tabName = "meta_study"),
       menuItem("Patient", tabName = "patient"),
       menuItem("Sample", tabName = "sample"),

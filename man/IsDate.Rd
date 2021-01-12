@@ -11,6 +11,9 @@ IsDate(mydate, date.format = "\%Y-\%m-\%d")
 
 \item{date.format}{string describig the date format}
 }
+\value{
+boolean
+}
 \description{
 Check if input is in the appropriate date format
 }

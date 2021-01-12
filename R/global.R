@@ -3,13 +3,23 @@ source(system.file("tabs", "studyTab.R", package = "cbpManager"), local=TRUE)
 source(system.file("tabs", "patientTab.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "sampleTab.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "mutationsTab.R", package = "cbpManager"), local = TRUE)
-source(system.file("reactives", "reactiveDynamicTable.R", package = "cbpManager"), local = TRUE)
+#source(system.file("reactives", "dynamicTable.R", package = "cbpManager"), local = TRUE)
 #source(system.file("reactives", "dynamicTableModule.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "timelineTab.R", package = "cbpManager"), local = TRUE)
 #source(system.file("tabs", "validationTab.R", package = "cbpManager"), local = TRUE)
 
 # resolve 'no visible binding NOTEs'
-utils::globalVariables(c("cancer_type", "cancer_type_detailed", "tumor_tissue_site", "oncotree_code", "oncotree", "study_dir", "cbpManager.options"))
+utils::globalVariables(
+  c(
+    "cancer_type",
+    "cancer_type_detailed",
+    "tumor_tissue_site",
+    "oncotree_code",
+    "oncotree",
+    "study_dir",
+    "cbpManager.options"
+  )
+)
 
 # set max file size for MAF-file upload - 10 MB
 options(shiny.maxRequestSize = 10 * 1024^2)

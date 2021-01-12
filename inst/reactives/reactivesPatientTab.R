@@ -24,7 +24,7 @@ output$patientTable <- DT::renderDT({
     DT::datatable(
       loadedData$data_clinical_patient,
       selection = 'single',
-      rownames = F,
+      rownames = FALSE,
       options = list(
         pageLength = 15,
         scrollX = TRUE
@@ -128,7 +128,7 @@ observeEvent(input$EditPatient, {
       )
     ))
   }
-}, ignoreInit = T)
+}, ignoreInit = TRUE)
 
 # validate edits and change values in the table
 observeEvent(input$ModalbuttonEditPatient, {
@@ -184,7 +184,7 @@ observeEvent(input$ImportPatient, {
       footer = tagList(modalButton("Cancel"))
       )
     )
-}, ignoreInit = T)
+}, ignoreInit = TRUE)
 
 importPatientID <- eventReactive(input$ConfirmStudy, {
   if (input$importStydyID == "") {
@@ -369,7 +369,7 @@ observeEvent(input$AddColumnPatient, {
       )
     )
   )
-}, ignoreInit = T)
+}, ignoreInit = TRUE)
 # output UI to select column that should be deleted
 output$AddColPatientUI <- renderUI({
   if (input$AddColPatientMode == 1) {
@@ -549,4 +549,4 @@ observeEvent(input$SaveDataPatient, {
   showNotification("Patient data saved successfully!",
                    type = "message",
                    duration = 10)
-}, ignoreInit = T)
+}, ignoreInit = TRUE)

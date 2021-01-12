@@ -13,6 +13,9 @@ shinyAppServer(input, output, session)
 
 \item{session}{provided by shiny}
 }
+\value{
+nothing to return
+}
 \description{
 Shiny app server function
 }

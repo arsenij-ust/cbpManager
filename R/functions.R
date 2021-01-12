@@ -32,6 +32,7 @@ convertDataFrame <- function(df){
 #'
 #' @param mydate date
 #' @param date.format string describig the date format
+#' @return boolean
 IsDate <- function(mydate, date.format = "%Y-%m-%d") {
   tryCatch(!is.na(as.Date(mydate, date.format)),
            error = function(err) {FALSE})

@@ -16,7 +16,7 @@ output$sampleTable <- DT::renderDT({
     DT::datatable(
       loadedData$data_clinical_sample,
       selection = 'single',
-      rownames = F,
+      rownames = FALSE,
       options = list(
         pageLength = 15,
         scrollX = TRUE
@@ -229,7 +229,7 @@ observeEvent(input$EditSample, {
       )
     )
   }
-}, ignoreInit = T)
+}, ignoreInit = TRUE)
 
 # validate edits and change values in the table
 observeEvent(input$ModalbuttonEditSample, {
@@ -328,7 +328,7 @@ observeEvent(input$AddColumnSample, {
       )
     )
   )
-}, ignoreInit = T)
+}, ignoreInit = TRUE)
 # output UI to select column that should be deleted
 output$AddColSampleUI <- renderUI({
   if (input$AddColSampleMode == 1) {
@@ -558,4 +558,4 @@ observeEvent(input$SaveDataSample, {
   showNotification("Sample data saved successfully!",
                    type = "message",
                    duration = 10)
-}, ignoreInit = T)
+}, ignoreInit = TRUE)

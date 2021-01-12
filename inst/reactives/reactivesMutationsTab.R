@@ -43,7 +43,7 @@ observeEvent(input$saveMAF, {
     # data_mutations_extended
     write.table(
       loadedData$data_mutations_extended,
-      file.path(study_dir,loadedData$studyID,"data_mutations_extended.txt.temp"),
+      file.path(study_dir,loadedData$studyID,paste0(loadedData$data_mutations_filename,".temp")),
       append = FALSE,
       sep = "\t",
       row.names = FALSE,
@@ -51,8 +51,8 @@ observeEvent(input$saveMAF, {
       quote = FALSE
     )
     file.rename(
-      file.path(study_dir,loadedData$studyID,"data_mutations_extended.txt.temp"),
-      file.path(study_dir,loadedData$studyID,"data_mutations_extended.txt")
+      file.path(study_dir,loadedData$studyID,paste0(loadedData$data_mutations_filename,".temp")),
+      file.path(study_dir,loadedData$studyID,loadedData$data_mutations_filename)
     )
 
     # add cases_sequenced
@@ -99,42 +99,44 @@ observeEvent(input$saveMAF, {
     )
 
     # meta_mutations_extended
-    meta_mutations_extended_df <-
-      data.frame(
-        V1 = c(
-          "cancer_study_identifier",
-          "stable_id",
-          "profile_name",
-          "profile_description",
-          "genetic_alteration_type",
-          "datatype",
-          "show_profile_in_analysis_tab",
-          "data_filename"
-        ),
-        V2 = c(
-          loadedData$studyID,
-          "mutations",
-          "Mutations",
-          "Extended MAF",
-          "MUTATION_EXTENDED",
-          "MAF",
-          "true",
-          "data_mutations_extended.txt"
+    if (!file.exists(file.path(study_dir, loadedData$studyID, "meta_mutations_extended.txt"))) {
+      meta_mutations_extended_df <-
+        data.frame(
+          V1 = c(
+            "cancer_study_identifier",
+            "stable_id",
+            "profile_name",
+            "profile_description",
+            "genetic_alteration_type",
+            "datatype",
+            "show_profile_in_analysis_tab",
+            "data_filename"
+          ),
+          V2 = c(
+            loadedData$studyID,
+            "mutations",
+            "Mutations",
+            "Extended MAF",
+            "MUTATION_EXTENDED",
+            "MAF",
+            "true",
+            loadedData$data_mutations_filename
+          )
         )
+      write.table(
+        meta_mutations_extended_df,
+        file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt.temp"),
+        append = FALSE,
+        sep = ": ",
+        row.names = FALSE,
+        col.names = FALSE,
+        quote = FALSE
       )
-    write.table(
-      meta_mutations_extended_df,
-      file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt.temp"),
-      append = FALSE,
-      sep = ": ",
-      row.names = FALSE,
-      col.names = FALSE,
-      quote = FALSE
-    )
-    file.rename(
-      file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt.temp"),
-      file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt")
-    )
+      file.rename(
+        file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt.temp"),
+        file.path(study_dir,loadedData$studyID,"meta_mutations_extended.txt")
+      )
+    }
     showNotification("MAF file submitted successfully!",
                      type = "message",
                      duration = 10)
