@@ -29,6 +29,10 @@ Imports:
     rlist,
     magrittr,
     jsonlite
+Suggests: 
+    knitr,
+    BiocStyle,
+    rmarkdown
 Collate:
     'dynamicTable.R'
     'cbpManager-pkg.R'
