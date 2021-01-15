@@ -17,8 +17,7 @@ URL: https://gitlab.miracum.org/arsenij_temp/cbpmanager
 BugReports: https://gitlab.miracum.org/arsenij_temp/cbpmanager/issues
 Depends:
     shiny,
-    shinydashboard,
-    shinyBS
+    shinydashboard
 Imports:
     utils,
     DT,
@@ -28,7 +27,8 @@ Imports:
     dplyr,
     rlist,
     magrittr,
-    jsonlite
+    jsonlite,
+    shinyBS
 Suggests: 
     knitr,
     BiocStyle,
@@ -41,4 +41,5 @@ Collate:
     'launchApp.R'
     'shinyAppServer.R'
     'shinyAppUI.R'
+    'zzz.R'
 biocViews: ImmunoOncology, DataImport, DataRepresentation, GUI, ThirdPartyClient, Preprocessing, Visualization
