@@ -20,6 +20,7 @@
 #' @import rlist
 #' @import DT
 #' @importFrom shinyBS popify bsButton
+#' @importFrom rapportools is.empty
 #'
 #' @name cbpManager-pkg
 #' @docType package

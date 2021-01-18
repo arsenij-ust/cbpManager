@@ -31,13 +31,13 @@ resourceTab <- tabItem(
     width = 12,
     box(width = 12,
         title="Define resource types",
-        actionButton("AddEntry_rc", label = "Add", icon=icon("plus",lib="glyphicon")),
-        actionButton("EditEntry_rc", label = "Edit", icon=icon("pencil",lib="glyphicon")),
-        actionButton("DeleteEntry_rc", label = "Delete", icon=icon("remove",lib="glyphicon")),
-        actionButton("SaveTimeline_rc", label = "Save",  class = "btn-success", icon=icon("saved",lib="glyphicon")),
+        addRowRc_UI("Define_rc"),
+        editRowRc_UI("Define_rc"),
+        deleteRowRc_UI("Define_rc"),
+        saveResource_UI("Define_rc"),
         br(),
         br(),
-        DT::DTOutput("resource_definition")
+        DT::DTOutput("rcDefinitionTable")
     )
   ),
   tabsetPanel(
@@ -48,12 +48,12 @@ resourceTab <- tabItem(
                width = 12,
                box(
                  title="Resources of the study",
-                 addRow_UI("Study_rc"),
-                 editRow_UI("Study_rc"),
+                 addRowRc_UI("Study_rc"),
+                 editRowRc_UI("Study_rc"),
                  deleteRow_UI("Study_rc"),
-                 saveTimeline_UI("Study_rc"),
+                 saveResource_UI("Study_rc"),
                  br(), br(),
-                 DT::DTOutput("Study_rc_table"),
+                 DT::DTOutput("rcStudyTable"),
                  width = 12
                )
              )
@@ -63,12 +63,12 @@ resourceTab <- tabItem(
                width = 12,
                box(
                  title="Resources of patients",
-                 addRow_UI("Patients_rc"),
-                 editRow_UI("Patients_rc"),
+                 addRowRc_UI("Patients_rc"),
+                 editRowRc_UI("Patients_rc"),
                  deleteRow_UI("Patients_rc"),
-                 saveTimeline_UI("Patients_rc"),
+                 saveResource_UI("Patients_rc"),
                  br(), br(),
-                 DT::DTOutput("Patients_rc_table"),
+                 DT::DTOutput("rcPatientTable"),
                  width = 12
                )
              )
@@ -79,11 +79,11 @@ resourceTab <- tabItem(
                box(
                  title="Resources of samples",
                  addRow_UI("Samples_rc"),
-                 editRow_UI("Samples_rc"),
+                 editRowRc_UI("Samples_rc"),
                  deleteRow_UI("Samples_rc"),
-                 saveTimeline_UI("Samples_rc"),
+                 saveResource_UI("Samples_rc"),
                  br(), br(),
-                 DT::DTOutput("Samples_rc_table"),
+                 DT::DTOutput("rcSampleTable"),
                  width = 12
                )
              )

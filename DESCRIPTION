@@ -28,9 +28,11 @@ Imports:
     dplyr,
     rlist,
     magrittr,
-    jsonlite
+    jsonlite,
+    rapportools
 Collate:
     'dynamicTable.R'
+    'modulesResourceButtons.R'
     'cbpManager-pkg.R'
     'functions.R' 
     'global.R'

@@ -257,6 +257,34 @@ observeEvent(input$upload, {
                                           shortName = character(),
                                           mode = factor(levels = c("timeline", "timepoint")))
 
+  loadedData$data_resource_definition <- data.frame(
+    RESOURCE_ID = character(),
+    DISPLAY_NAME = character(),
+    RESOURC_TYPE = factor(levels = c("SAMPLE", "PATIENT", "STUDY")),
+    DESCRIPTION = character(),
+    OPEN_BY_DEFAULT = logical(),
+    PRIORITY = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_resource_study <- data.frame(
+    RESOURCE_ID = character(),
+    URL = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_resource_patient <- data.frame(
+    PATIENT_ID = character(),
+    RESOURCE_ID = character(),
+    URL = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_resource_sample <- data.frame(
+    PATIENT_ID = character(),
+    SAMPLE_ID = character(),
+    RESOURCE_ID = character(),
+    URL = character(),
+    stringsAsFactors = FALSE
+  )
+
   # set studyID ---------------------------------------------------------------
   loadedData$studyID <- input$cancer_study_identifier
 
@@ -394,6 +422,52 @@ observeEvent(input$upload, {
                  sep = "\t",
                  header = TRUE)
     loadedData$dates_first_diagnosis <- dates_first_diagnosis
+  }
+
+  # read data_resource files ---------------------------------------------------------------
+  data_resource_definition_file <-
+    file.path(study_dir,
+              loadedData$studyID,
+              "data_resource_definition.txt")
+  if (file.exists(data_resource_definition_file)) {
+    data_resource_definition <-
+      read.table(data_resource_definition_file,
+                 sep = "\t",
+                 header = TRUE)
+    loadedData$data_resource_definition <- data_resource_definition
+  }
+  data_resource_study_file <-
+    file.path(study_dir,
+              loadedData$studyID,
+              "data_resource_study.txt")
+  if (file.exists(data_resource_study_file)) {
+    data_resource_study <-
+      read.table(data_resource_study_file,
+                 sep = "\t",
+                 header = TRUE)
+    loadedData$data_resource_study <- data_resource_study
+  }
+  data_resource_patient_file <-
+    file.path(study_dir,
+              loadedData$studyID,
+              "data_resource_patient.txt")
+  if (file.exists(data_resource_patient_file)) {
+    data_resource_patient <-
+      read.table(data_resource_patient_file,
+                 sep = "\t",
+                 header = TRUE)
+    loadedData$data_resource_patient <- data_resource_patient
+  }
+  data_resource_sample_file <-
+    file.path(study_dir,
+              loadedData$studyID,
+              "data_resource_sample.txt")
+  if (file.exists(data_resource_sample_file)) {
+    data_resource_sample <-
+      read.table(data_resource_sample_file,
+                 sep = "\t",
+                 header = TRUE)
+    loadedData$data_resource_sample <- data_resource_sample
   }
 
   # update Shiny drop down widgets ---------------------------------------------------------------
