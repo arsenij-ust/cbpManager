@@ -675,9 +675,11 @@ saveTimeline_Server <-
                        duration = 10)
 
       # logging
-      writeLogfile(outdir = study_dir,
-                   modified_file = file.path(study_id(), data_filename))
-      writeLogfile(outdir = study_dir,
-                   modified_file = file.path(study_id(), meta_filename))
+      if(!is.null(logDir)){
+        writeLogfile(outdir = logDir,
+                     modified_file = file.path(study_id(), data_filename))
+        writeLogfile(outdir = logDir,
+                     modified_file = file.path(study_id(), meta_filename))
+      }
     })
   }

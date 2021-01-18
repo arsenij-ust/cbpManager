@@ -56,11 +56,12 @@ observeEvent(input$saveMAF, {
     )
 
     # logging
-    writeLogfile(
-      outdir = study_dir,
-      modified_file = file.path(loadedData$studyID, loadedData$data_mutations_filename)
-    )
-
+    if(!is.null(logDir)){
+      writeLogfile(
+        outdir = logDir,
+        modified_file = file.path(loadedData$studyID, loadedData$data_mutations_filename)
+      )
+    }
 
     # add cases_sequenced
     case_list_dir <-
@@ -146,10 +147,12 @@ observeEvent(input$saveMAF, {
     }
 
     # logging
-    writeLogfile(
-      outdir = study_dir,
-      modified_file = file.path(loadedData$studyID, "meta_mutations_extended.txt")
-    )
+    if(!is.null(logDir)){
+      writeLogfile(
+        outdir = logDir,
+        modified_file = file.path(loadedData$studyID, "meta_mutations_extended.txt")
+      )
+    }
 
     showNotification("MAF file submitted successfully!",
                      type = "message",

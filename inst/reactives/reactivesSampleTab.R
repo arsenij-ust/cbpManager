@@ -474,10 +474,12 @@ observeEvent(input$SaveDataSample, {
   )
 
   # logging
-  writeLogfile(
-    outdir = study_dir,
-    modified_file = file.path(loadedData$studyID, "data_clinical_sample.txt")
-  )
+  if(!is.null(logDir)){
+    writeLogfile(
+      outdir = logDir,
+      modified_file = file.path(loadedData$studyID, "data_clinical_sample.txt")
+    )
+  }
 
   # meta_clinical_sample
   meta_patient_df <-
@@ -518,10 +520,12 @@ observeEvent(input$SaveDataSample, {
   )
 
   # logging
-  writeLogfile(
-    outdir = study_dir,
-    modified_file = file.path(loadedData$studyID, "meta_clinical_sample.txt")
-  )
+  if(!is.null(logDir)){
+    writeLogfile(
+      outdir = logDir,
+      modified_file = file.path(loadedData$studyID, "meta_clinical_sample.txt")
+    )
+  }
 
   # case lists
   case_list_dir <-
@@ -570,10 +574,12 @@ observeEvent(input$SaveDataSample, {
   )
 
   # logging
-  writeLogfile(
-    outdir = study_dir,
-    modified_file = file.path(loadedData$studyID, "case_lists", "cases_all.txt")
-  )
+  if(!is.null(logDir)){
+    writeLogfile(
+      outdir = logDir,
+      modified_file = file.path(loadedData$studyID, "case_lists", "cases_all.txt")
+    )
+  }
 
   showNotification("Sample data saved successfully!",
                    type = "message",

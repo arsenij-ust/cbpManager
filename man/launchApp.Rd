@@ -4,10 +4,13 @@
 \alias{launchApp}
 \title{Launch cbpManager}
 \usage{
-launchApp(studyDir = NULL, ...)
+launchApp(studyDir = NULL, logDir = NULL, ...)
 }
 \arguments{
 \item{studyDir}{Path to study folder containing studies of cBioPortal.}
+
+\item{logDir}{Path where a logfile should be saved. If NULL, logs are
+not stored}
 
 \item{...}{Further parameters that are used by \code{shiny::runApp}, e.g.
 \code{host} or \code{port}.}
