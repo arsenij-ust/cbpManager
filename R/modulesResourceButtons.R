@@ -620,7 +620,6 @@ saveResource_Server <-
            resource_type = c("SAMPLE", "DEFINITION", "PATIENT", "STUDY")) {
 
     resource_type <- match.arg(resource_type)
-    print("check")
     observeEvent(input$SaveResource, {
       ns <- session$ns
       resource_data <- data()

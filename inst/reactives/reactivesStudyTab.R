@@ -260,7 +260,7 @@ observeEvent(input$upload, {
   loadedData$data_resource_definition <- data.frame(
     RESOURCE_ID = character(),
     DISPLAY_NAME = character(),
-    RESOURC_TYPE = factor(levels = c("SAMPLE", "PATIENT", "STUDY")),
+    RESOURCE_TYPE = factor(levels = c("SAMPLE", "PATIENT", "STUDY")),
     DESCRIPTION = character(),
     OPEN_BY_DEFAULT = logical(),
     PRIORITY = character(),
