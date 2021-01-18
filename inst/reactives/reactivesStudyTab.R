@@ -107,6 +107,11 @@ observeEvent(input$add_study, {
       file.path(study_dir, studyID, "meta_study.txt")
     )
 
+    # logging
+    writeLogfile(outdir = study_dir,
+                 modified_file = file.path(studyID, "meta_study.txt"))
+
+
     # update UI "Select ID of cancer study"
     updateSelectInput(session,
                       "cancer_study_identifier",
@@ -164,6 +169,10 @@ observeEvent(input$overwrite_study, {
     file.path(study_dir, studyID, "meta_study.txt.temp"),
     file.path(study_dir, studyID, "meta_study.txt")
   )
+
+  # logging
+  writeLogfile(outdir = study_dir,
+               modified_file = file.path(studyID, "meta_study.txt"))
 
   # update UI "Select ID of cancer study"
   updateSelectInput(session,

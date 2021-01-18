@@ -473,6 +473,12 @@ observeEvent(input$SaveDataSample, {
     file.path(study_dir, loadedData$studyID, "data_clinical_sample.txt")
   )
 
+  # logging
+  writeLogfile(
+    outdir = study_dir,
+    modified_file = file.path(loadedData$studyID, "data_clinical_sample.txt")
+  )
+
   # meta_clinical_sample
   meta_patient_df <-
     data.frame(
@@ -509,6 +515,12 @@ observeEvent(input$SaveDataSample, {
       "meta_clinical_sample.txt.temp"
     ),
     file.path(study_dir, loadedData$studyID, "meta_clinical_sample.txt")
+  )
+
+  # logging
+  writeLogfile(
+    outdir = study_dir,
+    modified_file = file.path(loadedData$studyID, "meta_clinical_sample.txt")
   )
 
   # case lists
@@ -551,10 +563,18 @@ observeEvent(input$SaveDataSample, {
     col.names = FALSE,
     quote = FALSE
   )
+
   file.rename(
     file.path(case_list_dir, "cases_all.txt.temp"),
     file.path(case_list_dir, "cases_all.txt")
   )
+
+  # logging
+  writeLogfile(
+    outdir = study_dir,
+    modified_file = file.path(loadedData$studyID, "case_lists", "cases_all.txt")
+  )
+
   showNotification("Sample data saved successfully!",
                    type = "message",
                    duration = 10)
