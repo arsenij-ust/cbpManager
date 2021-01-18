@@ -509,6 +509,15 @@ observeEvent(input$SaveDataPatient, {
     ),
     file.path(study_dir, loadedData$studyID, "data_clinical_patient.txt")
   )
+
+  # logging
+  if(!is.null(logDir)){
+    writeLogfile(
+      outdir = logDir,
+      modified_file = file.path(loadedData$studyID, "data_clinical_patient.txt")
+    )
+  }
+
   # meta_clinical_patient
   meta_patient_df <-
     data.frame(
@@ -546,6 +555,15 @@ observeEvent(input$SaveDataPatient, {
     ),
     file.path(study_dir, loadedData$studyID, "meta_clinical_patient.txt")
   )
+
+  # logging
+  if(!is.null(logDir)){
+    writeLogfile(
+      outdir = logDir,
+      modified_file = file.path(loadedData$studyID, "meta_clinical_patient.txt")
+    )
+  }
+
   showNotification("Patient data saved successfully!",
                    type = "message",
                    duration = 10)

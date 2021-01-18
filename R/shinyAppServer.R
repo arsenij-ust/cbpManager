@@ -38,6 +38,19 @@ shinyAppServer <- function(input, output, session) {
     study_dir <<- system.file("study", package = "cbpManager")
   }
 
+  ## take path from 'cbpManager.options' if it is set
+  if (
+    exists('cbpManager.options') &&
+    !is.null(cbpManager.options[["logDir"]]) &&
+    dir.exists(cbpManager.options[["logDir"]])
+  ) {
+    logDir <<- cbpManager.options$logDir
+
+    ## if none of the above apply, get path of example study dir
+  } else {
+    logDir <<- NULL
+  }
+
 
   # Tab 1 Study Metadata ---------------------------------------------------------------
   # oncotree cancer types
