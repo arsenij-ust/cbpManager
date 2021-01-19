@@ -1,31 +1,26 @@
-#' Define the datatype required in cBioPortal file format
-#' NOT WORKING YET
-#'
-#' @param df data.frame
-#' @return String according to the data type of the column
-findDatatype <- function(df){
-  if(!any(is.na(as.numeric(df)))){
-    return("NUMBER")
-  } else if(!any(is.na(as.logical(df)))) {
-    return("BOOLEAN")
-  } else {
-    return("STRING")
-  }
-}
-
 #' Convert the data.frame to the appropriate file format for cBioPortal
 #'
 #' @param df data.frame
 #' @return Data.frame formated for the cBioPortal file format
 convertDataFrame <- function(df){
-  df_formated <- df[c(1,2),]
-  data_type <- sapply(df[3:nrow(df),], findDatatype)
-  df_formated[3,] <- data_type
-  df_formated[4,] <- 1
-  df_formated[,1] <- paste0("#",df_formated[,1])
-  df_formated[5,] <- colnames(df)
-  df_formated <- rbind(df_formated, df[3:nrow(df),])
-  return(df_formated)
+  df[df == ""] <- NA
+  short_names <- df[1,]
+  long_names <- df[2,]
+  data_type <- df[3,]
+  priority <- rep(1, ncol(df))
+  column_names <- colnames(df)
+  final_df <- rbind(
+    short_names,
+    long_names,
+    data_type,
+    priority,
+    column_names,
+    df[4:nrow(df),]
+  )
+  final_df[1:4,1] <- paste0("#", final_df[1:4,1])
+
+
+  return(final_df)
 }
 
 #' Check if input is in the appropriate date format
@@ -317,7 +312,7 @@ fncols <- function(data, cname) {
 cBioPortalToDataFrame <- function(data){
   data$V1 <- sub(pattern="^#", replacement="", x=data$V1)
   colnames(data) <- data[5,]
-  data <- data[-c(3,4,5),]
+  data <- data[-c(4,5),]
   return(data)
 }
 
@@ -375,12 +370,13 @@ importPatientData <- function(mode=c("patient", "sample", "mutations", "timeline
       data <- dplyr::bind_rows(data, extracted_data)
     }
 
-    # add missing short- and long column names
+    # add missing short- and long & data type column names
     if(mode=="patient"|mode=="sample"){
       if(length(emptyColNames)!=0){
         for (emptyCol in emptyColNames){
           data[1, emptyCol] <- whole_data[1, emptyCol]
           data[2, emptyCol] <- whole_data[2, emptyCol]
+          data[3, emptyCol] <- whole_data[3, emptyCol]
         }
       }
     }

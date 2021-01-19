@@ -14,7 +14,7 @@ output$patientDataImg <- renderImage({
 patient_id_list <- reactiveValues(ids = NULL)
 observeEvent(loadedData$data_clinical_patient, {
   ids <-
-    loadedData$data_clinical_patient[3:nrow(loadedData$data_clinical_patient), "PATIENT_ID"]
+    loadedData$data_clinical_patient[4:nrow(loadedData$data_clinical_patient), "PATIENT_ID"]
   patient_id_list$ids <- ids[!is.na(ids)]
 })
 
@@ -34,8 +34,8 @@ output$patientTable <- DT::renderDT({
         'PATIENT_ID',
         target = 'row',
         backgroundColor = DT::styleEqual(
-          c("Patient Identifier", "Patient identifier"),
-          c('lightblue', 'lightblue')
+          c("Patient Identifier", "Patient identifier", "STRING"),
+          c('lightblue', 'lightblue', 'lightblue')
         )
       )
   }
@@ -111,12 +111,74 @@ output$EditPatientUIs <- renderUI({
            )
          })
 })
+
+# output UI edit name
+output$EditNamePatUIs <- renderUI({
+  lapply(colnames(loadedData$data_clinical_patient),
+         function(colname) {
+           fluidRow(column(
+             width = 8,
+             textInput(
+               inputId = paste0("editPatientInput_",colname),
+               label = colname,
+               value = loadedData$data_clinical_patient[input$patientTable_rows_selected, colname]
+             )
+           ))
+         })
+})
+
+# output UI edit data_type
+output$EditDataTypePatUIs <- renderUI({
+  lapply(colnames(loadedData$data_clinical_patient),
+         function(colname) {
+           fluidRow(column(
+             width = 8,
+             selectInput(
+               inputId = paste0("editPatientInput_",colname),
+               label = colname,
+               choices = c("STRING", "NUMBER", "BOOLEAN"),
+               selected = loadedData$data_clinical_patient[input$patientTable_rows_selected, colname]
+             )
+           ))
+         })
+})
+
 # ModalDialog for editing a patient
 observeEvent(input$EditPatient, {
   if (is.null(input$patientTable_rows_selected)) {
     showNotification("Please select a row", type = "warning", duration = NULL)
     #} else if(input$patientTable_rows_selected == 1 | input$patientTable_rows_selected == 2){
     #  showNotification("Please select a row with a patient", type="warning", duration = NULL)
+  } else if(input$patientTable_rows_selected==1){
+    showModal(modalDialog(
+      title = "Edit short name of attribute",
+      uiOutput("EditNamePatUIs"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonEditPatient", "Edit")
+      )
+    ))
+  } else if(input$patientTable_rows_selected==2){
+    showModal(modalDialog(
+      title = "Edit long name of attribute",
+      uiOutput("EditNamePatUIs"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonEditPatient", "Edit")
+      )
+    ))
+  } else if(input$patientTable_rows_selected==3){
+    showModal(modalDialog(
+      title = "Edit data type",
+      uiOutput("EditDataTypePatUIs"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonEditPatient", "Edit")
+      )
+    ))
   } else {
     showModal(modalDialog(
       title = "Edit patient",
@@ -205,8 +267,8 @@ importPatientID <- eventReactive(input$ConfirmStudy, {
           replacement = "",
           x = importStudyPatientData$V1)
     colnames(importStudyPatientData) <- importStudyPatientData[5, ]
-    importStudyPatientData <- importStudyPatientData[-c(3, 4, 5), ]
-    return(importStudyPatientData$PATIENT_ID[3:length(importStudyPatientData$PATIENT_ID)])
+    importStudyPatientData <- importStudyPatientData[-c(4, 5), ]
+    return(importStudyPatientData$PATIENT_ID[4:length(importStudyPatientData$PATIENT_ID)])
   }
 })
 
@@ -317,7 +379,8 @@ observeEvent(input$DeletePatient, {
   if (is.null(input$patientTable_rows_selected)) {
     showNotification("Please select a row", type = "warning", duration = NULL)
   } else if (input$patientTable_rows_selected == 1 |
-             input$patientTable_rows_selected == 2) {
+             input$patientTable_rows_selected == 2 |
+             input$patientTable_rows_selected == 3) {
     showNotification("Selected row cannot be deleted",
                      type = "error",
                      duration = NULL)
@@ -372,6 +435,7 @@ observeEvent(input$AddColumnPatient, {
 }, ignoreInit = TRUE)
 # output UI to select column that should be deleted
 output$AddColPatientUI <- renderUI({
+  # Choose pre-defined columns
   if (input$AddColPatientMode == 1) {
     fluidRow(column(
       width = 8,
@@ -382,6 +446,7 @@ output$AddColPatientUI <- renderUI({
         multiple = TRUE
       )
     ))
+    # choose custom column
   } else if (input$AddColPatientMode == 2) {
     fluidRow(column(
       width = 8,
@@ -399,6 +464,12 @@ output$AddColPatientUI <- renderUI({
         inputId = "visLongNamePat",
         label = "Long name (visible in cBioPortal):",
         placeholder = "e.g. Attribute of patient"
+      ),
+      selectInput(
+        inputId = "typeofPat",
+        label = "Data type:",
+        choices = c("STRING", "NUMBER", "BOOLEAN"),
+        selected = 1
       )
     ))
   }
@@ -421,6 +492,8 @@ observeEvent(input$ModalbuttonAddColPatient, {
           patientCols[which(patientCols$colname == col), "shortColname"]
         loadedData$data_clinical_patient[2, col] <-
           patientCols[which(patientCols$colname == col), "longColname"]
+        loadedData$data_clinical_patient[3, col] <-
+          patientCols[which(patientCols$colname == col), "typeof"]
       }
       removeModal()
     }
@@ -448,6 +521,8 @@ observeEvent(input$ModalbuttonAddColPatient, {
         input$visShortNamePat
       loadedData$data_clinical_patient[2, colname] <-
         input$visLongNamePat
+      loadedData$data_clinical_patient[3, colname] <-
+        input$typeofPat
       removeModal()
     }
   }
@@ -485,7 +560,6 @@ observeEvent(input$ModalbuttonDeleteColPatient, {
 observeEvent(input$SaveDataPatient, {
   # data_clinical_patient
   df <- convertDataFrame(loadedData$data_clinical_patient)
-  df[df == ""] <- NA
 
   write.table(
     df,

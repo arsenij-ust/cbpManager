@@ -219,14 +219,14 @@ observeEvent(input$upload, {
   # fill reactive object ---------------------------------------------------------------
   loadedData$studyID <- NULL
   loadedData$data_clinical_patient <- data.frame(
-    PATIENT_ID = c("Patient Identifier", "Patient identifier", "e.g. JohnDoe"),
-    ATTRIBUTE = c("Name of attr.", "Longer name of attr.", "Value of attr."),
+    PATIENT_ID = c("Patient Identifier", "Patient identifier", "STRING", "e.g. JohnDoe"),
+    ATTRIBUTE = c("Name of attr.", "Longer name of attr.", "STRING", "Value of attr."),
     stringsAsFactors = FALSE
   )
   loadedData$data_clinical_sample <- data.frame(
-    PATIENT_ID = c("Patient Identifier", "Patient identifier", "e.g. JohnDoe"),
-    SAMPLE_ID = c("Sample Identifier", "Sample identifier", "e.g. JohnDoe_1"),
-    ATTRIBUTE = c("Name of attr.", "Longer name of attr.", "Value of attr."),
+    PATIENT_ID = c("Patient Identifier", "Patient identifier", "STRING", "e.g. JohnDoe"),
+    SAMPLE_ID = c("Sample Identifier", "Sample identifier", "STRING", "e.g. JohnDoe_1"),
+    ATTRIBUTE = c("Name of attr.", "Longer name of attr.", "STRING", "Value of attr."),
     stringsAsFactors = FALSE
   )
   loadedData$data_mutations_filename <- "data_mutations_extended.txt"
