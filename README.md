@@ -7,7 +7,7 @@ The R package cbpManager provides an R Shiny application that facilitates the ge
 ## Install
 
 ```
-remotes::install_gitlab("arsenij_temp/cbpmanager", host="https://gitlab.miracum.org/")
+remotes::install_github("arsenij-ust/cbpManager")
 
 ```
 
@@ -16,8 +16,18 @@ remotes::install_gitlab("arsenij_temp/cbpmanager", host="https://gitlab.miracum.
 After installation, run the Shiny application with the following R command:
 
 ```
-cbpManager::launchApp("path/to/study")
+cbpManager::launchApp()
 ```
+
+The installation was successful if the application starts working. 
+
+A study to be loaded in cBioPortal can basically consist of a directory where all the data files are located (see [here](https://docs.cbioportal.org/5.1-data-loading/data-loading#preparing-study-data)). It is common to store the single study directories in one directory called e.g. "study". If you already have a cBioPortal instance installed and such a folder containing study subfolders, you should provide the path when starting the application. Optionally, you can provide a directory path where a logfile will be created.:
+
+```
+cbpManager::launchApp(studyDir="path/to/study", logDir="path/to/logingDirectory")
+```
+
+Now you can select your already existing studies in the dropdown menu.
 
 Optionally you can provide further parameters to `cbpManager::launchApp()` function that are used by `shiny::runApp`, e.g.
 `host` or `port`.
