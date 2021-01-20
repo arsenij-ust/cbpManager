@@ -19,7 +19,6 @@ convertDataFrame <- function(df){
   )
   final_df[1:4,1] <- paste0("#", final_df[1:4,1])
 
-
   return(final_df)
 }
 

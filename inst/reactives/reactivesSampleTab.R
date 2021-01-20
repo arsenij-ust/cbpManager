@@ -26,8 +26,8 @@ output$sampleTable <- DT::renderDT({
         'PATIENT_ID',
         target = 'row',
         backgroundColor = DT::styleEqual(
-          c("Patient Identifier", "Patient identifier"),
-          c('lightblue', 'lightblue')
+          c("Patient Identifier", "Patient identifier", "STRING"),
+          c('lightblue', 'lightblue', 'lightblue')
         )
       )
   }
@@ -205,10 +205,70 @@ observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
   updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "edit")
 })
 
+# output UI edit name
+output$EditNameSampleUIs <- renderUI({
+  lapply(colnames(loadedData$data_clinical_sample),
+         function(colname) {
+           fluidRow(column(
+             width = 8,
+             textInput(
+               inputId = paste0("editSampleInput_",colname),
+               label = colname,
+               value = loadedData$data_clinical_sample[input$sampleTable_rows_selected, colname]
+             )
+           ))
+         })
+})
+
+# output UI edit data_type
+output$EditDataTypeSampleUIs <- renderUI({
+  lapply(colnames(loadedData$data_clinical_sample),
+         function(colname) {
+           fluidRow(column(
+             width = 8,
+             selectInput(
+               inputId = paste0("editSampleInput_",colname),
+               label = colname,
+               choices = c("STRING", "NUMBER", "BOOLEAN"),
+               selected = loadedData$data_clinical_sample[input$data_clinical_sample, colname]
+             )
+           ))
+         })
+})
 # ModalDialog for editing a patient
 observeEvent(input$EditSample, {
   if (is.null(input$sampleTable_rows_selected)) {
     showNotification("Please select a row", type = "warning", duration = NULL)
+  } else if(input$sampleTable_rows_selected==1){
+    showModal(modalDialog(
+      title = "Edit short name of attribute",
+      uiOutput("EditNameSampleUIs"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonEditSample", "Edit")
+      )
+    ))
+  } else if(input$sampleTable_rows_selected==2){
+    showModal(modalDialog(
+      title = "Edit long name of attribute",
+      uiOutput("EditNameSampleUIs"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonEditSample", "Edit")
+      )
+    ))
+  } else if(input$sampleTable_rows_selected==3){
+    showModal(modalDialog(
+      title = "Edit data type",
+      uiOutput("EditDataTypeSampleUIs"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonEditSample", "Edit")
+      )
+    ))
   } else {
     showModal(
       modalDialog(
@@ -236,6 +296,7 @@ observeEvent(input$ModalbuttonEditSample, {
   all_reactive_inputs <- reactiveValuesToList(input)
   editSampleValues <-
     all_reactive_inputs[grep("editSampleInput_", names(all_reactive_inputs))]
+  print(editSampleValues)
   names(editSampleValues) <-
     gsub("editSampleInput_", "", names(editSampleValues))
   if (editSampleValues["SAMPLE_ID"] == "") {
@@ -255,6 +316,8 @@ observeEvent(input$ModalbuttonEditSample, {
         sampleCols[which(sampleCols$colname == col), "shortColname"]
       loadedData$data_clinical_sample[2, col] <-
         sampleCols[which(sampleCols$colname == col), "longColname"]
+      loadedData$data_clinical_sample[3, col] <-
+        sampleCols[which(sampleCols$colname == col), "typeof"]
     }
 
     for (i in colnames(loadedData$data_clinical_sample)) {
@@ -276,7 +339,8 @@ observeEvent(input$DeleteSample, {
   if (is.null(input$sampleTable_rows_selected)) {
     showNotification("Please select a row", type = "warning", duration = NULL)
   } else if (input$sampleTable_rows_selected == 1 |
-             input$sampleTable_rows_selected == 2) {
+             input$sampleTable_rows_selected == 2 |
+             input$sampleTable_rows_selected == 3 ) {
     showNotification("Selected row cannot be deleted",
                      type = "error",
                      duration = NULL)
@@ -358,6 +422,12 @@ output$AddColSampleUI <- renderUI({
         inputId = "visLongNameSample",
         label = "Long name (visible in cBioPortal):",
         placeholder = "e.g. Attribute of sample"
+      ),
+      selectInput(
+        inputId = "typeofPat",
+        label = "Data type:",
+        choices = c("STRING", "NUMBER", "BOOLEAN"),
+        selected = 1
       )
     ))
   }
@@ -380,6 +450,8 @@ observeEvent(input$ModalbuttonAddColSample, {
           sampleCols[which(sampleCols$colname == col), "shortColname"]
         loadedData$data_clinical_sample[2, col] <-
           sampleCols[which(sampleCols$colname == col), "longColname"]
+        loadedData$data_clinical_sample[3, col] <-
+          sampleCols[which(sampleCols$colname == col), "typeof"]
       }
       removeModal()
     }
@@ -411,6 +483,8 @@ observeEvent(input$ModalbuttonAddColSample, {
         input$visShortNameSample
       loadedData$data_clinical_sample[2, colname] <-
         input$visLongNameSample
+      loadedData$data_clinical_sample[3, colname] <-
+        input$typeofPat
       removeModal()
     }
   }
@@ -450,7 +524,7 @@ observeEvent(input$ModalbuttonDeleteColSample, {
 observeEvent(input$SaveDataSample, {
   # data_clinical_sample
   df <- convertDataFrame(loadedData$data_clinical_sample)
-  df[df == ""] <- NA
+
   write.table(
     df,
     file.path(
@@ -535,7 +609,7 @@ observeEvent(input$SaveDataSample, {
          FALSE)
 
   cases_samples <-
-    loadedData$data_clinical_sample[3:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
+    loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
   cases_all_df <- data.frame(
     V1 = c(
       "cancer_study_identifier",
@@ -552,7 +626,7 @@ observeEvent(input$SaveDataSample, {
       "All Tumors",
       paste0(
         "All tumor samples (",
-        nrow(loadedData$data_clinical_sample) - 2,
+        nrow(loadedData$data_clinical_sample) - 3,
         " samples)"
       ),
       paste(cases_samples, collapse = "\t")
