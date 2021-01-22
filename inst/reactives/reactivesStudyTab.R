@@ -406,7 +406,8 @@ observeEvent(input$upload, {
     dates_first_diagnosis <-
       read.table(dates_first_diagnosis_file,
                  sep = "\t",
-                 header = TRUE)
+                 header = TRUE,
+                 comment.char = "")
     loadedData$dates_first_diagnosis <- dates_first_diagnosis
   }
 
