@@ -28,11 +28,14 @@ Imports:
     rlist,
     magrittr,
     jsonlite,
+    basilisk,
+    reticulate,
     shinyBS
 Suggests: 
     knitr,
     BiocStyle,
     rmarkdown
+StagedInstall: no
 Collate:
     'dynamicTable.R'
     'cbpManager-pkg.R'

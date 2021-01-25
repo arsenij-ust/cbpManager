@@ -21,6 +21,8 @@
 #' @import rlist
 #' @import DT
 #' @importFrom shinyBS popify bsButton
+#' @importFrom basilisk BasiliskEnvironment basiliskStart basiliskRun basiliskStop
+#' @importFrom reticulate import
 #'
 #' @name cbpManager-pkg
 #' @docType package
