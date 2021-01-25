@@ -9,7 +9,30 @@
 #'
 #' @name ValidationDependencies
 .validation_dependencies <- c(
-
+  "abc==",
+  "argparse==",
+  "base64==",
+  "collections==",
+  "csv==",
+  "datetime==",
+  "importlib==",
+  "itertools==",
+  "jinja2==",
+  "json==",
+  "logging==",
+  "logging.handlers==",
+  "math==",
+  "os==",
+  "pathlib==",
+  "re==",
+  "requests==",
+  "subprocess==",
+  "sys==",
+  "tempfile==",
+  "traceback==",
+  "urllib.parse",
+  "xml.etree.ElementTree==",
+  "yaml=="
 )
 
 env_validation <- BasiliskEnvironment(
