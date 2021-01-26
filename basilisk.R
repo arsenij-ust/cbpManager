@@ -24,6 +24,7 @@
   "math==",
   "os==",
   "pathlib==",
+  "pyyaml==5.4.1",
   "re==",
   "requests==",
   "subprocess==",
