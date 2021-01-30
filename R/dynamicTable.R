@@ -6,8 +6,8 @@
 #' @param label label of the button
 #' @return UI module
 addColumn_UI <- function(id, label = "Add column") {
-  # `NS(id)` returns a namespace function, which was save as `ns` and will
-  # invoke later.
+  # `NS(id)` returns a namespace function, which was saved as `ns` and will be
+  # invoked later.
   ns <- NS(id)
 
   actionButton(ns("AddColumn"), label, icon = icon("plus-sign", lib = "glyphicon"))
@@ -97,7 +97,7 @@ deleteColumn_UI <- function(id, label = "Delete column(s)") {
 #' @param output Shiny output
 #' @param session Shiny session
 #' @param data source data as data.frame
-#' @param exclude column names that shoud be excluded from deletion
+#' @param exclude column names that should be excluded from deletion
 #' @return reactive data.frame of modified source data
 deleteColumn_Server <-
   function(input, output, session, data, exclude) {
@@ -203,8 +203,8 @@ deleteRow_Server <-
 #' @param label label of the button
 #' @return UI module
 addRow_UI <- function(id, label = "Add") {
-  # `NS(id)` returns a namespace function, which was save as `ns` and will
-  # invoke later.
+  # `NS(id)` returns a namespace function, which was saved as `ns` and will be
+  # invoked later.
   ns <- NS(id)
 
   actionButton(ns("AddEntry"), label, icon = icon("plus", lib = "glyphicon"))

@@ -16,7 +16,7 @@ generateUIwidgets(
 \arguments{
 \item{colname}{A character string - the name of the column, that will be the label of the input}
 
-\item{mode}{"add" or "edit" - wether to use existing values or not}
+\item{mode}{"add" or "edit" - whether to use existing values or not}
 
 \item{tab}{"Patient", "Sample" - The used tab; sets the html id prefix of the input}
 

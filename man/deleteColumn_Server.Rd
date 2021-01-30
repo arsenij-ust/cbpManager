@@ -15,7 +15,7 @@ deleteColumn_Server(input, output, session, data, exclude)
 
 \item{data}{source data as data.frame}
 
-\item{exclude}{column names that shoud be excluded from deletion}
+\item{exclude}{column names that should be excluded from deletion}
 }
 \value{
 reactive data.frame of modified source data

@@ -18,7 +18,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignette last complied on `r Sys.Date()`. cbpManager is licenced under `r utils::packageDescription("cbpManager")[["License"]]`.
+Vignette last complied on `r Sys.Date()`. cbpManager is licensed under `r utils::packageDescription("cbpManager")[["License"]]`.
 
 ```{r style, echo = FALSE, results = 'asis', include = FALSE}
 BiocStyle::markdown()

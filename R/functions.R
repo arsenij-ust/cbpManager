@@ -1,7 +1,7 @@
 #' Convert the data.frame to the appropriate file format for cBioPortal
 #'
 #' @param df data.frame
-#' @return Data.frame formated for the cBioPortal file format
+#' @return Data.frame formatted for the cBioPortal file format
 convertDataFrame <- function(df){
   df[df == ""] <- NA
   short_names <- df[1,]
@@ -25,7 +25,7 @@ convertDataFrame <- function(df){
 #' Check if input is in the appropriate date format
 #'
 #' @param mydate date
-#' @param date.format string describig the date format
+#' @param date.format string describing the date format
 #' @return boolean
 IsDate <- function(mydate, date.format = "%Y-%m-%d") {
   tryCatch(!is.na(as.Date(mydate, date.format)),
@@ -55,7 +55,7 @@ check_input_dates <- function(diagnosisDate, startDate=NULL, endDate=NULL){
 #'
 #' This function takes a character string, replaces spaces by underscores and runs make.names.
 #' @param x A character string.
-#' @param toupper If TRUE, the name wil be upper-case; if FALSE, the name will be lower-case.
+#' @param toupper If TRUE, the name will be upper-case; if FALSE, the name will be lower-case.
 #' @return A sanitized string.
 .create_name <- function(x, toupper = TRUE) {
   . = NULL # workaround for R CMD check note: no visible binding for global variable '.'
@@ -70,7 +70,7 @@ check_input_dates <- function(diagnosisDate, startDate=NULL, endDate=NULL){
 #' Generate UI input widget
 #'
 #' @param colname A character string - the name of the column, that will be the label of the input
-#' @param mode "add" or "edit" - wether to use existing values or not
+#' @param mode "add" or "edit" - whether to use existing values or not
 #' @param tab "Patient", "Sample" - The used tab; sets the html id prefix of the input
 #' @param data A data.frame.
 #' @param selected_row A number indicating the row number of the selected row in the data.frame.
@@ -283,7 +283,7 @@ updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "
 #' @param cname column name
 #' @return data.frame
 fncols <- function(data, cname) {
-  add <-cname[!cname%in%names(data)]
+  add <- cname[!cname%in%names(data)]
 
   if(length(add)!=0) data[add] <- ""
   return(data)

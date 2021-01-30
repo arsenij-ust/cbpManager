@@ -9,7 +9,7 @@ IsDate(mydate, date.format = "\%Y-\%m-\%d")
 \arguments{
 \item{mydate}{date}
 
-\item{date.format}{string describig the date format}
+\item{date.format}{string describing the date format}
 }
 \value{
 boolean

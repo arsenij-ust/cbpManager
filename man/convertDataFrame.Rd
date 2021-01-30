@@ -10,7 +10,7 @@ convertDataFrame(df)
 \item{df}{data.frame}
 }
 \value{
-Data.frame formated for the cBioPortal file format
+Data.frame formatted for the cBioPortal file format
 }
 \description{
 Convert the data.frame to the appropriate file format for cBioPortal
