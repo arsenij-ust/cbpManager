@@ -2,7 +2,7 @@
 "OS_STATUS"	"Overall survival status"	"Overall patient survival status"	"STRING"
 "OS_MONTHS"	"Overall survival (Months)"	"Overall survival in months"	"NUMBER"
 "DFS_STATUS"	"Disease free status"	"Disease free status"	"STRING"
-"DFS_MONTHS"	"Disease free (Months)"	"Disease free"	"NUMBER
+"DFS_MONTHS"	"Disease free (Months)"	"Disease free"	"NUMBER"
 "PATIENT_DISPLAY_NAME"	"Name"	"Patient name"	"STRING"
 "GENDER"	"Gender"	"Gender"	"STRING"
 "SEX"	"Sex"	"Sex"	"STRING"
