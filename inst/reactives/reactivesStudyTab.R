@@ -7,8 +7,9 @@ cancer_study_rc <- reactive({
 # UI of cancer type
 output$ui_type_of_cancer <- renderUI({
   selectInput("type_of_cancer",
-              label = "Select the cancer type",
-              choices = c("mixed", oncotree$code), width="200px")
+    label = "Select the cancer type",
+    choices = c("mixed", oncotree$code), width = "200px"
+  )
 })
 
 # show table of oncotree codes
@@ -16,7 +17,7 @@ output$oncotree_table <- DT::renderDT({
   columns_to_show <- c("code", "name", "mainType", "tissue")
   DT::datatable(
     oncotree[, columns_to_show],
-    selection = 'single',
+    selection = "single",
     rownames = FALSE,
     options = list(
       pageLength = 15,
@@ -41,13 +42,14 @@ observeEvent(input$add_study, {
   # check if "Add ID of cancer study" is empty
   if (input$add_study_identifier == "") {
     showNotification("Please enter a cancer study ID",
-                     type = "warning",
-                     duration = NULL)
+      type = "warning",
+      duration = NULL
+    )
     return()
   }
 
   # Sanitize study ID
-  studyID <- .create_name(input$add_study_identifier, toupper=FALSE)
+  studyID <- .create_name(input$add_study_identifier, toupper = FALSE)
 
   # check if provided study ID already exists
   if (studyID %in% list.files(study_dir)) {
@@ -108,28 +110,32 @@ observeEvent(input$add_study, {
     )
 
     # logging
-    if(!is.null(logDir)){
-      writeLogfile(outdir = logDir,
-                   modified_file = file.path(studyID, "meta_study.txt"))
+    if (!is.null(logDir)) {
+      writeLogfile(
+        outdir = logDir,
+        modified_file = file.path(studyID, "meta_study.txt")
+      )
     }
 
 
 
     # update UI "Select ID of cancer study"
     updateSelectInput(session,
-                      "cancer_study_identifier",
-                      choices = c("", list.files(study_dir)))
+      "cancer_study_identifier",
+      choices = c("", list.files(study_dir))
+    )
 
     showNotification("Study added successfully!",
-                     type = "message",
-                     duration = 10)
+      type = "message",
+      duration = 10
+    )
   }
 })
 
 # overwrite existing study ---------------------------------------------------------------
 observeEvent(input$overwrite_study, {
   # Sanitize study ID
-  studyID <- .create_name(input$add_study_identifier, toupper=FALSE)
+  studyID <- .create_name(input$add_study_identifier, toupper = FALSE)
 
   # create meta_study data.frame
   meta_study_df <- data.frame(
@@ -174,19 +180,23 @@ observeEvent(input$overwrite_study, {
   )
 
   # logging
-  if(!is.null(logDir)){
-    writeLogfile(outdir = logDir,
-                 modified_file = file.path(studyID, "meta_study.txt"))
+  if (!is.null(logDir)) {
+    writeLogfile(
+      outdir = logDir,
+      modified_file = file.path(studyID, "meta_study.txt")
+    )
   }
 
   # update UI "Select ID of cancer study"
   updateSelectInput(session,
-                    "cancer_study_identifier",
-                    choices = c("", list.files(study_dir)))
+    "cancer_study_identifier",
+    choices = c("", list.files(study_dir))
+  )
 
   showNotification("Study updated successfully!",
-                   type = "message",
-                   duration = 10)
+    type = "message",
+    duration = 10
+  )
   removeModal()
 })
 
@@ -211,8 +221,9 @@ observeEvent(input$upload, {
   # check if empty study ID ---------------------------------------------------------------
   if (input$cancer_study_identifier == "") {
     showNotification("Please select a cancer study ID",
-                     type = "warning",
-                     duration = NULL)
+      type = "warning",
+      duration = NULL
+    )
     return()
   }
 
@@ -267,9 +278,11 @@ observeEvent(input$upload, {
     data.frame(PATIENT_ID = character(), DATE = character())
 
 
-  customTimelines$timelines <- data.frame(name = character(),
-                                          shortName = character(),
-                                          mode = factor(levels = c("timeline", "timepoint")))
+  customTimelines$timelines <- data.frame(
+    name = character(),
+    shortName = character(),
+    mode = factor(levels = c("timeline", "timepoint"))
+  )
 
   # set studyID ---------------------------------------------------------------
   loadedData$studyID <- input$cancer_study_identifier
@@ -321,31 +334,37 @@ observeEvent(input$upload, {
   }
 
   data_mutations_extended_file <-
-    file.path(study_dir,
-              loadedData$studyID,
-              loadedData$data_mutations_filename)
+    file.path(
+      study_dir,
+      loadedData$studyID,
+      loadedData$data_mutations_filename
+    )
   if (file.exists(data_mutations_extended_file)) {
     data_mutations_extended <-
       read.table(data_mutations_extended_file,
-                 sep = "\t",
-                 header = TRUE,
-                 comment.char = "#",
-                 stringsAsFactors = FALSE,
-                 quote = "",
-                 fill = FALSE)
+        sep = "\t",
+        header = TRUE,
+        comment.char = "#",
+        stringsAsFactors = FALSE,
+        quote = "",
+        fill = FALSE
+      )
     loadedData$data_mutations_extended <- data_mutations_extended
   }
 
   # read data_timeline_treatment ---------------------------------------------------------------
   data_timeline_treatment_file <-
-    file.path(study_dir,
-              loadedData$studyID,
-              "data_timeline_treatment.txt")
+    file.path(
+      study_dir,
+      loadedData$studyID,
+      "data_timeline_treatment.txt"
+    )
   if (file.exists(data_timeline_treatment_file)) {
     data_timeline_treatment <-
       read.table(data_timeline_treatment_file,
-                 sep = "\t",
-                 header = TRUE)
+        sep = "\t",
+        header = TRUE
+      )
     loadedData$data_timeline_treatment <- data_timeline_treatment
   }
 
@@ -355,8 +374,9 @@ observeEvent(input$upload, {
   if (file.exists(data_timeline_status_file)) {
     data_timeline_status <-
       read.table(data_timeline_status_file,
-                 sep = "\t",
-                 header = TRUE)
+        sep = "\t",
+        header = TRUE
+      )
     loadedData$data_timeline_status <- data_timeline_status
   }
 
@@ -367,8 +387,9 @@ observeEvent(input$upload, {
   if (file.exists(data_timeline_surgery_file)) {
     data_timeline_surgery <-
       read.table(data_timeline_surgery_file,
-                 sep = "\t",
-                 header = TRUE)
+        sep = "\t",
+        header = TRUE
+      )
     loadedData$data_timeline_surgery <- data_timeline_surgery
   }
 
@@ -389,12 +410,12 @@ observeEvent(input$upload, {
     track_var <- gsub(".txt", "", tl_filename)
     loadedData[[track_var]] <- track
 
-    if(all(is.na(loadedData[[track_var]][,"STOP_DATE"]))){
+    if (all(is.na(loadedData[[track_var]][, "STOP_DATE"]))) {
       mode <- "timepoint"
     } else {
       mode <- "timeline"
     }
-    customTimelines$timelines[track_var,] <- list(name=track_var, shortName=gsub("data_timeline_", "", track_var), mode=mode)
+    customTimelines$timelines[track_var, ] <- list(name = track_var, shortName = gsub("data_timeline_", "", track_var), mode = mode)
   }
   customTimelines$selectedTrack <- NULL
 
@@ -405,9 +426,10 @@ observeEvent(input$upload, {
   if (file.exists(dates_first_diagnosis_file)) {
     dates_first_diagnosis <-
       read.table(dates_first_diagnosis_file,
-                 sep = "\t",
-                 header = TRUE,
-                 comment.char = "")
+        sep = "\t",
+        header = TRUE,
+        comment.char = ""
+      )
     loadedData$dates_first_diagnosis <- dates_first_diagnosis
   }
 
@@ -421,8 +443,9 @@ observeEvent(input$upload, {
   # )
 
   showNotification("Study uploaded successfully!",
-                   type = "message",
-                   duration = 10)
+    type = "message",
+    duration = 10
+  )
 })
 
 # show table of metadata ---------------------------------------------------------------

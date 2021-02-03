@@ -6,10 +6,10 @@ shinyAppUI <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       # logo
-      tags$div(style = "position: absolute; top: -100px;",textOutput("clock")),
+      tags$div(style = "position: absolute; top: -100px;", textOutput("clock")),
       tags$head(
         tags$style(
-          type="text/css",
+          type = "text/css",
           "#logo {
           max-width: 150px;
           width: 150px;
@@ -26,8 +26,8 @@ shinyAppUI <- dashboardPage(
       menuItem("Sample", tabName = "sample"),
       menuItem("Mutations", tabName = "mutations"),
       menuItem("Timelines", tabName = "timelines")
-      #,
-      #menuItem("Validation", tabName = "validation")
+      # ,
+      # menuItem("Validation", tabName = "validation")
     )
   ),
   dashboardBody(
@@ -48,7 +48,7 @@ shinyAppUI <- dashboardPage(
       # Tab 5 Timelines - timelineTab.R
       timelineTab
 
-      #,
+      # ,
       # Tab 6 Validation - validationTab.R
       # validationTab
     )

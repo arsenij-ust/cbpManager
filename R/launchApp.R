@@ -12,42 +12,41 @@
 #' @return shiny application object
 #'
 #' @examples
-#' if ( interactive() ) {
+#' if (interactive()) {
 #'   launchApp()
 #' }
-#'
 #' @export launchApp
 
 
 # wrapper for shiny::shinyApp()
 launchApp <- function(
-  studyDir = NULL,
-  logDir = NULL,
-  ...
-) {
+                      studyDir = NULL,
+                      logDir = NULL,
+                      ...) {
 
-  ##--------------------------------------------------------------------------##
+  ## --------------------------------------------------------------------------##
   ## Create global variable with options that need to be available inside the
   ## Shiny app.
-  ##--------------------------------------------------------------------------##
+  ## --------------------------------------------------------------------------##
   cbpManager.options <<- list(
     "studyDir" = studyDir,
     "logDir" = logDir,
-    "cbpManager_root" = system.file(package="cbpManager")
+    "cbpManager_root" = system.file(package = "cbpManager")
   )
 
-  ##--------------------------------------------------------------------------##
+  ## --------------------------------------------------------------------------##
   ## Launch cbpManager
-  ##--------------------------------------------------------------------------##
+  ## --------------------------------------------------------------------------##
   message(
     paste0(
-      '##---------------------------------------------------------------------------##\n',
-      '## Launching cbpManager\n',
-      '##---------------------------------------------------------------------------##'
+      "##---------------------------------------------------------------------------##\n",
+      "## Launching cbpManager\n",
+      "##---------------------------------------------------------------------------##"
     )
   )
   app <- shiny::shinyApp(
     ui = shinyAppUI,
-    server = shinyAppServer)
+    server = shinyAppServer
+  )
   runApp(app, ...)
 }
