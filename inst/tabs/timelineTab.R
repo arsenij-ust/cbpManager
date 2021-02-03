@@ -10,7 +10,7 @@ timelineTab <- tabItem(
         collapsible = TRUE,
         collapsed = TRUE,
         solidHeader = TRUE,
-        includeMarkdown(system.file("www", "descriptionTimelineTab.md", package = "cbpManager")),
+        includeMarkdown(system.file("apphelp", "descriptionTimelineTab.md", package = "cbpManager")),
       )
     ),
     column(

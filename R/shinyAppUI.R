@@ -5,8 +5,8 @@ shinyAppUI <- dashboardPage(
   dashboardHeader(title = "cbpManager"),
   dashboardSidebar(
     sidebarMenu(
-      # logo
       tags$div(style = "position: absolute; top: -100px;", textOutput("clock")),
+      # logo
       tags$head(
         tags$style(
           type = "text/css",

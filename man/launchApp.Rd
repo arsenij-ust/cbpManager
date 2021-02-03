@@ -22,8 +22,7 @@ shiny application object
 Launch the cbpManager Shiny application.
 }
 \examples{
-if ( interactive() ) {
+if (interactive()) {
   launchApp()
 }
-
 }
