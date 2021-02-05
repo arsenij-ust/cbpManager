@@ -37,6 +37,7 @@ Suggests:
     rmarkdown
 StagedInstall: no
 Collate:
+    'basilisk.R'
     'dynamicTable.R'
     'cbpManager-pkg.R'
     'functions.R' 
