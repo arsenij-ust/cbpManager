@@ -18,6 +18,7 @@ convertDataFrame <- function(df) {
     df[4:nrow(df), ]
   )
   final_df[1:4, 1] <- paste0("#", final_df[1:4, 1])
+  rownames(final_df) <- seq(nrow(final_df))
 
   return(final_df)
 }
@@ -384,6 +385,7 @@ cBioPortalToDataFrame <- function(data) {
   data$V1 <- sub(pattern = "^#", replacement = "", x = data$V1)
   colnames(data) <- data[5, ]
   data <- data[-c(4, 5), ]
+  rownames(data) <- seq(nrow(data))
   return(data)
 }
 
