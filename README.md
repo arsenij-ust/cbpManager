@@ -4,7 +4,17 @@ Intuitive visualization and interactive exploration of multidimensional cancer g
 
 The R package cbpManager provides an R Shiny application that facilitates the generation of files suitable for the import in cBioPortal for Cancer Genomics. It enables the user to manage and edit clinical data maintain new patient data over time.
 
-## Install
+## Features:
+
+- Create and edit existing and new studies
+- Editing of patient data (data_clinical_patient.txt)
+- Editing of sample data (data_clinical_sample.txt)
+- Adding MAF files (internally these are concatenated to the data_mutations_extended.txt file)
+- Edit timeline tracks (surgery, status, treatment)
+- Creation and editing of user-defined timeline tracks
+→ The functionality of the application is extended on a regular basis (long-term goal is to cover most of the cBioPortals format specifications)
+
+## Installation
 
 ```
 remotes::install_github("arsenij-ust/cbpManager")
