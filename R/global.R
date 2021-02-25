@@ -6,7 +6,7 @@ source(system.file("tabs", "mutationsTab.R", package = "cbpManager"), local = TR
 #source(system.file("reactives", "dynamicTable.R", package = "cbpManager"), local = TRUE)
 #source(system.file("reactives", "dynamicTableModule.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "timelineTab.R", package = "cbpManager"), local = TRUE)
-#source(system.file("tabs", "validationTab.R", package = "cbpManager"), local = TRUE)
+source(system.file("tabs", "validationTab.R", package = "cbpManager"), local = TRUE)
 
 # resolve 'no visible binding NOTEs'
 utils::globalVariables(

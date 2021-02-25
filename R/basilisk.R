@@ -9,31 +9,30 @@
 #'
 #' @name ValidationDependencies
 .validation_dependencies <- c(
-  "abc==",
-  "argparse==",
-  "base64==",
-  "collections==",
-  "csv==",
-  "datetime==",
-  "importlib==",
-  "itertools==",
-  "jinja2==",
-  "json==",
-  "logging==",
-  "logging.handlers==",
-  "math==",
-  "os==",
-  "pathlib==",
+  "requests==2.24.0",
   "pyyaml==5.4.1",
-  "re==",
-  "requests==",
-  "subprocess==",
-  "sys==",
-  "tempfile==",
-  "traceback==",
-  "urllib.parse",
-  "xml.etree.ElementTree==",
-  "yaml=="
+  "jinja2==2.11.2",
+
+  #
+  # Following packages are dependencies from the above:
+  #
+  "brotlipy==0.7.0",
+  "certifi==2020.12.5",
+  "cffi==1.14.5",
+  "chardet==3.0.4",
+  "cryptography==3.4.4",
+  "idna==2.10",
+  "MarkupSafe==1.1.1",
+  "pip==21.0.1",
+  "pycparser==2.20",
+  "pyOpenSSL==20.0.1",
+  "PySocks==1.7.1",
+  "setuptools==49.6.0.post20210108",
+  "six==1.15.0",
+  "urllib3==1.25.11",
+  "wheel==0.36.2",
+  "win-inet-pton==1.1.0",
+  "wincertstore==0.2"
 )
 
 env_validation <- BasiliskEnvironment(

@@ -78,5 +78,5 @@ shinyAppServer <- function(input, output, session) {
   source(system.file("reactives", "reactivesTimelineTab.R", package = "cbpManager"), local=TRUE)
 
   # Tab 6 Validation  ---------------------------------------------------------------
-  #source(system.file("reactives", "reactivesValidationTab.R", package = "cbpManager"), local=TRUE)
+  source(system.file("reactives", "reactivesValidationTab.R", package = "cbpManager"), local=TRUE)
 }
