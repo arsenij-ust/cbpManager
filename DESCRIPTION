@@ -30,7 +30,8 @@ Imports:
     jsonlite,
     basilisk,
     reticulate,
-    shinyBS
+    shinyBS,
+    shinycssloaders
 Suggests: 
     knitr,
     BiocStyle,

@@ -1,58 +1,65 @@
-runValidation <- eventReactive(input$runValidation, {
+# Triggers the validation by clicking the "Validate" button
+validation <- eventReactive(input$runValidation, {
   req(loadedData$studyID)
-  exitCode <- validateStudy()
-  if (exitCode == 0) {
-    return(p("Validation of study succeeded.", class = "valid"))
-  } else if (exitCode == 1) {
-    return(p("Validation of study failed.", class = "invalid"))
-  } else if (exitCode == 2) {
-    return(p(
-      "Validation of study not performed as problems occurred.",
-      class = "invalid"
-    ))
-  } else if (exitCode == 3) {
-    return(p("Validation of study succeeded with warnings.", class = "invalid"))
-  }
+  validateStudy()
 })
 
+# Install and use the conda environment managed by basilisk
 validateStudy <- function() {
-  proc <- basilisk::basiliskStart(env_validation)
-  on.exit(basilisk::basiliskStop(proc))
+  proc <- basiliskStart(env_validation)
+  on.exit(basiliskStop(proc))
 
+  # Execute the validateDataWrapper.py script
   validationOutput <- basiliskRun(proc, function() {
     importerPath <- system.file("python", package = "cbpManager")
     studyDir <- file.path(study_dir, loadedData$studyID)
     outfile <-
       file.path(study_dir, loadedData$studyID, "validated_study.html")
 
-    reticulate::source_python(system.file("python", "validateDataWrapper.py", package = "cbpManager"))
+    source_python(system.file("python", "validateDataWrapper.py", package = "cbpManager"))
     executeScript(importerPath, studyDir, outfile)
 
   })
   validationOutput
 }
 
+# Visualize the html report and the download button
 output$validateUI <- renderUI({
-  runValidation()
+  exitCode <- validation()
+  if (exitCode == 0) {
+    print("Validation of study succeeded.")
+  } else if (exitCode == 1) {
+    print("Validation of study failed.")
+  } else if (exitCode == 2) {
+    print("Validation of study not performed as problems occurred.")
+  } else if (exitCode == 3) {
+    print("Validation of study succeeded with warnings.")
+  }
 
   outfile <-
     file.path(study_dir, loadedData$studyID, "validated_study.html")
 
-  if (file.exists(outfile)) {
-    includeHTML(outfile)
+  if (input$runValidation != 0 & file.exists(outfile)) {
+    tagList(
+      downloadButton("downloadValidation", "Download"),
+      includeHTML(outfile)
+    )
   }
 })
 
+# Handle download
 output$downloadValidation <- downloadHandler(
   filename <- function() {
-    paste("study_validation", "html", sep=".")
+    paste("study_validation-",loadedData$studyID,"-", Sys.Date(), ".html", sep="")
   },
-
   content <- function(file) {
     outfile <-
       file.path(study_dir, loadedData$studyID, "validated_study.html")
-    if (file.exists(outfile)) {
-      file.copy("study_validation.html", file)
+    if(input$runValidation != 0 & file.exists(outfile)){
+      file.copy(outfile, file)
+    } else {
+      return()
     }
+
   }
 )

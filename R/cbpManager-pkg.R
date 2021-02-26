@@ -22,7 +22,8 @@
 #' @import DT
 #' @importFrom shinyBS popify bsButton
 #' @importFrom basilisk BasiliskEnvironment basiliskStart basiliskRun basiliskStop
-#' @importFrom reticulate import
+#' @importFrom reticulate import source_python
+#' @importFrom shinycssloaders withSpinner
 #'
 #' @name cbpManager-pkg
 #' @docType package

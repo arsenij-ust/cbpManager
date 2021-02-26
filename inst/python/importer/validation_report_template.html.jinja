@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<!--
-  Copyright (c) 2016 The Hyve B.V.
-  This code is licensed under the GNU Affero General Public License as
-  published by the Free Software Foundation, version 3,
-  or (at your option) any later version.
--->
-
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
   <style type="text/css">
     .jumbotron {
       text-align: center;
@@ -38,14 +24,12 @@
   <![endif]-->
   <title>cBioPortal validation report: study in '{{ study_dir }}'</title>
 </head>
-
 <body>
-  <script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
   <div class="container">
     <div class="header">
       <div class="jumbotron">
-        <h1>cBioPortal validation report</h1>
+        <h1>Test cBioPortal validation report</h1>
         <p>Study directory:<br />{{ study_dir }}</p>
         <p>For details, please see <a href='https://github.com/cbioportal/cbioportal/blob/master/docs/File-Formats.md'>the documentation on file formats supported by cBioPortal</a></p>
         <p>cBioPortal version {{ cbio_version }}</p>
@@ -151,7 +135,7 @@
                                   ' more)')|e }}
                           {%- else -%}
                                   {{ (record[attr_name + '_list']|join(', '))|e }}
-                          {%- endif %}	          
+                          {%- endif %}
                     {%- elif record[attr_name] is defined -%}
                       {{ record[attr_name]|e }}
                     {%- else -%}
@@ -221,4 +205,3 @@
     </div>
   </div>
 </body>
-</html>

@@ -27,12 +27,12 @@
   "pycparser==2.20",
   "pyOpenSSL==20.0.1",
   "PySocks==1.7.1",
-  "setuptools==49.6.0.post20210108",
+  #"setuptools==49.6.0.post20210108",
   "six==1.15.0",
   "urllib3==1.25.11",
   "wheel==0.36.2",
-  "win-inet-pton==1.1.0",
-  "wincertstore==0.2"
+  #"win-inet-pton==1.1.0",
+  #"wincertstore==0.2"
 )
 
 env_validation <- BasiliskEnvironment(
