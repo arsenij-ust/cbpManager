@@ -4,21 +4,21 @@ mutationsTab <- tabItem(
   fluidRow(
     width = 12,
     box(
-      title="Description",
+      title = "Description",
       collapsible = TRUE,
       collapsed = TRUE,
       solidHeader = TRUE,
       includeMarkdown(system.file("www", "descriptionMutationTab.md", package = "cbpManager")),
       width = 6
-      ),
+    ),
     box(
-      title="Sample from cBioPortal",
+      title = "Sample from cBioPortal",
       collapsible = TRUE,
       collapsed = FALSE,
       solidHeader = TRUE,
       tags$head(
         tags$style(
-          type="text/css",
+          type = "text/css",
           "#MutDataImg img {max-width: 100%; width: 100%; height: auto}"
         )
       ),
@@ -28,18 +28,19 @@ mutationsTab <- tabItem(
       ),
       width = 6
     )
-    ),
+  ),
   fluidRow(
     width = 12,
     box(
       column(
         3,
         fileInput("chooseMAF", "Choose MAF File",
-                  multiple = FALSE,
-                  accept = c("text/tsv",
-                             "text/tab-separated-values,text/plain",
-                             ".tsv", ".txt", ".maf", ".MAF"
-                  )
+          multiple = FALSE,
+          accept = c(
+            "text/tsv",
+            "text/tab-separated-values,text/plain",
+            ".tsv", ".txt", ".maf", ".MAF"
+          )
         ),
         actionButton("saveMAF", "Save MAF file", class = "btn-success")
       ),

@@ -6,10 +6,10 @@ shinyAppUI <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       # logo
-      tags$div(style = "position: absolute; top: -100px;",textOutput("clock")),
+      tags$div(style = "position: absolute; top: -100px;", textOutput("clock")),
       tags$head(
         tags$style(
-          type="text/css",
+          type = "text/css",
           "#logo {
           max-width: 150px;
           width: 150px;
