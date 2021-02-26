@@ -4,13 +4,16 @@
 \alias{launchApp}
 \title{Launch cbpManager}
 \usage{
-launchApp(studyDir = NULL, logDir = NULL, ...)
+launchApp(studyDir = NULL, logDir = NULL, returnAppObj = FALSE, ...)
 }
 \arguments{
 \item{studyDir}{Path to study folder containing studies of cBioPortal.}
 
 \item{logDir}{Path where a logfile should be saved. If NULL, logs are
 not stored}
+
+\item{returnAppObj}{Logical value, whether to return the app object if set to
+TRUE. Default behavior: directly runs the app (FALSE)}
 
 \item{...}{Further parameters that are used by \code{shiny::runApp}, e.g.
 \code{host} or \code{port}.}
@@ -22,8 +25,7 @@ shiny application object
 Launch the cbpManager Shiny application.
 }
 \examples{
-if ( interactive() ) {
+if (interactive()) {
   launchApp()
 }
-
 }
