@@ -76,9 +76,6 @@ observeEvent(input$add_study, {
         "description",
         "short_name",
         "add_global_case_list",
-        "citation",
-        "pmid",
-        "groups",
         "reference_genome"
       ),
       V2 = c(
@@ -88,12 +85,19 @@ observeEvent(input$add_study, {
         input$description,
         input$add_short_name,
         "false",
-        input$citation,
-        input$pmid,
-        input$groups,
         input$reference_genome
       )
     )
+    if(input$citation != ""){
+      meta_study_df <- rbind(meta_study_df, c("citation",input$citation))
+    }
+    if(input$pmid != ""){
+      meta_study_df <- rbind(meta_study_df, c("pmid",input$pmid))
+    }
+    if(input$groups != ""){
+      meta_study_df <- rbind(meta_study_df, c("groups",input$groups))
+    }
+
     # write meta_study.txt
     write.table(
       meta_study_df,
@@ -146,9 +150,6 @@ observeEvent(input$overwrite_study, {
       "description",
       "short_name",
       "add_global_case_list",
-      "citation",
-      "pmid",
-      "groups",
       "reference_genome"
     ),
     V2 = c(
@@ -158,12 +159,19 @@ observeEvent(input$overwrite_study, {
       input$description,
       input$add_short_name,
       "false",
-      input$citation,
-      input$pmid,
-      input$groups,
       input$reference_genome
     )
   )
+  if(input$citation != ""){
+    meta_study_df <- rbind(meta_study_df, c("citation",input$citation))
+  }
+  if(input$pmid != ""){
+    meta_study_df <- rbind(meta_study_df, c("pmid",input$pmid))
+  }
+  if(input$groups != ""){
+    meta_study_df <- rbind(meta_study_df, c("groups",input$groups))
+  }
+
   # write meta_study.txt
   write.table(
     meta_study_df,
