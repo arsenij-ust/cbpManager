@@ -30,7 +30,7 @@
   #"setuptools==49.6.0.post20210108",
   "six==1.15.0",
   "urllib3==1.25.11",
-  "wheel==0.36.2",
+  "wheel==0.36.2"
   #"win-inet-pton==1.1.0",
   #"wincertstore==0.2"
 )

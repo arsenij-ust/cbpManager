@@ -10,7 +10,7 @@ validationTab <- tabItem(
     box(
       title="Results",
       width = 12,
-      uiOutput("validateUI") %>% withSpinner
+      uiOutput("validateUI") %>% withSpinner()
     )
   )
 )

@@ -37,7 +37,7 @@ output$validateUI <- renderUI({
   }
 
   outfile <-
-    file.path(study_dir, loadedData$studyID, "validated_study.html")
+    file.path(study_dir, loadedData$studyID, "validated_study_cropped.html")
 
   if (input$runValidation != 0 & file.exists(outfile)) {
     tagList(
