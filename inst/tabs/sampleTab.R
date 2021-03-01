@@ -8,7 +8,7 @@ sampleTab <- tabItem(
       collapsible = TRUE,
       collapsed = TRUE,
       solidHeader = TRUE,
-      includeMarkdown(system.file("www", "descriptionSampleTab1.md", package = "cbpManager")),
+      includeMarkdown(system.file("apphelp", "descriptionSampleTab1.md", package = "cbpManager")),
       width = 6
     ),
     box(
@@ -34,11 +34,11 @@ sampleTab <- tabItem(
       solidHeader = TRUE,
       column(
         6,
-        includeMarkdown(system.file("www", "descriptionSampleTab2.md", package = "cbpManager")),
+        includeMarkdown(system.file("apphelp", "descriptionSampleTab2.md", package = "cbpManager")),
       ),
       column(
         6,
-        includeMarkdown(system.file("www", "descriptionSampleTab3.md", package = "cbpManager")),
+        includeMarkdown(system.file("apphelp", "descriptionSampleTab3.md", package = "cbpManager")),
       ),
       width = 12
     )
