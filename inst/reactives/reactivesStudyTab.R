@@ -1,3 +1,18 @@
+# image  ---------------------------------------------------------------
+output$workflowImage <- renderImage(
+  {
+    return(
+      list(
+        src = system.file("www", "workflow.png", package = "cbpManager"),
+        contentType = "image/png",
+        alt = "workflow-cbpManager",
+        width = "auto"
+      )
+    )
+  },
+  deleteFile = FALSE
+)
+
 # list files of study_dir ---------------------------------------------------------------
 cancer_study_rc <- reactive({
   list.files(study_dir)
