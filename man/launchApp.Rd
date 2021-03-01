@@ -12,6 +12,9 @@ launchApp(studyDir = NULL, logDir = NULL, returnAppObj = FALSE, ...)
 \item{logDir}{Path where a logfile should be saved. If NULL, logs are
 not stored}
 
+\item{returnAppObj}{Logical value, whether to return the app object if set to
+TRUE. Default behavior: directly runs the app (FALSE)}
+
 \item{...}{Further parameters that are used by \code{shiny::runApp}, e.g.
 \code{host} or \code{port}.}
 }

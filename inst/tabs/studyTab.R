@@ -146,27 +146,6 @@ studyTab <- tabItem(
           div(
             div(
               style = "display: inline-block;vertical-align: middle;width: 200px",
-              textInput("pmid",
-                label = "(Optional) Pubmed ids"
-              ),
-            ),
-            div(
-              style = "display: inline-block;vertical-align: middle;", popify(
-                bsButton(
-                  "q4",
-                  label = "",
-                  icon = icon("question"),
-                  style = "info",
-                  size = "extra-small"
-                ),
-                "pmid (Optional)",
-                "One or more relevant pubmed ids (comma separated without whitespace). If used, the field citation has to be filled, too."
-              )
-            )
-          ),
-          div(
-            div(
-              style = "display: inline-block;vertical-align: middle;width: 200px",
               textInput("groups",
                 label = "(Optional) Groups",
                 placeholder = "e.g. PUBLIC;GDAC;SU2C-PI3K"
@@ -189,9 +168,9 @@ studyTab <- tabItem(
           div(
             div(
               style = "display: inline-block;vertical-align: middle;width: 200px",
-              textInput("reference_genome",
+              selectInput("reference_genome",
                 label = "(Optional) Reference genome",
-                placeholder = "e.g. hg19, hg38"
+                choices = c('hg19', 'hg38', 'mm10')
               ),
             ),
             div(

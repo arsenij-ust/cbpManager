@@ -25,9 +25,8 @@ shinyAppUI <- dashboardPage(
       menuItem("Patient", tabName = "patient"),
       menuItem("Sample", tabName = "sample"),
       menuItem("Mutations", tabName = "mutations"),
-      menuItem("Timelines", tabName = "timelines")
-      # ,
-      # menuItem("Validation", tabName = "validation")
+      menuItem("Timelines", tabName = "timelines"),
+      menuItem("Validation", tabName = "validation")
     )
   ),
   dashboardBody(
@@ -46,11 +45,10 @@ shinyAppUI <- dashboardPage(
       mutationsTab,
 
       # Tab 5 Timelines - timelineTab.R
-      timelineTab
+      timelineTab,
 
-      # ,
       # Tab 6 Validation - validationTab.R
-      # validationTab
+      validationTab
     )
   )
 )

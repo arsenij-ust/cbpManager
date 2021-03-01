@@ -1,87 +1,82 @@
-# validationTags <- eventReactive(input$runValidation, {
-#   req(input$cancer_study_identifier)
-#   tags <- list()
-#
-#   studyFiles <- list.files(file.path(study_dir, input$cancer_study_identifier))
-#   studyFiles <- c(studyFiles, list.files(file.path(study_dir, input$cancer_study_identifier, "case_lists")))
-#   requiredFiles <- c(
-#     "data_clinical_sample.txt",
-#     "data_clinical_patient.txt",
-#     "data_mutations_extended.txt",
-#     "meta_study.txt",
-#     "meta_clinical_sample.txt",
-#     "meta_clinical_patient.txt",
-#     "meta_mutations_extended.txt",
-#     "cases_all.txt"
-#   )
-#   tags <- rlist::list.append(tags, hr())
-#   tags <- rlist::list.append(tags, h4("Required files:"))
-#   for (f in requiredFiles){
-#     if(f %in% studyFiles){
-#       tags <- rlist::list.append(tags, p(paste0(f," exists"), class = "valid"))
-#     } else {
-#       tags <- rlist::list.append(tags, p(paste0(f," not exists"), class = "invalid"))
-#     }
-#   }
-#   tags <- rlist::list.append(tags, h4("Optional files:"))
-#
-#   return(tags)
-# })
+# Triggers the validation by clicking the "Validate" button
+validation <- eventReactive(input$runValidation, {
+  req(loadedData$studyID)
+  validateStudy()
+})
 
-# output$validateUI <- renderUI({
-#   tagList(
-#     validationTags()
-#   )
-# })
+# Install and use the conda environment managed by basilisk
+validateStudy <- function() {
+  proc <- basiliskStart(env_validation)
+  on.exit(basiliskStop(proc))
 
-# getPage <- eventReactive(input$runValidation, {
-#   req(input$cancer_study_identifier)
-#
-#   reticulate::use_condaenv("r-reticulate", required = TRUE)
-#   py_modules <- c("requests", "PyYAML", "jinja2", "importer")
-#   for (module in py_modules){
-#     if(reticulate::py_module_available(module)){
-#       reticulate::py_install(module, pip = TRUE)
-#     }
-#   }
-#   validationFile <- paste0(input$cancer_study_identifier,"_validation.html")
-#   validationPath <-file.path(study_dir, input$cancer_study_identifier, validationFile)
-#
-#   source_python(system.file("python", "validateDataWrapper.py", package = "cbpManager"))
-#   executeScript(file.path(study_dir, input$cancer_study_identifier), validationPath)
-#
-#
-#
-#   ######
-#
-#   reticulate::use_condaenv("r-reticulate", required = TRUE)
-#   source_python("inst/python/validateDataWrapper.py")
-#   executeScript("test", "hallo")
-#
-#   source_python("inst/python/importer/validateData.py")
-  #error_file=None, html_table='validation_testpatient.html', max_reported_values=3, no_portal_checks=True, portal_info_dir=None, relaxed_clinical_definitions=False, strict_maf_checks=False, study_directory='./testpatient/', url_server='http://localhost:8080', verbose=True
+  # Execute the validateDataWrapper.py script
+  validationOutput <- basiliskRun(proc, function() {
+    # check if conda environment
+    packages_df <- basilisk::listPackages(env_validation)
+    if (!all(c("Jinja2", "requests", "PyYAML") %in% packages_df$package)) {
+      return(4)
+    }else{
+      importerPath <- system.file("python", package = "cbpManager")
+      studyDir <- file.path(study_dir, loadedData$studyID)
+      outfile <-
+        file.path(study_dir, loadedData$studyID, "validated_study.html")
 
+      source_python(system.file("python", "validateDataWrapper.py", package = "cbpManager"))
+      executeScript(importerPath, studyDir, outfile)
+    }
 
+  })
+  validationOutput
+}
 
+# Visualize the html report and the download button
+output$validateUI <- renderUI({
+  exitCode <- validation()
+  if (exitCode == 0) {
+    print("Validation of study succeeded.")
+  } else if (exitCode == 1) {
+    print("Validation of study failed.")
+  } else if (exitCode == 2) {
+    print("Validation of study not performed as problems occurred.")
+  } else if (exitCode == 3) {
+    print("Validation of study succeeded with warnings.")
+  } else if (exitCode == 4) {
+    warning("Some problems occured during the installation of the conda environment.
+One or more of the necessary packages were not installed.
+Please try reinstalling cbpManager and basilisk or contact the support at https://github.com/arsenij-ust/cbpManager/issues")
+    showNotification(
+      "Some problems occured during the installation of the conda environment.
+One or more of the necessary packages were not installed.
+Please try reinstalling cbpManager and basilisk or contact the support at https://github.com/arsenij-ust/cbpManager/issues.",
+      type = "error",
+      duration = NULL
+    )
+  }
 
+  outfile <-
+    file.path(study_dir, loadedData$studyID, "validated_study_cropped.html")
 
-  ##########
+  if (input$runValidation != 0 & file.exists(outfile)) {
+    tagList(
+      downloadButton("downloadValidation", "Download"),
+      includeHTML(outfile)
+    )
+  }
+})
 
-  #reticulate::py_run_file(system.file("python", "importer", "validateData.py", package = "cbpManager"))
-
-#   return(includeHTML(validationPath))
-# })
-
-output$validation<-renderUI({getPage()})
+# Handle download
 output$downloadValidation <- downloadHandler(
   filename <- function() {
-    paste0(loadedData$studyID,"_validation.html")
+    paste("study_validation-",loadedData$studyID,"-", Sys.Date(), ".html", sep="")
   },
-
   content <- function(file) {
-    validationFile <- paste0(loadedData$studyID,"_validation.html")
-    validationPath <-file.path(study_dir, loadedData$studyID, validationFile)
-    file.copy(validationPath, file)
-  },
-  contentType = NULL
+    outfile <-
+      file.path(study_dir, loadedData$studyID, "validated_study.html")
+    if(input$runValidation != 0 & file.exists(outfile)){
+      file.copy(outfile, file)
+    } else {
+      return()
+    }
+
+  }
 )

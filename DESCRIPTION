@@ -28,13 +28,18 @@ Imports:
     rlist,
     magrittr,
     jsonlite,
-    shinyBS
+    basilisk,
+    reticulate,
+    shinyBS,
+    shinycssloaders
 Suggests: 
     knitr,
     BiocStyle,
     rmarkdown,
     testthat (>= 3.0.0)
+StagedInstall: no
 Collate:
+    'basilisk.R'
     'dynamicTable.R'
     'cbpManager-pkg.R'
     'functions.R' 

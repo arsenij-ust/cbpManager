@@ -479,3 +479,21 @@ writeLogfile <- function(outdir, modified_file, log_filename = "cbpManager_logfi
   log <- paste0(timepoint, "   User: ", userName, " modified file '", modified_file, "'")
   write(log, file = file.path(outdir, log_filename), append = TRUE)
 }
+
+#' Install conda environment with basilisk before launching the app
+#'
+#' @return Nothing to return
+#' @export
+setupConda <- function() {
+  proc <- basiliskStart(env_validation)
+  on.exit(basiliskStop(proc))
+  checkPackages <- basiliskRun(proc, function() {
+    packages_df <- basilisk::listPackages(env_validation)
+    if (!all(c("Jinja2", "requests", "PyYAML") %in% packages_df$package)) {
+      warning(
+      "Some problems occured during the installation of the conda environment.
+One or more of the necessary packages were not installed.
+Please try reinstalling cbpManager and basilisk or contact the support at https://github.com/arsenij-ust/cbpManager/issues")
+    }
+  })
+}

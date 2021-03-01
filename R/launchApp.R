@@ -9,6 +9,9 @@
 #' \code{host} or \code{port}.
 #' @param logDir Path where a logfile should be saved. If NULL, logs are
 #' not stored
+#' @param returnAppObj Logical value, whether to return the app object if set to
+#' TRUE. Default behavior: directly runs the app (FALSE)
+#'
 #' @return shiny application object
 #'
 #' @examples
@@ -16,8 +19,6 @@
 #'   launchApp()
 #' }
 #' @export launchApp
-
-
 # wrapper for shiny::shinyApp()
 launchApp <- function(
                       studyDir = NULL,
