@@ -8,7 +8,7 @@ mutationsTab <- tabItem(
       collapsible = TRUE,
       collapsed = TRUE,
       solidHeader = TRUE,
-      includeMarkdown(system.file("www", "descriptionMutationTab.md", package = "cbpManager")),
+      includeMarkdown(system.file("apphelp", "descriptionMutationTab.md", package = "cbpManager")),
       width = 6
     ),
     box(
