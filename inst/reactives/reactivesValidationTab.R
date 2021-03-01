@@ -11,13 +11,19 @@ validateStudy <- function() {
 
   # Execute the validateDataWrapper.py script
   validationOutput <- basiliskRun(proc, function() {
-    importerPath <- system.file("python", package = "cbpManager")
-    studyDir <- file.path(study_dir, loadedData$studyID)
-    outfile <-
-      file.path(study_dir, loadedData$studyID, "validated_study.html")
+    # check if conda environment
+    packages_df <- basilisk::listPackages(env_validation)
+    if (!all(c("Jinja2", "requests", "PyYAML") %in% packages_df$package)) {
+      return(4)
+    }else{
+      importerPath <- system.file("python", package = "cbpManager")
+      studyDir <- file.path(study_dir, loadedData$studyID)
+      outfile <-
+        file.path(study_dir, loadedData$studyID, "validated_study.html")
 
-    source_python(system.file("python", "validateDataWrapper.py", package = "cbpManager"))
-    executeScript(importerPath, studyDir, outfile)
+      source_python(system.file("python", "validateDataWrapper.py", package = "cbpManager"))
+      executeScript(importerPath, studyDir, outfile)
+    }
 
   })
   validationOutput
@@ -34,6 +40,17 @@ output$validateUI <- renderUI({
     print("Validation of study not performed as problems occurred.")
   } else if (exitCode == 3) {
     print("Validation of study succeeded with warnings.")
+  } else if (exitCode == 4) {
+    warning("Some problems occured during the installation of the conda environment.
+One or more of the necessary packages were not installed.
+Please try reinstalling cbpManager and basilisk or contact the support at https://github.com/arsenij-ust/cbpManager/issues")
+    showNotification(
+      "Some problems occured during the installation of the conda environment.
+One or more of the necessary packages were not installed.
+Please try reinstalling cbpManager and basilisk or contact the support at https://github.com/arsenij-ust/cbpManager/issues.",
+      type = "error",
+      duration = NULL
+    )
   }
 
   outfile <-

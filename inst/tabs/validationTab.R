@@ -4,7 +4,7 @@ validationTab <- tabItem(
   fluidRow(
     width = 12,
     box(title="Run validation",width = 12,
-      includeMarkdown(system.file("www", "descriptionValidationTab.md", package = "cbpManager")),
+      includeMarkdown(system.file("apphelp", "descriptionValidationTab.md", package = "cbpManager")),
       actionButton("runValidation", "Validate", class = "btn-success")
     ),
     box(
