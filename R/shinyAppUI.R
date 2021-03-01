@@ -21,7 +21,7 @@ shinyAppUI <- dashboardPage(
       ),
       imageOutput("logo", height = "auto", width = "150px"),
       # Sidebar items
-      menuItem("Study Metadata", tabName = "meta_study"),
+      menuItem("Study", tabName = "meta_study"),
       menuItem("Patient", tabName = "patient"),
       menuItem("Sample", tabName = "sample"),
       menuItem("Mutations", tabName = "mutations"),

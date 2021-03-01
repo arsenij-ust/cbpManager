@@ -22,6 +22,7 @@
 launchApp <- function(
                       studyDir = NULL,
                       logDir = NULL,
+                      returnAppObj = FALSE,
                       ...) {
 
   ## --------------------------------------------------------------------------##
@@ -48,5 +49,10 @@ launchApp <- function(
     ui = shinyAppUI,
     server = shinyAppServer
   )
+
+  if(returnAppObj){
+    return(app)
+  }
+
   runApp(app, ...)
 }

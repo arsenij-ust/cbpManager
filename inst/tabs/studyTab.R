@@ -1,6 +1,23 @@
 studyTab <- tabItem(
   tabName = "meta_study",
-  h2("Study Metadata"),
+  h2("Study"),
+  fluidRow(
+    box(
+      title = "cbpManager workflow steps",
+      collapsible = TRUE,
+      collapsed = FALSE,
+      solidHeader = TRUE,
+      tags$head(
+        tags$style(
+          type = "text/css",
+          "#workflowImage img {max-width: 100%; width: 75%; height: auto;
+          display: block; margin-left: auto;margin-right: auto}"
+        )
+      ),
+      imageOutput("workflowImage", height = "auto"),
+      width = 12
+    )
+  ),
   fluidRow(
     column(
       width = 4,

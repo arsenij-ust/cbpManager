@@ -4,7 +4,7 @@
 \alias{launchApp}
 \title{Launch cbpManager}
 \usage{
-launchApp(studyDir = NULL, logDir = NULL, ...)
+launchApp(studyDir = NULL, logDir = NULL, returnAppObj = FALSE, ...)
 }
 \arguments{
 \item{studyDir}{Path to study folder containing studies of cBioPortal.}

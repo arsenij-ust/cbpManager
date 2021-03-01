@@ -16,8 +16,12 @@ output$patientDataImg <- renderImage(
 # reactive list with PATIENT_IDs from data_clinical_patient
 patient_id_list <- reactiveValues(ids = NULL)
 observeEvent(loadedData$data_clinical_patient, {
-  ids <-
-    loadedData$data_clinical_patient[4:nrow(loadedData$data_clinical_patient), "PATIENT_ID"]
+  if (nrow(loadedData$data_clinical_patient) > 3) {
+    ids <-
+      loadedData$data_clinical_patient[4:nrow(loadedData$data_clinical_patient), "PATIENT_ID"]
+  } else {
+    ids <- c()
+  }
   patient_id_list$ids <- ids[!is.na(ids)]
 })
 
