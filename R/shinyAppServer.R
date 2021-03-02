@@ -57,7 +57,7 @@ shinyAppServer <- function(input, output, session) {
 
   # Tab 1 Study Metadata ---------------------------------------------------------------
   # oncotree cancer types
-  oncotree <<- jsonlite::fromJSON(system.file("data", "oncotree.json", package = "cbpManager"))
+  oncotree <<- jsonlite::fromJSON(system.file("extdata", "oncotree.json", package = "cbpManager"))
   oncotree$code <<- tolower(oncotree$code)
   unique(oncotree$tissue)
   tumor_tissue_site <<- unique(oncotree$tissue[which(!is.na(oncotree$tissue))])
@@ -69,11 +69,11 @@ shinyAppServer <- function(input, output, session) {
   source(system.file("reactives", "reactivesStudyTab.R", package = "cbpManager"), local = TRUE)
   # Tab 2 Patient ---------------------------------------------------------------
   # read table with predefined colnames
-  patientCols <- read.table(system.file("data", "predefined_patient_cols.tsv", package = "cbpManager"), header = TRUE, sep = "\t")
+  patientCols <- read.table(system.file("extdata", "predefined_patient_cols.tsv", package = "cbpManager"), header = TRUE, sep = "\t")
   source(system.file("reactives", "reactivesPatientTab.R", package = "cbpManager"), local = TRUE)
   # Tab 3 Sample ---------------------------------------------------------------
   # read table with predefined colnames
-  sampleCols <- read.table(system.file("data", "predefined_sample_cols.tsv", package = "cbpManager"), header = TRUE, sep = "\t")
+  sampleCols <- read.table(system.file("extdata", "predefined_sample_cols.tsv", package = "cbpManager"), header = TRUE, sep = "\t")
   source(system.file("reactives", "reactivesSampleTab.R", package = "cbpManager"), local = TRUE)
   # Tab 4 Mutations ---------------------------------------------------------------
   source(system.file("reactives", "reactivesMutationsTab.R", package = "cbpManager"), local = TRUE)
