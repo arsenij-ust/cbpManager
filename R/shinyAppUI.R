@@ -4,6 +4,7 @@
 shinyAppUI <- dashboardPage(
   dashboardHeader(title = "cbpManager"),
   dashboardSidebar(
+    rintrojs::introjsUI(),
     sidebarMenu(
       tags$div(style = "position: absolute; top: -100px;", textOutput("clock")),
       # logo
@@ -27,7 +28,16 @@ shinyAppUI <- dashboardPage(
       menuItem("Mutations", tabName = "mutations"),
       menuItem("Timelines", tabName = "timelines"),
       menuItem("Validation", tabName = "validation")
-    )
+    ),
+    tags$br(),
+    tags$head(
+      tags$style(
+        type = "text/css",
+        "#ui_loaded_study_info {
+          color: black;}"
+      )
+    ),
+    uiOutput("ui_loaded_study_info")
   ),
   dashboardBody(
     tabItems(

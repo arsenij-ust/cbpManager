@@ -31,7 +31,8 @@ Imports:
     basilisk,
     reticulate,
     shinyBS,
-    shinycssloaders
+    shinycssloaders,
+    rintrojs
 Suggests: 
     knitr,
     BiocStyle,
