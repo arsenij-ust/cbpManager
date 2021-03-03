@@ -2,7 +2,15 @@
 #' create the shiny application user interface
 
 shinyAppUI <- dashboardPage(
-  dashboardHeader(title = "cbpManager"),
+  dashboardHeader(
+    title = "cbpManager",
+    tags$li(a(
+      href = "https://github.com/arsenij-ust/cbpManager",
+      icon("github"),
+      title = "Github repository",
+      style = "cursor: pointer;"),
+      class = "dropdown",)
+  ),
   dashboardSidebar(
     rintrojs::introjsUI(),
     sidebarMenu(
