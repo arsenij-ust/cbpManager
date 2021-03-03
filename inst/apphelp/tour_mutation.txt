@@ -1,0 +1,8 @@
+element;intro
+#Welcome;Welcome to the interactive tour for <code>cbpManager</code>!<br><br>In the <b>Mutation</b> tab, you can add sample data to existing patients and edit already existing samples. In the following you will learn how to do this in detail.
+#mutation_description;This box contains a description of the <b>Mutation</b> tab.
+#mutation_img;Here you can see an example image how the mutation data will look later in cBioPortal.
+#MAFdata;If the loaded study already has mutation data, it would be shown in this table.
+#chooseMAFDiv;Upload a MAF file to the study. This file will be concatenated to the existing mutation data. Please have a look at the description box for the correct MAF format! If the upload was successful, the new mutation data is added to the table on the right.
+#saveMAF;Make the changes persistent by saving the file!
+#Thanks;Thank you for taking the <b>Mutation</b> tab tour of <code>cbpManager</code>!

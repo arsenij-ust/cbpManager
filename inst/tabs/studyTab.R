@@ -1,7 +1,15 @@
 studyTab <- tabItem(
   tabName = "meta_study",
-  h2("Study"),
+  div(style="display:inline-block",h2("Study")),
+  div(style="display:inline-block; padding-bottom:15px; margin-left:30px",bsButton(
+    "tour_study",
+    label = "Tour",
+    icon = icon("question"),
+    style = "info",
+    size = "extra-small"
+  )),
   fluidRow(
+    id = "workflow_overview",
     box(
       title = "cbpManager workflow steps",
       collapsible = TRUE,
@@ -11,7 +19,7 @@ studyTab <- tabItem(
         tags$style(
           type = "text/css",
           "#workflowImage img {max-width: 100%; width: 75%; height: auto;
-          display: block; margin-left: auto;margin-right: auto}"
+            display: block; margin-left: auto;margin-right: auto}"
         )
       ),
       imageOutput("workflowImage", height = "auto"),
@@ -20,6 +28,7 @@ studyTab <- tabItem(
   ),
   fluidRow(
     column(
+      id = "existing_study",
       width = 4,
       box(
         width = NULL,
@@ -33,6 +42,7 @@ studyTab <- tabItem(
       )
     ),
     column(
+      id = "create_study",
       width = 8,
       box(
         width = NULL,
@@ -128,7 +138,7 @@ studyTab <- tabItem(
             )
           ),
           uiOutput("ui_type_of_cancer"),
-          actionButton("add_study", "Add study")
+          actionButton("add_study", "Add study", class = "btn-success")
         ),
         column(
           6,
@@ -189,13 +199,15 @@ studyTab <- tabItem(
           )
         )
       ),
-      box(
-        width = NULL,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        solidHeader = TRUE,
-        title = "Alternatively select cancer type here",
-        DT::DTOutput("oncotree_table")
+      div(id = "cancer_type_table",
+        box(
+          width = NULL,
+          collapsible = TRUE,
+          collapsed = TRUE,
+          solidHeader = TRUE,
+          title = "Alternatively select cancer type here",
+          DT::DTOutput("oncotree_table")
+        )
       )
     )
   )

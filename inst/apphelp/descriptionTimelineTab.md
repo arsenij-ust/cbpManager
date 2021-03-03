@@ -1,6 +1,6 @@
 #### Visualization of timeline data 
 
-The timeline data is a representation of the various events that occur during the course of treatment for a patient from initial diagnosis. In cBioPortal timeline data is represented as one or more tracks in the patient view. This application produces separate files for treatment, surgery and status events (see tabs below). Add a treatment, a surgery or a status to a patient by providing the Patient ID and the necessary dates. The event timepoints are calculated in *days from the date of diagnosis. The 'Date of the first Diagnosis' act as point zero on the timeline scale.
+The timeline data is a representation of the various events that occur during the course of treatment for a patient from initial diagnosis. In cBioPortal timeline data is represented as one or more tracks in the patient view. This application produces separate files for treatment, surgery and status events (see tabs below). Add a treatment, a surgery or a status to a patient by providing the Patient ID and the necessary dates. The event timepoints are calculated in days from the date of diagnosis. The 'Date of the first Diagnosis' act as point zero on the timeline scale.
 
 ---
 
@@ -25,6 +25,6 @@ A row in the timeline tables represents a timeline event in a timeline track.
 #### Custom timeline tracks:
 
 At the bottom of this page you can create and manage custom timeline tracks.
-First provide a name for your custom track. This name will be used as "EVENT_TYPE" in the final file. The naming of the final file will be "data_timeline_<track-name>.txt" (& "meta_timeline_<track-name>.txt"). 
+First provide a name for your custom track. This name will be used as "EVENT_TYPE" in the final file. The naming of the final file will be `data_timeline_<track-name>.txt` (& `meta_timeline_<track-name>.txt`). 
 In the drop down menu you can choose from already existing custom timelines.
 To edit the selected timeline track, click on **Edit track**. A table with the selected track data will appear below.

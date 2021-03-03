@@ -9,7 +9,7 @@ By adding 'PATIENT_ID' here, cBioPortal will map the given sample to this patien
 
 #### Optional columns
 
-Further columns contain variable sample attributes. You can select a predefined attribute. These attributes are described in the following. Optionally you can set a custom named attribute.
+Further columns contain variable sample attributes. You can select a predefined attribute. These attributes are described in the following. Optionally you can add a custom column.
 
 The following columns are required for the pan-cancer summary statistics tab:
 

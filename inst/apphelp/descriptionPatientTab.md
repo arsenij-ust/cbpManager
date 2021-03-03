@@ -1,14 +1,17 @@
-**Add clinical data, which are shown in cBioPortal in form of the table** (see image on the right.)
+**Add clinical data, which are shown in cBioPortal in form of the table** (see image on the right.) 
+If you are new to cbpManager, we strongly advise you to take the tour with the `? tour` button above.
 
 ---
 
 #### Data:
 
-The first two rows contain a **short name**  (1st row) and a **longer name** (2nd row) of the clinical attribute.
+The first three blue rows of the table below represents the meta data of columns and contain a **short name**  (1st row), a **longer name** (2nd row), and the **data type** of the column. These rows are required by cBioPortal. Usually, you don't need to change them, but if you need to, you can edit them with the `Edit patient` button. 
 
-- The first column **'PATIENT_ID'** is **obligatory** and should contain a unique patient identifier. (Please do not override the cells containing 'Patient Identifier' and 'Patient identifier' in the first column.)
+The remaining light rows below the three blue rows contain the patients. 
 
-Several pre-defined attributes are described in the following:
+- The first column **'PATIENT_ID'** is **obligatory** and should contain a unique patient identifier.
+
+Several pre-defined columns are described in the following. Some of the columns are entity specific, therefore do not be surprised. If you need other columns which are not present in the pre-defined selection you can create custom columns with the button `Add column(s)` --> `Create custom column`.
 
 - **'OS_STATUS'**:   Overall patient survival status. Possible values: 1:DECEASED, 0:LIVING
 - **'OS_MONTHS'**:   Overall survival in months since initial diagnosis.
@@ -26,6 +29,6 @@ Several pre-defined attributes are described in the following:
 - **Edit patient:** select a row by clicking on it and then click on 'Edit patient' to edit the values in this row.
 - **Import patient** allows you to import patients from other studies. The patient data, sample data, mutation data, and timeline data associated with the selected patient will be copied in the current study.
 - **Delete patient:** select a row by clicking on it and then click on 'Delete patient' to delete the selected entry.
-- **Add column(s):** after clicking on 'Add column' choose whether you want to add a pre-defined column or create a custom column. In case of a custom column, you need to provide a 'column name', a 'short name' and a 'long name' for this column.
+- **Add column(s):** after clicking on `Add column` choose whether you want to add a pre-defined column or create a custom column. In case of a custom column, you need to provide a 'column name', a 'short name' and a 'long name' for this column.
 - **Delete column(s):** choose the columns you want to delete.
 - **Save:** saves the edited table to the final file.

@@ -13,6 +13,14 @@ output$MutDataImg <- renderImage(
   deleteFile = FALSE
 )
 
+# tour  ---------------------------------------------------------------
+observeEvent(input$tour_mutation, {
+  tour <- read.delim(system.file("apphelp", "tour_mutation.txt", package = "cbpManager"),
+                     sep = ";", stringsAsFactors = FALSE,
+                     row.names = NULL, quote = "")
+  rintrojs::introjs(session, options = list(steps = tour))
+})
+
 # upload file ---------------------------------------------------------------
 observeEvent(input$chooseMAF, {
   uploaded_data <-

@@ -1,32 +1,47 @@
 mutationsTab <- tabItem(
   tabName = "mutations",
-  h2("Mutations"),
+  div(style="display:inline-block",h2("Mutation")),
+  div(style="display:inline-block; padding-bottom:15px; margin-left:30px",bsButton(
+    "tour_mutation",
+    label = "Tour",
+    icon = icon("question"),
+    style = "info",
+    size = "extra-small"
+  )),
   fluidRow(
     width = 12,
-    box(
-      title = "Description",
-      collapsible = TRUE,
-      collapsed = TRUE,
-      solidHeader = TRUE,
-      includeMarkdown(system.file("apphelp", "descriptionMutationTab.md", package = "cbpManager")),
-      width = 6
+    column(
+      width = 6,
+      id = "mutation_description",
+      box(
+        title = "Description",
+        collapsible = TRUE,
+        collapsed = TRUE,
+        solidHeader = TRUE,
+        includeMarkdown(system.file("apphelp", "descriptionMutationTab.md", package = "cbpManager")),
+        width = NULL
+      )
     ),
-    box(
-      title = "Sample from cBioPortal",
-      collapsible = TRUE,
-      collapsed = FALSE,
-      solidHeader = TRUE,
-      tags$head(
-        tags$style(
-          type = "text/css",
-          "#MutDataImg img {max-width: 100%; width: 100%; height: auto}"
-        )
-      ),
-      imageOutput(
-        "MutDataImg",
-        height = "auto"
-      ),
-      width = 6
+    column(
+      width = 6,
+      id = "mutation_img",
+      box(
+        title = "Sample from cBioPortal",
+        collapsible = TRUE,
+        collapsed = FALSE,
+        solidHeader = TRUE,
+        tags$head(
+          tags$style(
+            type = "text/css",
+            "#MutDataImg img {max-width: 100%; width: 100%; height: auto}"
+          )
+        ),
+        imageOutput(
+          "MutDataImg",
+          height = "auto"
+        ),
+        width = NULL
+      )
     )
   ),
   fluidRow(
@@ -34,12 +49,14 @@ mutationsTab <- tabItem(
     box(
       column(
         3,
-        fileInput("chooseMAF", "Choose MAF File",
-          multiple = FALSE,
-          accept = c(
-            "text/tsv",
-            "text/tab-separated-values,text/plain",
-            ".tsv", ".txt", ".maf", ".MAF"
+        div(id = "chooseMAFDiv",
+          fileInput("chooseMAF", "Choose MAF File",
+            multiple = FALSE,
+            accept = c(
+              "text/tsv",
+              "text/tab-separated-values,text/plain",
+              ".tsv", ".txt", ".maf", ".MAF"
+            )
           )
         ),
         actionButton("saveMAF", "Save MAF file", class = "btn-success")

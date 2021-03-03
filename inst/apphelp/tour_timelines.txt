@@ -1,0 +1,26 @@
+element;intro
+#Welcome;Welcome to the interactive tour for <code>cbpManager</code>!<br><br>In the <b>Timelines</b> tab, you can add timeline data to existing patients and edit already existing timeline tracks. In the following you will learn how to do this in detail.
+#timeline_description;This box contains a description of the <b>Timelines</b> tab.
+#timeline_img;Here you can see an example image how the timelines data will look later in cBioPortal.  In cBioPortal timeline data is represented as one or more tracks in the patient view.<br><br>You can already see, that a timeline track can have events symbolized by a point (timepoint event, e.g. in the 'Surgery' track) or a line (timeline event, e.g. 'Treatment' track). When the user moves the mouse over one of the events, supplementary informations associated with the event are shown.<br><br>You can also see, that the events are represented in number of days relative to the patients date of the first diagnosis. Therefore we need to add dates of first diagnoses to the patinets (see the next step).
+#diagnosisdate_box;Before adding timeline events, you should provide a first diagnosis date to an existing patient. This is necessary because events are calculated in days from the date of diagnosis.
+#dateTable;In this table you have an overview over the patients who already have a first diagnosis date.
+#datesAdd;With this button, we can add a first diagnosis date to a patient. We can select from patients existing in the <b>Patient</b> tab table.
+#datesEdit;If we made a mistake, we can change the date of a patient with this button. As already known, select a row and click on the <b>Edit date</b> button.
+#datesDelete;We can also delete a patients date. <br><br><b>Note that timeline events of the patient are not deleted when you delete the date. However, it prevents you from creating new events for this patient.</b>
+#datesSave;As always, make the changes permanent by clicking on the <b>Save</b> button.
+#timeline_tabs;In this section we can view and edit the timeline data of the tracks 'Treatment', 'Surgery', and 'Status'. Each of this tracks has already the suggested columns but you can add or remove columns as you want.<br><br>As 'Treatment' has 'timeline' events, it requires a 'START_DATE' and a 'STOP_DATE' columns.<br><br>'Surgery' and 'Status' has 'timepoint' events and require only the 'START_DATE' column. To match an event to a patient the 'PATIENT_ID' is also required.
+#Treatment-AddColumn;Similir to previous tabs, you can add additional columns to the table. The values of these columns will be displayed when the user mouse hovers the event in cBioPortal.
+#Treatment-DeleteColumn;You can also delete several columns. The columns 'START_DATE', 'STOP_DATE', and 'PATIENT_ID' are excluded from the delition.
+#Treatment-AddEntry;With this button you can add an event to the timeline track. Similar to previous tabs, the input fields matches the columns of the table.
+#Treatment-EditEntry;When editing an event you need to provide the 'START_DATE' (and 'STOP_DATE') again.
+#Treatment-DeleteEntry;Delete events by selecting the row and clicking on this button.
+#Treatment-SaveTimeline;Make the changes persistent by saving the data to the file!
+#custom_timelines;In this section you can create and manage custom timeline tracks.
+#customTrackID;First provide an ID for your custom track.
+#timelineMode;Select one of the track modes. This defines the type of events.
+#addTrack;Click on <b>Add track</b> to confirm the ID. The track can now be selected and edited in the next steps.
+#selectTrackUI;Select from existing custom timeline tracks the track you want to edit.
+#editTrack;Confirm the selection by clicking <b>Edit track</b>.
+#Table_ct;After you clicked on <b>Edit track</b> the track data appears here.
+#custom_track_buttons;As in previous tables, you can edit this tables with these buttons. Don't forget to save your changes with the <b>Save</b> button.
+#Thanks;Thank you for taking the <b>Mutation</b> tab tour of <code>cbpManager</code>!

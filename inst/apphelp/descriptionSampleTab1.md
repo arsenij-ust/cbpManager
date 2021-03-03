@@ -1,5 +1,6 @@
 **Add sample data to patients, which are shown in cBioPortal in form of the table** (see image on the right.)
-The first two rows contain a **short name**  (1st row) and a **longer name** (2nd row) of the sample attribute.
+If you are new to cbpManager, we strongly advise you to take the tour with the `? tour` button above.
+The first three blue rows of the table below represents the meta data of columns and contain a **short name**  (1st row), a **longer name** (2nd row), and the **data type** of the column. These rows are required by cBioPortal. Usually, you don't need to change them, but if you need to, you can edit them with the `Edit sample` button. 
 
 ---
 

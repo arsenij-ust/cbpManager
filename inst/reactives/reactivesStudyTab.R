@@ -13,6 +13,14 @@ output$workflowImage <- renderImage(
   deleteFile = FALSE
 )
 
+# tour  ---------------------------------------------------------------
+observeEvent(input$tour_study, {
+  tour <- read.delim(system.file("apphelp", "tour_study.txt", package = "cbpManager"),
+                     sep = ";", stringsAsFactors = FALSE,
+                     row.names = NULL, quote = "")
+  rintrojs::introjs(session, options = list(steps = tour))
+})
+
 # list files of study_dir ---------------------------------------------------------------
 cancer_study_rc <- reactive({
   list.files(study_dir)
@@ -22,7 +30,7 @@ cancer_study_rc <- reactive({
 # UI of cancer type
 output$ui_type_of_cancer <- renderUI({
   selectInput("type_of_cancer",
-    label = "Select the cancer type",
+    label = "Select the cancer type (alternatively select in the table below)",
     choices = c("mixed", oncotree$code), width = "200px"
   )
 })
@@ -144,7 +152,7 @@ observeEvent(input$add_study, {
       choices = c("", list.files(study_dir))
     )
 
-    showNotification("Study added successfully!",
+    showNotification(paste0("Study ", studyID, " added successfully!"),
       type = "message",
       duration = 10
     )
@@ -216,7 +224,7 @@ observeEvent(input$overwrite_study, {
     choices = c("", list.files(study_dir))
   )
 
-  showNotification("Study updated successfully!",
+  showNotification(paste0("Study ", studyID, " updated successfully!"),
     type = "message",
     duration = 10
   )
@@ -465,7 +473,7 @@ observeEvent(input$upload, {
   #                   choices = setdiff(colnames(loadedData$data_clinical_sample), c("PATIENT_ID", "SAMPLE_ID"))
   # )
 
-  showNotification("Study uploaded successfully!",
+  showNotification(paste0("Study ", loadedData$studyID, " loaded successfully! You can now proceed with the Patient tab."),
     type = "message",
     duration = 10
   )
@@ -474,6 +482,22 @@ observeEvent(input$upload, {
 # show table of metadata ---------------------------------------------------------------
 output$studyTable <- DT::renderDT({
   if (!is.null(loadedData$meta_study)) {
-    DT::datatable(loadedData$meta_study, colnames = rep("", ncol(loadedData$meta_study)))
+    DT::datatable(loadedData$meta_study, colnames = rep("", ncol(loadedData$meta_study)),
+                  caption = 'Meta data of loaded study:')
+  }
+})
+
+# UI of "loaded study info"
+output$ui_loaded_study_info <- renderUI({
+  if(!is.null(loadedData$studyID)){
+    column(width = 12,
+      box(
+        title = "Loaded study:", status = "success", solidHeader = TRUE,
+        collapsible = FALSE, width=NULL,
+        renderText(paste("ID:",loadedData$studyID)),
+        renderText(paste("Name:",loadedData$meta_study[which(loadedData$meta_study$V1=="name"),]$V2))
+      )
+    )
+
   }
 })

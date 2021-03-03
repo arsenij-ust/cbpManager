@@ -2,8 +2,17 @@
 #' create the shiny application user interface
 
 shinyAppUI <- dashboardPage(
-  dashboardHeader(title = "cbpManager"),
+  dashboardHeader(
+    title = "cbpManager",
+    tags$li(a(
+      href = "https://github.com/arsenij-ust/cbpManager",
+      icon("github"),
+      title = "Github repository",
+      style = "cursor: pointer;"),
+      class = "dropdown",)
+  ),
   dashboardSidebar(
+    rintrojs::introjsUI(),
     sidebarMenu(
       tags$div(style = "position: absolute; top: -100px;", textOutput("clock")),
       # logo
@@ -27,11 +36,30 @@ shinyAppUI <- dashboardPage(
       menuItem("Mutations", tabName = "mutations"),
       menuItem("Timelines", tabName = "timelines"),
       menuItem("Validation", tabName = "validation")
-    )
+    ),
+    tags$br(),
+    tags$head(
+      tags$style(
+        type = "text/css",
+        "#ui_loaded_study_info {
+          color: black;}"
+      )
+    ),
+    uiOutput("ui_loaded_study_info")
   ),
   dashboardBody(
+    tags$head(
+      tags$style(
+        HTML("#shiny-notification-panel {
+             position:fixed;
+             top: calc(50%);
+             left: calc(50% - 150px);
+             }
+             "
+        )
+      )
+    ),
     tabItems(
-
       # Tab 1 Study Metadata - studyTab.R
       studyTab,
 

@@ -1,32 +1,47 @@
 patientTab <- tabItem(
   tabName = "patient",
-  h2("Patient"),
+  div(style="display:inline-block",h2("Patient")),
+  div(style="display:inline-block; padding-bottom:15px; margin-left:30px",bsButton(
+    "tour_patient",
+    label = "Tour",
+    icon = icon("question"),
+    style = "info",
+    size = "extra-small"
+  )),
   fluidRow(
     width = 12,
-    box(
-      title = "Description",
-      collapsible = TRUE,
-      collapsed = TRUE,
-      solidHeader = TRUE,
-      includeMarkdown(system.file("apphelp", "descriptionPatientTab.md", package = "cbpManager")),
-      width = 6
-    ),
-    box(
-      title = "Sample from cBioPortal",
-      collapsible = TRUE,
-      collapsed = FALSE,
-      solidHeader = TRUE,
-      tags$head(
-        tags$style(
-          type = "text/css",
-          "#patientDataImg img {max-width: 100%; width: 100%; height: auto}"
-        )
+    column(6,
+      id = "patient_description",
+      box(
+        id = "patient_description",
+        title = "Description",
+        collapsible = TRUE,
+        collapsed = TRUE,
+        solidHeader = TRUE,
+        includeMarkdown(system.file("apphelp", "descriptionPatientTab.md", package = "cbpManager")),
+        width = NULL
       ),
-      imageOutput("patientDataImg", height = "auto"),
-      width = 6
+    ),
+    column(6,
+      id = "patient_sample_img",
+      box(
+        title = "Sample from cBioPortal",
+        collapsible = TRUE,
+        collapsed = FALSE,
+        solidHeader = TRUE,
+        tags$head(
+          tags$style(
+            type = "text/css",
+            "#patientDataImg img {max-width: 100%; width: 100%; height: auto}"
+          )
+        ),
+        imageOutput("patientDataImg", height = "auto"),
+        width = NULL
+      )
     )
   ),
   fluidRow(
+    id = "patient_main",
     width = 12,
     box(
       title = "Patient manager",

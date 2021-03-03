@@ -20,6 +20,7 @@
 #' @import shinydashboard
 #' @import rlist
 #' @import DT
+#' @importFrom rintrojs introjs introjsUI
 #' @importFrom shinyBS popify bsButton
 #' @importFrom basilisk BasiliskEnvironment basiliskStart basiliskRun basiliskStop
 #' @importFrom reticulate import source_python
