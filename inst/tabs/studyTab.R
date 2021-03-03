@@ -1,15 +1,13 @@
 studyTab <- tabItem(
   tabName = "meta_study",
-  div(
-    div(style="display:inline-block",h2("Study")),
-    div(style="display:inline-block; padding-bottom:15px; margin-left:30px",bsButton(
-      "tour_study",
-      label = "Tour",
-      icon = icon("question"),
-      style = "info",
-      size = "extra-small"
-    ))
-  ),
+  div(style="display:inline-block",h2("Study")),
+  div(style="display:inline-block; padding-bottom:15px; margin-left:30px",bsButton(
+    "tour_study",
+    label = "Tour",
+    icon = icon("question"),
+    style = "info",
+    size = "extra-small"
+  )),
   fluidRow(
     id = "workflow_overview",
     box(
@@ -140,7 +138,7 @@ studyTab <- tabItem(
             )
           ),
           uiOutput("ui_type_of_cancer"),
-          actionButton("add_study", "Add study")
+          actionButton("add_study", "Add study", class = "btn-success")
         ),
         column(
           6,

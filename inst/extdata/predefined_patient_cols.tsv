@@ -10,6 +10,7 @@
 "TUMOR_SITE"	"Tumor site"	"Tumor site"	"STRING"
 "CANCER_TYPE"	"Cancer type"	"Cancer type"	"STRING"
 "CANCER_TYPE_DETAILED"	"Cancer type detailed"	"Cancer type detailed"	"STRING"
+"ONCOTREE_CODE"	"Oncotree code"	"Oncotree code"	"STRING"
 "KNOWN_MOLECULAR_CLASSIFIER"	"Known mol. classifier"	"Known molecular classifier"	"STRING"
 "GLEASON_SCORE"	"Gleason score"	"Gleason score"	"NUMBER"
 "HISTOLOGY"	"Histology"	"Histology"	"NUMBER"

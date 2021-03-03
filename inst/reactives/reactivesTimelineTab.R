@@ -13,6 +13,14 @@ output$timelineDataImg <- renderImage(
   deleteFile = FALSE
 )
 
+# tour  ---------------------------------------------------------------
+observeEvent(input$tour_timelines, {
+  tour <- read.delim(system.file("apphelp", "tour_timelines.txt", package = "cbpManager"),
+                     sep = ";", stringsAsFactors = FALSE,
+                     row.names = NULL, quote = "")
+  rintrojs::introjs(session, options = list(steps = tour))
+})
+
 # dates of first diagnosis ---------------------------------------------------------------
 # Data table output
 output$dateTable <- DT::renderDT({

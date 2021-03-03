@@ -13,7 +13,15 @@ output$patientDataImg <- renderImage(
   deleteFile = FALSE
 )
 
-# reactive list with PATIENT_IDs from data_clinical_patient
+# tour  ---------------------------------------------------------------
+observeEvent(input$tour_patient, {
+  tour <- read.delim(system.file("apphelp", "tour_patient.txt", package = "cbpManager"),
+                     sep = ";", stringsAsFactors = FALSE,
+                     row.names = NULL, quote = "")
+  rintrojs::introjs(session, options = list(steps = tour))
+})
+
+# reactive list with PATIENT_IDs from data_clinical_patient---------------------
 patient_id_list <- reactiveValues(ids = NULL)
 observeEvent(loadedData$data_clinical_patient, {
   if (nrow(loadedData$data_clinical_patient) > 3) {
@@ -226,11 +234,13 @@ observeEvent(input$ModalbuttonEditPatient, {
       type = "error",
       duration = NULL
     )
-  }
-  # else if(editPatientValues["PATIENT_ID"] %in% patient_id_list$ids[-which(patient_id_list$ids == editPatientValues$PATIENT_ID)]){
-  #   showNotification("PATIENT_ID already exists.", type="error", duration = NULL)
-  # }
-  else {
+  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editPatientValues["PATIENT_ID"])) {
+    showNotification(
+      "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
+      type = "error",
+      duration = NULL
+    )
+  } else {
     for (i in colnames(loadedData$data_clinical_patient)) {
       loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
         editPatientValues[i]
@@ -472,7 +482,7 @@ output$AddColPatientUI <- renderUI({
       width = 8,
       selectInput(
         inputId = "SelColnamePat",
-        label = "Select pre-defined column(s)",
+        label = "Select pre-defined column(s). (Some of them are entity specific)",
         choices = c(patientCols$colname),
         multiple = TRUE
       )

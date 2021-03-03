@@ -13,6 +13,14 @@ output$sampleDataImg <- renderImage(
   deleteFile = FALSE
 )
 
+# tour  ---------------------------------------------------------------
+observeEvent(input$tour_sample, {
+  tour <- read.delim(system.file("apphelp", "tour_sample.txt", package = "cbpManager"),
+                     sep = ";", stringsAsFactors = FALSE,
+                     row.names = NULL, quote = "")
+  rintrojs::introjs(session, options = list(steps = tour))
+})
+
 # Data table output ---------------------------------------------------------------
 output$sampleTable <- DT::renderDT({
   if (!is.null(loadedData$data_clinical_sample)) {
@@ -432,7 +440,7 @@ output$AddColSampleUI <- renderUI({
       width = 8,
       selectInput(
         inputId = "SelColnameSample",
-        label = "Select pre-defined column(s)",
+        label = "Select pre-defined column(s). (Some of them are entity specific)",
         choices = c(sampleCols$colname),
         multiple = TRUE
       )

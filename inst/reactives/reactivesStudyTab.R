@@ -152,7 +152,7 @@ observeEvent(input$add_study, {
       choices = c("", list.files(study_dir))
     )
 
-    showNotification("Study added successfully!",
+    showNotification(paste0("Study ", studyID, " added successfully!"),
       type = "message",
       duration = 10
     )
@@ -224,7 +224,7 @@ observeEvent(input$overwrite_study, {
     choices = c("", list.files(study_dir))
   )
 
-  showNotification("Study updated successfully!",
+  showNotification(paste0("Study ", studyID, " updated successfully!"),
     type = "message",
     duration = 10
   )
@@ -473,7 +473,7 @@ observeEvent(input$upload, {
   #                   choices = setdiff(colnames(loadedData$data_clinical_sample), c("PATIENT_ID", "SAMPLE_ID"))
   # )
 
-  showNotification("Study uploaded successfully!",
+  showNotification(paste0("Study ", loadedData$studyID, " loaded successfully! You can now proceed with the Patient tab."),
     type = "message",
     duration = 10
   )
@@ -482,7 +482,8 @@ observeEvent(input$upload, {
 # show table of metadata ---------------------------------------------------------------
 output$studyTable <- DT::renderDT({
   if (!is.null(loadedData$meta_study)) {
-    DT::datatable(loadedData$meta_study, colnames = rep("", ncol(loadedData$meta_study)))
+    DT::datatable(loadedData$meta_study, colnames = rep("", ncol(loadedData$meta_study)),
+                  caption = 'Meta data of loaded study:')
   }
 })
 

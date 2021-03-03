@@ -40,8 +40,18 @@ shinyAppUI <- dashboardPage(
     uiOutput("ui_loaded_study_info")
   ),
   dashboardBody(
+    tags$head(
+      tags$style(
+        HTML("#shiny-notification-panel {
+             position:fixed;
+             top: calc(50%);
+             left: calc(50% - 150px);
+             }
+             "
+        )
+      )
+    ),
     tabItems(
-
       # Tab 1 Study Metadata - studyTab.R
       studyTab,
 
