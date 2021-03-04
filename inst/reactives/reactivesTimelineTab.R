@@ -493,7 +493,7 @@ observeEvent(input$addTrack, {
     )
   } else {
     # sanitize track name
-    ID <- .create_name(input$customTrackID, toupper = FALSE)
+    ID <- create_name(input$customTrackID, toupper = FALSE)
 
     # check if track name already exists
     if (ID %in% customTimelines$timelines$shortName) {
@@ -578,7 +578,7 @@ observeEvent(input$ct_ModalbuttonAddCol, {
   } else if (toupper(input$ct_colname) %in% colnames(data)) {
     showNotification("Column already exists.", type = "error", duration = NULL)
   } else {
-    ct_colname <- .create_name(input$ct_colname)
+    ct_colname <- create_name(input$ct_colname)
     data %>% dplyr::mutate(!!(ct_colname) := "") -> loadedData[[customTimelines$selectedTrack]]
     removeModal()
   }

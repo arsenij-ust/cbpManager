@@ -17,8 +17,8 @@ convertDataFrame <- function(df) {
     column_names,
     df[4:nrow(df), ]
   )
-  final_df[1:4, 1] <- paste0("#", final_df[1:4, 1])
-  rownames(final_df) <- seq(nrow(final_df))
+  final_df[seq_len(4), 1] <- paste0("#", final_df[seq_len(4), 1])
+  rownames(final_df) <- seq_len(nrow(final_df))
 
   return(final_df)
 }
@@ -67,7 +67,7 @@ check_input_dates <- function(diagnosisDate, startDate = NULL, endDate = NULL) {
 #' @param x A character string.
 #' @param toupper If TRUE, the name wil be upper-case; if FALSE, the name will be lower-case.
 #' @return A sanitized string.
-.create_name <- function(x, toupper = TRUE) {
+create_name <- function(x, toupper = TRUE) {
   . <- NULL # workaround for R CMD check note: no visible binding for global variable '.'
   if (toupper) {
     x %>%
@@ -385,7 +385,7 @@ cBioPortalToDataFrame <- function(data) {
   data$V1 <- sub(pattern = "^#", replacement = "", x = data$V1)
   colnames(data) <- data[5, ]
   data <- data[-c(4, 5), ]
-  rownames(data) <- seq(nrow(data))
+  rownames(data) <- seq_len(nrow(data))
   return(data)
 }
 
@@ -483,8 +483,12 @@ writeLogfile <- function(outdir, modified_file, log_filename = "cbpManager_logfi
 #' Install conda environment with basilisk before launching the app
 #'
 #' @return Nothing to return
-#' @export
-setupConda <- function() {
+#'
+#' @examples
+#' setupConda_cbpManager()
+#'
+#' @export setupConda_cbpManager
+setupConda_cbpManager <- function() {
   proc <- basiliskStart(env_validation)
   on.exit(basiliskStop(proc))
   checkPackages <- basiliskRun(proc, function() {

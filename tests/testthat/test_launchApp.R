@@ -5,10 +5,10 @@ ld <- "path/to/workingDir"
 
 
 test_that("Shiny app is generated", {
-  app <- launchApp(returnAppObj = TRUE)
+  app <- cbpManager(returnAppObj = TRUE)
 
   expect_s3_class(app, "shiny.appobj")
-  expect_s3_class(launchApp(studyDir = sd, logDir = ld, returnAppObj = TRUE), "shiny.appobj")
+  expect_s3_class(cbpManager(studyDir = sd, logDir = ld, returnAppObj = TRUE), "shiny.appobj")
 
 })
 

@@ -17,9 +17,9 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom vroom vroom
 #' @importFrom htmltools tagList
-#' @import shinydashboard
-#' @import rlist
-#' @import DT
+#' @importFrom shinydashboard box dashboardBody dashboardHeader dashboardPage
+#' dashboardSidebar menuItem sidebarMenu tabBox tabItem tabItems
+#' @importFrom DT renderDT styleEqual DTOutput datatable formatStyle renderDataTable
 #' @importFrom rintrojs introjs introjsUI
 #' @importFrom shinyBS popify bsButton
 #' @importFrom basilisk BasiliskEnvironment basiliskStart basiliskRun basiliskStop

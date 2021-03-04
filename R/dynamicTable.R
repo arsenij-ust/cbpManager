@@ -65,7 +65,7 @@ addColumn_Server <- function(input, output, session, data) {
         duration = NULL
       )
     } else {
-      colname <- .create_name(input$colname)
+      colname <- create_name(input$colname)
       data() %>% dplyr::mutate(!!(colname) := "") -> params$df
       removeModal()
     }

@@ -3,8 +3,6 @@ source(system.file("tabs", "studyTab.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "patientTab.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "sampleTab.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "mutationsTab.R", package = "cbpManager"), local = TRUE)
-# source(system.file("reactives", "dynamicTable.R", package = "cbpManager"), local = TRUE)
-# source(system.file("reactives", "dynamicTableModule.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "timelineTab.R", package = "cbpManager"), local = TRUE)
 source(system.file("tabs", "validationTab.R", package = "cbpManager"), local = TRUE)
 
@@ -17,7 +15,9 @@ utils::globalVariables(
     "oncotree_code",
     "oncotree",
     "study_dir",
-    "cbpManager.options"
+    "cbpManager.options",
+    ":=",
+    "logDir"
   )
 )
 

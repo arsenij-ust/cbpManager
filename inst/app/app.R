@@ -1,1 +1,1 @@
-cbpManager::launchApp()
+cbpManager::cbpManager()

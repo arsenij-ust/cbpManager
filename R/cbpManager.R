@@ -16,11 +16,11 @@
 #'
 #' @examples
 #' if (interactive()) {
-#'   launchApp()
+#'   cbpManager()
 #' }
-#' @export launchApp
+#' @export cbpManager
 # wrapper for shiny::shinyApp()
-launchApp <- function(
+cbpManager <- function(
                       studyDir = NULL,
                       logDir = NULL,
                       returnAppObj = FALSE,

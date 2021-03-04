@@ -561,7 +561,7 @@ observeEvent(input$ModalbuttonAddColPatient, {
         duration = NULL
       )
     } else {
-      colname <- .create_name(input$colnamePat)
+      colname <- create_name(input$colnamePat)
       loadedData$data_clinical_patient %<>% mutate(!!(colname) := "")
       loadedData$data_clinical_patient[1, colname] <-
         input$visShortNamePat

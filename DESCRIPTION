@@ -1,7 +1,7 @@
 Package: cbpManager
 Type: Package
 Title: Generate, manage and edit data and metadata files suitable for the import in cBioPortal for Cancer Genomics
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person(given = "Arsenij", family = "Ustjanzew", email = "arsenij.ustjanzew@gmail.com", role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-1014-4521")),
     person("Federico", "Marini", role="aut", email="marinif@uni-mainz.de", comment = c(ORCID = '0000-0003-3252-7758')))
@@ -26,7 +26,6 @@ Imports:
     vroom,
     plyr,
     dplyr,
-    rlist,
     magrittr,
     jsonlite,
     basilisk,
@@ -46,7 +45,7 @@ Collate:
     'cbpManager-pkg.R'
     'functions.R' 
     'global.R'
-    'launchApp.R'
+    'cbpManager.R'
     'shinyAppServer.R'
     'shinyAppUI.R'
     'zzz.R'

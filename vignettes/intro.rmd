@@ -69,6 +69,8 @@ remotes::install_github("arsenij-ust/cbpManager")
 
 ```
 
+cbpManager will use the `validateData.py` script from cBioPortal for Cancer Genomics inside of the application, which allows the user to validate the created files. Therefore, a conda environment will be installed. To prevent long loading times during the application usage, we can setup the conda environment with the function `cbpManager::setupConda()` before launch.
+
 After successful installation, the application is started with the following command (a browser window/ RStudio viewer with the application should open):
 
 ```
@@ -80,7 +82,10 @@ The installation was successful if the application starts working.
 A study to be loaded in cBioPortal can basically consist of a directory where all the data files are located (see [here](https://docs.cbioportal.org/5.1-data-loading/data-loading#preparing-study-data)). It is common to store the single study directories in one directory called e.g. "study". If you already have a cBioPortal instance installed and such a folder containing study subfolders, you should provide the path when starting the application:
 
 ```
-cbpManager::launchApp(studyDir="path/to/study", logDir="path/to/logingDirectory")
+cbpManager::launchApp(
+  studyDir="path/to/study", 
+  logDir="path/to/logingDirectory"
+)
 ```
 
 Now you can select your already existing studies in the dropdown menu.
@@ -241,6 +246,7 @@ The "Mutations" page offers the user the possibility to upload MAF files. If mut
 </p>
 
 ### Editing timelines:
+
 The "Timelines" page offers the possibility to edit the timeline tracks "Treatment", "Surgery" and "Status". Furthermore, it is possible to create and edit user-defined timeline tracks.
 
 Since cBioPortal uses the number of days since the initial diagnosis instead of a specific date for the start or end of a timeline event, one would have to specify the initial diagnosis date for each event as well. This is repetitive and time-consuming in total, which is why we decided to create a patient first diagnosis date table as an intermediate step. So before you can add timeline events to a timeline track, you have to assign a diagnosis date to the patient. This is done in the box `Add date of the first diagnosis to a Patient ID`. In the timeline tracks you only have to select the patient ID to which this event belongs and the cbpManager calculates the number of days until the given date automatically.
@@ -260,6 +266,17 @@ To create custom timeline tracks, you must first specify the name of the timelin
 <p align="center">
 <img src="images/17.PNG" style="width:1000px;"/>
 </p>
+
+### Validating created study
+
+The tab "Validation" allows the user quickly validate the created or modified study files. The validation checks whether the study is suitable for the upload in cBioPortal. In background the cBioPortal `validateData.py` script is used.
+
+The report generation is triggered by the `Validate` button. After, the report can be downloaded.
+
+<p align="center">
+<img src="images/18.PNG" style="width:1000px;"/>
+</p>
+
 
 ## Upload to cBioPortal for Cancer Genomics.
 

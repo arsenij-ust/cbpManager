@@ -72,7 +72,7 @@ observeEvent(input$add_study, {
   }
 
   # Sanitize study ID
-  studyID <- .create_name(input$add_study_identifier, toupper = FALSE)
+  studyID <- create_name(input$add_study_identifier, toupper = FALSE)
 
   # check if provided study ID already exists
   if (studyID %in% list.files(study_dir)) {
@@ -162,7 +162,7 @@ observeEvent(input$add_study, {
 # overwrite existing study ---------------------------------------------------------------
 observeEvent(input$overwrite_study, {
   # Sanitize study ID
-  studyID <- .create_name(input$add_study_identifier, toupper = FALSE)
+  studyID <- create_name(input$add_study_identifier, toupper = FALSE)
 
   # create meta_study data.frame
   meta_study_df <- data.frame(

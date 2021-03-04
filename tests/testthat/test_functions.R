@@ -34,9 +34,9 @@ test_that("check_input_dates works correctly", {
   expect_equal(cbpManager:::check_input_dates("2020-01-01", "2021-02-01", "2021-01-01"), 1)
 })
 
-test_that(".create_name works correctly", {
-  expect_equal(cbpManager:::.create_name("test A"), "TEST_A")
-  expect_equal(cbpManager:::.create_name("test A", toupper = FALSE), "test_a")
+test_that("create_name works correctly", {
+  expect_equal(cbpManager:::create_name("test A"), "TEST_A")
+  expect_equal(cbpManager:::create_name("test A", toupper = FALSE), "test_a")
 })
 
 test_that("generateUIwidgets works correctly", {
