@@ -20,10 +20,10 @@ vignette: >
 
 
 <br>
-**Authors**: `r packageDescription("cbpManager")[["Author"]]`<br />
-**Version**: `r packageDescription("cbpManager")$Version`<br />
+**Authors**: `r utils::packageDescription("cbpManager")[["Author"]]`<br />
+**Version**: `r utils::packageDescription("cbpManager")$Version`<br />
 **Compiled date**: `r Sys.Date()`<br />
-**License**: `r packageDescription("cbpManager")[["License"]]`<br />
+**License**: `r utils::packageDescription("cbpManager")[["License"]]`<br />
 
 
 ```{r style, echo = FALSE, results = 'asis', include = FALSE}
@@ -69,12 +69,12 @@ remotes::install_github("arsenij-ust/cbpManager")
 
 ```
 
-cbpManager will use the `validateData.py` script from cBioPortal for Cancer Genomics inside of the application, which allows the user to validate the created files. Therefore, a conda environment will be installed. To prevent long loading times during the application usage, we can setup the conda environment with the function `cbpManager::setupConda()` before launch.
+cbpManager will use the `validateData.py` script from cBioPortal for Cancer Genomics inside of the application, which allows the user to validate the created files. Therefore, a conda environment will be installed. To prevent long loading times during the application usage, we can setup the conda environment with the function `cbpManager::setupConda_cbpManager()` before launch.
 
 After successful installation, the application is started with the following command (a browser window/ RStudio viewer with the application should open):
 
 ```
-cbpManager::launchApp()
+cbpManager::cbpManager()
 ```
 
 The installation was successful if the application starts working. 
@@ -82,7 +82,7 @@ The installation was successful if the application starts working.
 A study to be loaded in cBioPortal can basically consist of a directory where all the data files are located (see [here](https://docs.cbioportal.org/5.1-data-loading/data-loading#preparing-study-data)). It is common to store the single study directories in one directory called e.g. "study". If you already have a cBioPortal instance installed and such a folder containing study subfolders, you should provide the path when starting the application:
 
 ```
-cbpManager::launchApp(
+cbpManager::cbpManager(
   studyDir="path/to/study", 
   logDir="path/to/logingDirectory"
 )
@@ -90,7 +90,7 @@ cbpManager::launchApp(
 
 Now you can select your already existing studies in the dropdown menu.
 
-Optionally, you can provide further parameters to `cbpManager::launchApp()` function that are used by `shiny::runApp`, e.g. `host` or `port`.
+Optionally, you can provide further parameters to `cbpManager::cbpManager()` function that are used by `shiny::runApp`, e.g. `host` or `port`.
 
 **Attention**: If you do not pass a path to the application before starting it, the "study" directory in the installed R package will be used by default. If the package is reinstalled at a later time, all studies and files in the folder will be lost. Thus it is advisable to always pass a path (e.g. of the working directory).
 
@@ -104,24 +104,24 @@ The advantage of running cbpManager as a Docker container is the system integrat
 
 If cbpManager should recognize files of a study, the files should be named as following:
 
-- data_clinical_patient.txt (Clinical Data)
-- data_clinical_sample.txt (Clinical Data)
-- data_mutations_extended.txt (Mutation Data)
+- `data_clinical_patient.txt` (Clinical Data)
+- `data_clinical_sample.txt` (Clinical Data)
+- `data_mutations_extended.txt` (Mutation Data)
 
-- meta_study.txt (Cancer Study)
-- meta_clinical_patient.txt (Clinical Data)
-- meta_clinical_sample.txt (Clinical Data)
-- meta_mutations_extended.txt (Mutation Data)
+- `meta_study.txt` (Cancer Study)
+- `meta_clinical_patient.txt` (Clinical Data)
+- `meta_clinical_sample.txt` (Clinical Data)
+- `meta_mutations_extended.txt` (Mutation Data)
 
 Optional files:
 
-- data_timeline_surgery.txt / meta_timeline_surgery.txt 
-- data_timeline_status.txt / meta_timeline_status.txt
-- data_timeline_treatment.txt / meta_timeline_treatment.txt
+- `data_timeline_surgery.txt` / `meta_timeline_surgery.txt` 
+- `data_timeline_status.txt` / `meta_timeline_status.txt`
+- `data_timeline_treatment.txt` / `meta_timeline_treatment.txt`
 
 Further custom timeline tracks should be named:
 
-e.g. data_timeline_<custom>.txt / meta_timeline_<custom>.txt
+e.g. `data_timeline_<custom>.txt` / `meta_timeline_<custom>.txt`
 
 For further details see [File Formats](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats) and the 'testpatient' study in this package under 'inst/study/'.
 
@@ -285,5 +285,5 @@ The report generation is triggered by the `Validate` button. After, the report c
 # Session Info {.unnumbered}
 
 ```{r sessioninfo}
-sessionInfo()
+utils::sessionInfo()
 ```

@@ -18,7 +18,7 @@ studyTab <- tabItem(
       tags$head(
         tags$style(
           type = "text/css",
-          "#workflowImage img {max-width: 100%; width: 75%; height: auto;
+          "#workflowImage img {max-width: 100%; width: 65%; height: auto;
             display: block; margin-left: auto;margin-right: auto}"
         )
       ),
