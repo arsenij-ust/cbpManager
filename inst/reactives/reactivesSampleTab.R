@@ -60,49 +60,6 @@ output$AddSampleUIs <- renderUI({
   )
 })
 
-# output reactive UIs - oncotree specific
-output$AddOncotreeUIs <- renderUI({
-  if (input$addoncotree) {
-    reqColumns <-
-      c(
-        "ONCOTREE_CODE",
-        "CANCER_TYPE",
-        "CANCER_TYPE_DETAILED",
-        "TUMOR_TISSUE_SITE"
-      )
-    colsToAdd <-
-      reqColumns[!reqColumns %in% names(loadedData$data_clinical_sample)]
-    fluidPage(fluidRow(
-      p(
-        "Search the tumor type for this sample and select the row in the following table:"
-      ),
-      DT::DTOutput("oncotree_tableModal"),
-      lapply(colsToAdd, function(colname) {
-        generateOncotreeUIwidgets(colname, mode = "add")
-      })
-    ))
-  }
-})
-
-observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
-  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "add")
-})
-
-output$oncotree_tableModal <- DT::renderDT({
-  columns_to_show <- c("code", "name", "mainType", "tissue")
-  DT::datatable(
-    oncotree[, columns_to_show],
-    selection = "single",
-    rownames = FALSE,
-    options = list(
-      scrollX = TRUE,
-      scrollY = TRUE,
-      pageLength = 5,
-      lengthMenu = c(5, 10, 15, 20)
-    )
-  )
-})
-
 # show modalDialog for new sample
 observeEvent(
   input$NewSample,
@@ -111,13 +68,6 @@ observeEvent(
       size = "m",
       title = "Add sample",
       uiOutput("AddSampleUIs"),
-      hr(),
-      h4("Add oncotree specific entries:"),
-      p(
-        "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', 'CANCER_TYPE_DETAILED' and 'TUMOR_TISSUE_SITE' does not exist yet, they will be added to the table."
-      ),
-      checkboxInput("addoncotree", label = "Add oncotree", value = FALSE),
-      uiOutput("AddOncotreeUIs"),
       easyClose = FALSE,
       footer = tagList(
         modalButton("Cancel"),
@@ -155,28 +105,6 @@ observeEvent(input$ModalbuttonAddSample, {
       type = "error",
       duration = NULL
     )
-  } else if (input$addoncotree) {
-    # add missing columns
-    reqColumns <-
-      c(
-        "ONCOTREE_CODE",
-        "CANCER_TYPE",
-        "CANCER_TYPE_DETAILED",
-        "TUMOR_TISSUE_SITE"
-      )
-    loadedData$data_clinical_sample <-
-      fncols(loadedData$data_clinical_sample, reqColumns)
-    for (col in reqColumns) {
-      loadedData$data_clinical_sample[1, col] <-
-        sampleCols[which(sampleCols$colname == col), "shortColname"]
-      loadedData$data_clinical_sample[2, col] <-
-        sampleCols[which(sampleCols$colname == col), "longColname"]
-    }
-
-    # add new row
-    loadedData$data_clinical_sample <-
-      rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
-    removeModal()
   } else {
     loadedData$data_clinical_sample <-
       rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
@@ -201,34 +129,6 @@ output$EditSampleUIs <- renderUI({
       )
     }
   )
-})
-
-# output reactive UIs - oncotree specific
-output$EditOncotreeUIs <- renderUI({
-  if (input$addoncotree) {
-    reqColumns <-
-      c(
-        "ONCOTREE_CODE",
-        "CANCER_TYPE",
-        "CANCER_TYPE_DETAILED",
-        "TUMOR_TISSUE_SITE"
-      )
-    colsToAdd <-
-      reqColumns[!reqColumns %in% names(loadedData$data_clinical_sample)]
-    fluidPage(fluidRow(
-      p(
-        "Search the tumor type for this sample and select the row in the following table:"
-      ),
-      DT::DTOutput("oncotree_tableModal"),
-      lapply(colsToAdd, function(colname) {
-        generateOncotreeUIwidgets(colname, mode = "edit")
-      })
-    ))
-  }
-})
-
-observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
-  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "edit")
 })
 
 # output UI edit name
@@ -305,13 +205,6 @@ observeEvent(input$EditSample,
         modalDialog(
           title = "Edit sample",
           uiOutput("EditSampleUIs"),
-          hr(),
-          h4("Add oncotree specific entries:"),
-          p(
-            "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', 'CANCER_TYPE_DETAILED' and 'TUMOR_TISSUE_SITE' does not exist yet, they will be added to the table."
-          ),
-          checkboxInput("addoncotree", label = "Add oncotree", value = FALSE),
-          uiOutput("EditOncotreeUIs"),
           easyClose = FALSE,
           footer = tagList(
             modalButton("Cancel"),
@@ -329,38 +222,30 @@ observeEvent(input$ModalbuttonEditSample, {
   all_reactive_inputs <- reactiveValuesToList(input)
   editSampleValues <-
     all_reactive_inputs[grep("editSampleInput_", names(all_reactive_inputs))]
-  print(editSampleValues)
   names(editSampleValues) <-
     gsub("editSampleInput_", "", names(editSampleValues))
-  if (editSampleValues["SAMPLE_ID"] == "") {
-    showNotification("SAMPLE_ID cannot be empty.",
+  if (editSampleValues["PATIENT_ID"] == "") {
+    showNotification("PATIENT_ID cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["PATIENT_ID"])) {
+    showNotification(
+      "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
       type = "error",
       duration = NULL
     )
-  } else if (input$addoncotree) {
-    reqColumns <-
-      c(
-        "ONCOTREE_CODE",
-        "CANCER_TYPE",
-        "CANCER_TYPE_DETAILED",
-        "TUMOR_TISSUE_SITE"
-      )
-    loadedData$data_clinical_sample <-
-      fncols(loadedData$data_clinical_sample, reqColumns)
-    for (col in reqColumns) {
-      loadedData$data_clinical_sample[1, col] <-
-        sampleCols[which(sampleCols$colname == col), "shortColname"]
-      loadedData$data_clinical_sample[2, col] <-
-        sampleCols[which(sampleCols$colname == col), "longColname"]
-      loadedData$data_clinical_sample[3, col] <-
-        sampleCols[which(sampleCols$colname == col), "typeof"]
-    }
-
-    for (i in colnames(loadedData$data_clinical_sample)) {
-      loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
-        editSampleValues[i]
-    }
-    removeModal()
+  } else if (editSampleValues["SAMPLE_ID"] == "") {
+    showNotification("SAMPLE_ID cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["SAMPLE_ID"])) {
+    showNotification(
+      "SAMPLE_ID allows only numbers, letters, points, underscores and hyphens.",
+      type = "error",
+      duration = NULL
+    )
   } else {
     for (i in colnames(loadedData$data_clinical_sample)) {
       loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
