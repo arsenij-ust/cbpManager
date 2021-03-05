@@ -5,11 +5,23 @@ shinyAppUI <- dashboardPage(
   dashboardHeader(
     title = "cbpManager",
     tags$li(a(
+      href = "https://arsenij-ust.github.io/cbpManager/index.html",
+      icon("home"),
+      title = "Homepage",
+      style = "cursor: pointer;"),
+      class = "dropdown"),
+    tags$li(a(
+      href = "https://arsenij-ust.github.io/cbpManager/articles/intro.html",
+      icon("question-circle"),
+      title = "Vignette",
+      style = "cursor: pointer;"),
+      class = "dropdown"),
+    tags$li(a(
       href = "https://github.com/arsenij-ust/cbpManager",
       icon("github"),
       title = "Github repository",
       style = "cursor: pointer;"),
-      class = "dropdown",)
+      class = "dropdown")
   ),
   dashboardSidebar(
     rintrojs::introjsUI(),
