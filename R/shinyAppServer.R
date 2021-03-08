@@ -53,6 +53,42 @@ shinyAppServer <- function(input, output, session) {
   } else {
     logDir <<- NULL
   }
+  
+  # Modal dialog for Session info button
+  observeEvent(input$openSessionInfo, {
+    showModal(
+      modalDialog(
+        title = "Session information",
+        size = "l",
+        fade = TRUE,
+        footer = NULL,
+        easyClose = TRUE,
+        tagList(tags$code("> sessionInfo()"),
+                renderPrint({
+                  sessionInfo()
+                }))
+      )
+    )
+  })
+  
+  # Modal dialog for Session info button
+  observeEvent(input$openAbout, {
+    showModal(
+      modalDialog(
+        title = "About cbpManager",
+        size = "l",
+        fade = TRUE,
+        footer = NULL,
+        easyClose = TRUE,
+        tagList(includeMarkdown(
+          system.file("apphelp", "about.md", package = "cbpManager")
+        ),
+        renderPrint({
+          citation("cbpManager")
+        }))
+      )
+    )
+  })
 
 
   # Tab 1 Study Metadata ---------------------------------------------------------------

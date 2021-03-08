@@ -21,7 +21,15 @@ shinyAppUI <- dashboardPage(
       icon("github"),
       title = "Github repository",
       style = "cursor: pointer;"),
-      class = "dropdown")
+      class = "dropdown"),
+    tags$li(actionLink("openSessionInfo",
+                       label = "",
+                       icon = icon("clipboard-list"),
+                       title = "Session info"), class = "dropdown"),
+    tags$li(actionLink("openAbout",
+                       label = "",
+                       icon = icon("info"),
+                       title = "About cbpManager"), class = "dropdown")
   ),
   dashboardSidebar(
     rintrojs::introjsUI(),
