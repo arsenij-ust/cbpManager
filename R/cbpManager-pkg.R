@@ -10,8 +10,9 @@
 #' modalButton modalDialog NS numericInput observeEvent reactive reactiveValues
 #' reactiveValuesToList removeModal renderText renderUI runApp selectInput
 #' shinyApp showModal showNotification textInput uiOutput updateSelectInput
-#' renderImage
+#' renderImage renderPrint tags includeMarkdown
 #' @importFrom utils read.table write.table packageDescription sessionInfo
+#' citation
 #' @importFrom plyr rbind.fill 
 #' @importFrom dplyr bind_rows mutate
 #' @importFrom jsonlite fromJSON
