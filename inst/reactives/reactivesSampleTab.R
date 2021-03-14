@@ -106,12 +106,26 @@ observeEvent(input$ModalbuttonAddSample, {
       duration = NULL
     )
   } else {
-    loadedData$data_clinical_sample <-
-      rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
+    #check if rbind would work according to number of input items
+    if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
+      loadedData$data_clinical_sample <-
+        rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
+    } else {
+      print(
+        "Number of input values does not match with number of columns. 
+        Please contact the support."
+      )
+      showNotification(
+        "Adding new row not possible. 
+        Number of input values does not match with number of columns. 
+        Please contact the support.",
+        type = "error",
+        duration = NULL
+      )
+    }
     removeModal()
   }
 })
-
 
 # edit sample ---------------------------------------------------------------
 # output reactive UIs per column

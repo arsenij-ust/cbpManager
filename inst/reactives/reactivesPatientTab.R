@@ -175,12 +175,40 @@ observeEvent(input$ModalbuttonAddPatient, {
     }
     
     # add new row
-    loadedData$data_clinical_patient <-
+    if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
+      loadedData$data_clinical_patient <-
       rbind(loadedData$data_clinical_patient, addPatientValues[colnames(loadedData$data_clinical_patient)])
+    } else {
+      print(
+        "Number of input values does not match with number of columns. 
+        Please contact the support."
+      )
+      showNotification(
+        "Adding new row not possible. 
+        Number of input values does not match with number of columns. 
+        Please contact the support.",
+        type = "error",
+        duration = NULL
+      )
+    }
     removeModal()
   } else {
-    loadedData$data_clinical_patient <-
+    if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
+      loadedData$data_clinical_patient <-
       rbind(loadedData$data_clinical_patient, addPatientValues[colnames(loadedData$data_clinical_patient)])
+    } else {
+      print(
+        "Number of input values does not match with number of columns. 
+        Please contact the support."
+      )
+      showNotification(
+        "Adding new row not possible. 
+        Number of input values does not match with number of columns. 
+        Please contact the support.",
+        type = "error",
+        duration = NULL
+      )
+    }
     removeModal()
   }
 })

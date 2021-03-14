@@ -292,7 +292,7 @@ addRow_Server <-
               selectInput(
                 inputId = ns(colname),
                 label = colname,
-                choices = c("Medical Therapy", "Radiation Therapy"),
+                choices = c("Medical Therapy", "Radiation Therapy", "Non-surgical Local Treamtent"),
                 selected = 1
               ),
             ))
@@ -301,9 +301,13 @@ addRow_Server <-
               width = 8,
               selectInput(
                 inputId = ns(colname),
-                label = colname,
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                multiple = TRUE,
                 choices = c(
                   "",
+                  "Monoclonal Antibody",
+                  "Antibody drug conjugate",
+                  "Immunotherapy",
                   "Chemotherapy",
                   "Hormone Therapy",
                   "Targeted Therapy",
@@ -347,6 +351,14 @@ addRow_Server <-
           duration = NULL
         )
       } else {
+        if ("SUBTYPE" %in% names(addPatientValues)) {
+          if(is.null(addPatientValues[["SUBTYPE"]])) addPatientValues[["SUBTYPE"]] <- ""
+          if(length(addPatientValues[["SUBTYPE"]])>1){
+            addPatientValues[["SUBTYPE"]] <- paste(addPatientValues[["SUBTYPE"]], collapse = " + ")
+          }
+          print(addPatientValues["SUBTYPE"])
+        }
+        
         diagnosisDate <-
           dates_first_diagnosis()[which(dates_first_diagnosis()$PATIENT_ID == addPatientValues["PATIENT_ID"]), "DATE"]
         if (mode == "timeline") {
@@ -362,13 +374,13 @@ addRow_Server <-
         )
         if (failed == 1) {
           showNotification(
-            "'End date' cannot be earlier as 'start date'.",
+            "'Stop date' cannot be earlier as 'start date'.",
             type = "error",
             duration = NULL
           )
         } else if (failed == 2) {
           showNotification(
-            "'Start date' and 'End date' cannot be earlier as diagnosis date.",
+            "'Start date' and 'Stop date' cannot be earlier as diagnosis date.",
             type = "error",
             duration = NULL
           )
@@ -391,8 +403,9 @@ addRow_Server <-
           addPatientValues$START_DATE <- start
           addPatientValues$STOP_DATE <- end
           params$df <-
-            plyr::rbind.fill(data(), as.data.frame(addPatientValues))
-          removeModal()
+           plyr::rbind.fill(data(), as.data.frame(addPatientValues))
+
+          removeModal()#
         }
       }
     })
