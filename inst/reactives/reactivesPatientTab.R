@@ -68,6 +68,47 @@ output$AddPatientUIs <- renderUI({
   )
 })
 
+# output reactive UIs - oncotree specific
+output$AddOncotreeUIs <- renderUI({
+  if (input$addoncotree) {
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    colsToAdd <-
+      reqColumns[!reqColumns %in% names(loadedData$data_clinical_patient)]
+    fluidPage(fluidRow(
+      p(
+        "Search the tumor type for this patient and select the row in the following table:"
+      ),
+      DT::DTOutput("oncotree_tableModal"),
+      lapply(colsToAdd, function(colname) {
+        generateOncotreeUIwidgets(colname, mode = "add")
+      })
+    ))
+  }
+})
+
+observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
+  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "add")
+})
+
+output$oncotree_tableModal <- DT::renderDT({
+  columns_to_show <- c("code", "name", "mainType", "tissue")
+  DT::datatable(
+    oncotree[, columns_to_show],
+    selection = "single",
+    rownames = FALSE,
+    options = list(
+      scrollX = TRUE,
+      scrollY = TRUE,
+      pageLength = 5,
+      lengthMenu = c(5, 10, 15, 20)
+    )
+  )
+})
 
 # show modalDialog for new patient
 observeEvent(
@@ -75,10 +116,14 @@ observeEvent(
   showModal(
     modalDialog(
       title = "Add patient",
-      # fluidPage(
-      #   PatientTabUI$AddPatientInputList
-      # ),
       uiOutput("AddPatientUIs"),
+      hr(),
+      h4("Add oncotree specific entries:"),
+      p(
+        "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', and 'CANCER_TYPE_DETAILED' does not exist yet, they will be added to the table."
+      ),
+      checkboxInput("addoncotree", label = "Add oncotree", value = FALSE),
+      uiOutput("AddOncotreeUIs"),
       easyClose = FALSE,
       footer = tagList(
         modalButton("Cancel"),
@@ -110,9 +155,60 @@ observeEvent(input$ModalbuttonAddPatient, {
       type = "error",
       duration = NULL
     )
-  } else {
+  } else if (input$addoncotree) {
+    # add missing columns
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
     loadedData$data_clinical_patient <-
+      fncols(loadedData$data_clinical_patient, reqColumns)
+    for (col in reqColumns) {
+      loadedData$data_clinical_patient[1, col] <-
+        patientCols[which(patientCols$colname == col), "shortColname"]
+      loadedData$data_clinical_patient[2, col] <-
+        patientCols[which(patientCols$colname == col), "longColname"]
+      loadedData$data_clinical_patient[3, col] <-
+        patientCols[which(patientCols$colname == col), "typeof"]
+    }
+    
+    # add new row
+    if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
+      loadedData$data_clinical_patient <-
       rbind(loadedData$data_clinical_patient, addPatientValues[colnames(loadedData$data_clinical_patient)])
+    } else {
+      print(
+        "Number of input values does not match with number of columns. 
+        Please contact the support."
+      )
+      showNotification(
+        "Adding new row not possible. 
+        Number of input values does not match with number of columns. 
+        Please contact the support.",
+        type = "error",
+        duration = NULL
+      )
+    }
+    removeModal()
+  } else {
+    if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
+      loadedData$data_clinical_patient <-
+      rbind(loadedData$data_clinical_patient, addPatientValues[colnames(loadedData$data_clinical_patient)])
+    } else {
+      print(
+        "Number of input values does not match with number of columns. 
+        Please contact the support."
+      )
+      showNotification(
+        "Adding new row not possible. 
+        Number of input values does not match with number of columns. 
+        Please contact the support.",
+        type = "error",
+        duration = NULL
+      )
+    }
     removeModal()
   }
 })
@@ -134,6 +230,34 @@ output$EditPatientUIs <- renderUI({
     }
   )
 })
+
+# output reactive UIs - oncotree specific
+output$EditOncotreeUIs <- renderUI({
+  if (input$addoncotree) {
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    colsToAdd <-
+      reqColumns[!reqColumns %in% names(loadedData$data_clinical_patient)]
+    fluidPage(fluidRow(
+      p(
+        "Search the tumor type for this patient and select the row in the following table:"
+      ),
+      DT::DTOutput("oncotree_tableModal"),
+      lapply(colsToAdd, function(colname) {
+        generateOncotreeUIwidgets(colname, mode = "edit")
+      })
+    ))
+  }
+})
+
+observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
+  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "edit")
+})
+
 
 # output UI edit name
 output$EditNamePatUIs <- renderUI({
@@ -211,6 +335,13 @@ observeEvent(input$EditPatient,
       showModal(modalDialog(
         title = "Edit patient",
         uiOutput("EditPatientUIs"),
+        hr(),
+        h4("Add oncotree specific entries:"),
+        p(
+          "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', and 'CANCER_TYPE_DETAILED' does not exist yet, they will be added to the table."
+        ),
+        checkboxInput("addoncotree", label = "Add oncotree", value = FALSE),
+        uiOutput("EditOncotreeUIs"),
         easyClose = FALSE,
         footer = tagList(
           modalButton("Cancel"),
@@ -240,6 +371,29 @@ observeEvent(input$ModalbuttonEditPatient, {
       type = "error",
       duration = NULL
     )
+  }  else if (input$addoncotree) {
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    loadedData$data_clinical_patient <-
+      fncols(loadedData$data_clinical_patient, reqColumns)
+    for (col in reqColumns) {
+      loadedData$data_clinical_patient[1, col] <-
+        sampleCols[which(patientCols$colname == col), "shortColname"]
+      loadedData$data_clinical_patient[2, col] <-
+        sampleCols[which(patientCols$colname == col), "longColname"]
+      loadedData$data_clinical_patient[3, col] <-
+        sampleCols[which(patientCols$colname == col), "typeof"]
+    }
+    
+    for (i in colnames(loadedData$data_clinical_patient)) {
+      loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
+        editPatientValues[i]
+    }
+    removeModal()
   } else {
     for (i in colnames(loadedData$data_clinical_patient)) {
       loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-

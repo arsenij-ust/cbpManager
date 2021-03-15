@@ -78,6 +78,7 @@ output$AddPatientDateUI <- renderUI({
 })
 
 observeEvent(input$ModalbuttonAddDate, {
+  req(input$AddPatientIDDate, input$AddPatientDate)
   if (input$AddPatientIDDate == "") {
     showNotification("PATIENT_ID cannot be empty.",
       type = "error",
@@ -149,7 +150,9 @@ output$EditPatientDateUI <- renderUI({
   )))
 })
 
+# Validate edited values and add them to data.frame
 observeEvent(input$ModalbuttonEditDate, {
+  req(input$AddPatientIDDate, input$AddPatientDate)
   if (input$AddPatientIDDate == "") {
     showNotification("PATIENT_ID cannot be empty.",
       type = "error",
@@ -695,26 +698,6 @@ output$ct_addEntry_UI <- renderUI({
             ),
           ))
         }
-      } else if (colname == "TREATMENT_TYPE") {
-        fluidRow(column(
-          width = 8,
-          selectInput(
-            inputId = colname,
-            label = colname,
-            choices = c("Medical Therapy", "Radiation Therapy"),
-            selected = 1
-          ),
-        ))
-      } else if (colname == "SUBTYPE") {
-        fluidRow(column(
-          width = 8,
-          selectInput(
-            inputId = colname,
-            label = colname,
-            choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"),
-            selected = 1
-          ),
-        ))
       } else {
         fluidRow(column(
           width = 8,
@@ -823,26 +806,6 @@ output$ct_editEntry_UI <- renderUI({
             ),
           ))
         }
-      } else if (colname == "TREATMENT_TYPE") {
-        fluidRow(column(
-          width = 8,
-          selectInput(
-            inputId = colname,
-            label = colname,
-            choices = c("Medical Therapy", "Radiation Therapy"),
-            selected = data[selected_row, colname]
-          ),
-        ))
-      } else if (colname == "SUBTYPE") {
-        fluidRow(column(
-          width = 8,
-          selectInput(
-            inputId = colname,
-            label = colname,
-            choices = c("", "Chemotherapy", "Hormone Therapy", "Targeted Therapy", "WPRT", "IVRT"),
-            selected = data[selected_row, colname]
-          ),
-        ))
       } else {
         fluidRow(column(
           width = 8,

@@ -266,9 +266,9 @@ generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
   mode <- match.arg(mode)
 
   if (mode == "add") {
-    id_prefix <- "addSampleInput_"
+    id_prefix <- "addPatientInput_"
   } else if (mode == "edit") {
-    id_prefix <- "editSampleInput_"
+    id_prefix <- "editPatientInput_"
   }
 
   if (colname == "CANCER_TYPE") {
@@ -291,16 +291,16 @@ generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
         selected = 1
       ),
     ))
-  } else if (colname == "TUMOR_TISSUE_SITE") {
-    fluidRow(column(
-      width = 8,
-      selectInput(
-        inputId = paste0(id_prefix, "TUMOR_TISSUE_SITE"),
-        label = "TUMOR_TISSUE_SITE",
-        choices = c("other", tumor_tissue_site),
-        selected = 1
-      ),
-    ))
+  # } else if (colname == "TUMOR_TISSUE_SITE") {
+  #   fluidRow(column(
+  #     width = 8,
+  #     selectInput(
+  #       inputId = paste0(id_prefix, "TUMOR_TISSUE_SITE"),
+  #       label = "TUMOR_TISSUE_SITE",
+  #       choices = c("other", tumor_tissue_site),
+  #       selected = 1
+  #     ),
+  #   ))
   } else if (colname == "ONCOTREE_CODE") {
     fluidRow(column(
       width = 8,
@@ -324,9 +324,9 @@ updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "
   mode <- match.arg(mode)
 
   if (mode == "add") {
-    id_prefix <- "addSampleInput_"
+    id_prefix <- "addPatientInput_"
   } else if (mode == "edit") {
-    id_prefix <- "editSampleInput_"
+    id_prefix <- "editPatientInput_"
   }
 
   updateSelectInput(session, paste0(id_prefix, "CANCER_TYPE"),
@@ -338,11 +338,11 @@ updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "
     choices = c("other", cancer_type_detailed),
     selected = oncotree$name[row_last_clicked]
   )
-  updateSelectInput(session, paste0(id_prefix, "TUMOR_TISSUE_SITE"),
-    label = "TUMOR_TISSUE_SITE",
-    choices = c("other", tumor_tissue_site),
-    selected = oncotree$tissue[row_last_clicked]
-  )
+  # updateSelectInput(session, paste0(id_prefix, "TUMOR_TISSUE_SITE"),
+  #   label = "TUMOR_TISSUE_SITE",
+  #   choices = c("other", tumor_tissue_site),
+  #   selected = oncotree$tissue[row_last_clicked]
+  # )
   updateSelectInput(session, paste0(id_prefix, "ONCOTREE_CODE"),
     label = "ONCOTREE_CODE",
     choices = c("", oncotree_code),

@@ -291,8 +291,9 @@ addRow_Server <-
               width = 8,
               selectInput(
                 inputId = ns(colname),
-                label = colname,
-                choices = c("Medical Therapy", "Radiation Therapy"),
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                multiple = TRUE,
+                choices = c("Medical Therapy", "Radiation Therapy", "Non-surgical Local Treamtent"),
                 selected = 1
               ),
             ))
@@ -301,9 +302,13 @@ addRow_Server <-
               width = 8,
               selectInput(
                 inputId = ns(colname),
-                label = colname,
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                multiple = TRUE,
                 choices = c(
                   "",
+                  "Monoclonal Antibody",
+                  "Antibody drug conjugate",
+                  "Immunotherapy",
                   "Chemotherapy",
                   "Hormone Therapy",
                   "Targeted Therapy",
@@ -347,6 +352,19 @@ addRow_Server <-
           duration = NULL
         )
       } else {
+        if ("SUBTYPE" %in% names(addPatientValues)) {
+          if(is.null(addPatientValues[["SUBTYPE"]])) addPatientValues[["SUBTYPE"]] <- ""
+          if(length(addPatientValues[["SUBTYPE"]])>1){
+            addPatientValues[["SUBTYPE"]] <- paste(addPatientValues[["SUBTYPE"]], collapse = " + ")
+          }
+        }
+        if ("TREATMENT_TYPE" %in% names(addPatientValues)) {
+          if(is.null(addPatientValues[["TREATMENT_TYPE"]])) addPatientValues[["TREATMENT_TYPE"]] <- ""
+          if(length(addPatientValues[["TREATMENT_TYPE"]])>1){
+            addPatientValues[["TREATMENT_TYPE"]] <- paste(addPatientValues[["TREATMENT_TYPE"]], collapse = " + ")
+          }
+        }
+        
         diagnosisDate <-
           dates_first_diagnosis()[which(dates_first_diagnosis()$PATIENT_ID == addPatientValues["PATIENT_ID"]), "DATE"]
         if (mode == "timeline") {
@@ -362,13 +380,13 @@ addRow_Server <-
         )
         if (failed == 1) {
           showNotification(
-            "'End date' cannot be earlier as 'start date'.",
+            "'Stop date' cannot be earlier as 'start date'.",
             type = "error",
             duration = NULL
           )
         } else if (failed == 2) {
           showNotification(
-            "'Start date' and 'End date' cannot be earlier as diagnosis date.",
+            "'Start date' and 'Stop date' cannot be earlier as diagnosis date.",
             type = "error",
             duration = NULL
           )
@@ -391,8 +409,9 @@ addRow_Server <-
           addPatientValues$START_DATE <- start
           addPatientValues$STOP_DATE <- end
           params$df <-
-            plyr::rbind.fill(data(), as.data.frame(addPatientValues))
-          removeModal()
+           plyr::rbind.fill(data(), as.data.frame(addPatientValues))
+
+          removeModal()#
         }
       }
     })
@@ -498,30 +517,41 @@ editRow_Server <-
               ))
             }
           } else if (colname == "TREATMENT_TYPE") {
+            treatment_value <- data()[selected_row(), colname]
+            req(treatment_value)
+            if(grepl(" \\+ ", treatment_value)) treatment_value <- unlist(strsplit(treatment_value, " \\+ "))
             fluidRow(column(
               width = 8,
               selectInput(
                 inputId = ns(colname),
-                label = colname,
-                choices = c("Medical Therapy", "Radiation Therapy"),
+                multiple = TRUE,
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                choices = c("Medical Therapy", "Radiation Therapy", "Non-surgical Local Treamtent"),
                 selected = data()[selected_row(), colname]
               ),
             ))
           } else if (colname == "SUBTYPE") {
+            subtype_value <- data()[selected_row(), colname]
+            req(subtype_value)
+            if(grepl(" \\+ ", subtype_value)) subtype_value <- unlist(strsplit(subtype_value, " \\+ "))
             fluidRow(column(
               width = 8,
               selectInput(
                 inputId = ns(colname),
-                label = colname,
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                multiple = TRUE,
                 choices = c(
                   "",
+                  "Monoclonal Antibody",
+                  "Antibody drug conjugate",
+                  "Immunotherapy",
                   "Chemotherapy",
                   "Hormone Therapy",
                   "Targeted Therapy",
                   "WPRT",
                   "IVRT"
                 ),
-                selected = data()[selected_row(), colname]
+                selected = subtype_value
               ),
             ))
           } else {
@@ -557,6 +587,19 @@ editRow_Server <-
           duration = NULL
         )
       } else {
+        if ("SUBTYPE" %in% names(editValues)) {
+          if(is.null(editValues[["SUBTYPE"]])) editValues[["SUBTYPE"]] <- ""
+          if(length(editValues[["SUBTYPE"]])>1){
+            editValues[["SUBTYPE"]] <- paste(editValues[["SUBTYPE"]], collapse = " + ")
+          }
+        }
+        if ("TREATMENT_TYPE" %in% names(editValues)) {
+          if(is.null(editValues[["TREATMENT_TYPE"]])) editValues[["TREATMENT_TYPE"]] <- ""
+          if(length(editValues[["TREATMENT_TYPE"]])>1){
+            editValues[["TREATMENT_TYPE"]] <- paste(editValues[["TREATMENT_TYPE"]], collapse = " + ")
+          }
+        }
+        
         diagnosisDate <-
           dates_first_diagnosis()[which(dates_first_diagnosis()$PATIENT_ID == editValues["PATIENT_ID"]), "DATE"]
         if (mode == "timeline") {
