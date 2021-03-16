@@ -95,12 +95,9 @@ shinyAppUI <- dashboardPage(
 
       # Tab 5 Timelines - timelineTab.R
       timelineTab,
-<<<<<<< HEAD
 
       # Tab Resource data - resourceTab.R
-      resourceTab
-=======
->>>>>>> master
+      resourceTab,
 
       # Tab 6 Validation - validationTab.R
       validationTab
