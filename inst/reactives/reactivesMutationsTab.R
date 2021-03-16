@@ -24,7 +24,6 @@ observeEvent(input$tour_mutation, {
 # upload file ---------------------------------------------------------------
 observeEvent(input$chooseMAF, {
   if(!grepl("\\.[txt|tsv|maf|MAF|csv]", input$chooseMAF$name)){
-    print(input$chooseMAF$name)
     showNotification(
       "The file format is not supported. 
       File should be '.txt', '.tsv', '.maf', '.MAF', or '.csv'.",
