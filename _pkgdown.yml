@@ -1,0 +1,11 @@
+template:
+  params:
+    bootswatch: flatly
+
+reference:
+- title: "cbpManager essentials:"
+  desc: >
+    Functions to prepare the conda environment for cbpManager and launch the application.
+- contents:
+  - setupConda_cbpManager
+  - cbpManager

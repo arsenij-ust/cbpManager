@@ -10,18 +10,23 @@
 #' modalButton modalDialog NS numericInput observeEvent reactive reactiveValues
 #' reactiveValuesToList removeModal renderText renderUI runApp selectInput
 #' shinyApp showModal showNotification textInput uiOutput updateSelectInput
-#' renderImage
-#' @importFrom utils read.table write.table
-#' @importFrom plyr rbind.fill
+#' renderImage renderPrint tags includeMarkdown
+#' @importFrom utils read.table write.table packageDescription sessionInfo
+#' citation
+#' @importFrom plyr rbind.fill 
 #' @importFrom dplyr bind_rows mutate
 #' @importFrom jsonlite fromJSON
 #' @importFrom vroom vroom
 #' @importFrom htmltools tagList
-#' @import shinydashboard
-#' @import rlist
-#' @import DT
+#' @importFrom shinydashboard box dashboardBody dashboardHeader dashboardPage
+#' dashboardSidebar menuItem sidebarMenu tabBox tabItem tabItems
+#' @importFrom DT renderDT styleEqual DTOutput datatable formatStyle renderDataTable
+#' @importFrom rintrojs introjs introjsUI
 #' @importFrom shinyBS popify bsButton
 #' @importFrom rapportools is.empty
+#' @importFrom basilisk BasiliskEnvironment basiliskStart basiliskRun basiliskStop
+#' @importFrom reticulate import source_python
+#' @importFrom shinycssloaders withSpinner
 #'
 #' @name cbpManager-pkg
 #' @docType package

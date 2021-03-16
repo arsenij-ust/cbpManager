@@ -2,14 +2,43 @@
 #' create the shiny application user interface
 
 shinyAppUI <- dashboardPage(
-  dashboardHeader(title = "cbpManager"),
+  dashboardHeader(
+    title = "cbpManager",
+    tags$li(a(
+      href = "https://arsenij-ust.github.io/cbpManager/index.html",
+      icon("home"),
+      title = "Homepage",
+      style = "cursor: pointer;"),
+      class = "dropdown"),
+    tags$li(a(
+      href = "https://arsenij-ust.github.io/cbpManager/articles/intro.html",
+      icon("question-circle"),
+      title = "Vignette",
+      style = "cursor: pointer;"),
+      class = "dropdown"),
+    tags$li(a(
+      href = "https://github.com/arsenij-ust/cbpManager",
+      icon("github"),
+      title = "Github repository",
+      style = "cursor: pointer;"),
+      class = "dropdown"),
+    tags$li(actionLink("openSessionInfo",
+                       label = "",
+                       icon = icon("clipboard-list"),
+                       title = "Session info"), class = "dropdown"),
+    tags$li(actionLink("openAbout",
+                       label = "",
+                       icon = icon("info"),
+                       title = "About cbpManager"), class = "dropdown")
+  ),
   dashboardSidebar(
+    rintrojs::introjsUI(),
     sidebarMenu(
+      tags$div(style = "position: absolute; top: -100px;", textOutput("clock")),
       # logo
-      tags$div(style = "position: absolute; top: -100px;",textOutput("clock")),
       tags$head(
         tags$style(
-          type="text/css",
+          type = "text/css",
           "#logo {
           max-width: 150px;
           width: 150px;
@@ -21,19 +50,37 @@ shinyAppUI <- dashboardPage(
       ),
       imageOutput("logo", height = "auto", width = "150px"),
       # Sidebar items
-      menuItem("Study Metadata", tabName = "meta_study"),
+      menuItem("Study", tabName = "meta_study"),
       menuItem("Patient", tabName = "patient"),
       menuItem("Sample", tabName = "sample"),
       menuItem("Mutations", tabName = "mutations"),
       menuItem("Timelines", tabName = "timelines"),
-      menuItem("Resources", tabName = "resource")
-      #,
-      #menuItem("Validation", tabName = "validation")
-    )
+      menuItem("Resources", tabName = "resource"),
+      menuItem("Validation", tabName = "validation")
+    ),
+    tags$br(),
+    tags$head(
+      tags$style(
+        type = "text/css",
+        "#ui_loaded_study_info {
+          color: black;}"
+      )
+    ),
+    uiOutput("ui_loaded_study_info")
   ),
   dashboardBody(
+    tags$head(
+      tags$style(
+        HTML("#shiny-notification-panel {
+             position:fixed;
+             top: calc(50%);
+             left: calc(50% - 150px);
+             }
+             "
+        )
+      )
+    ),
     tabItems(
-
       # Tab 1 Study Metadata - studyTab.R
       studyTab,
 
@@ -48,13 +95,15 @@ shinyAppUI <- dashboardPage(
 
       # Tab 5 Timelines - timelineTab.R
       timelineTab,
+<<<<<<< HEAD
 
       # Tab Resource data - resourceTab.R
       resourceTab
+=======
+>>>>>>> master
 
-      #,
       # Tab 6 Validation - validationTab.R
-      # validationTab
+      validationTab
     )
   )
 )

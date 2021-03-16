@@ -1,58 +1,88 @@
 studyTab <- tabItem(
   tabName = "meta_study",
-  h2("Study Metadata"),
-  fluidRow(column(
-    width = 4,
+  div(style="display:inline-block",h2("Study")),
+  div(style="display:inline-block; padding-bottom:15px; margin-left:30px",bsButton(
+    "tour_study",
+    label = "Tour",
+    icon = icon("question"),
+    style = "info",
+    size = "extra-small"
+  )),
+  fluidRow(
+    id = "workflow_overview",
     box(
-      width = NULL,
-      title = "Select existing study",
-
-      uiOutput("ui_cancer_study_identifier"),
-      actionButton("upload", "Load study", class = "btn-success"),
-      br(),
-      br(),
-      DT::DTOutput("studyTable")
+      title = "cbpManager workflow steps",
+      collapsible = TRUE,
+      collapsed = FALSE,
+      solidHeader = TRUE,
+      tags$head(
+        tags$style(
+          type = "text/css",
+          "#workflowImage img {max-width: 100%; width: 65%; height: auto;
+            display: block; margin-left: auto;margin-right: auto}"
+        )
+      ),
+      imageOutput("workflowImage", height = "auto"),
+      width = 12
     )
   ),
-  column(
-    width = 8,
-    box(
-      width = NULL,
-      title = "Add new study",
-      column(
-        6,
-        div(
+  fluidRow(
+    column(
+      id = "existing_study",
+      width = 4,
+      box(
+        width = NULL,
+        title = "Select existing study",
+
+        uiOutput("ui_cancer_study_identifier"),
+        actionButton("upload", "Load study", class = "btn-success"),
+        br(),
+        br(),
+        DT::DTOutput("studyTable")
+      )
+    ),
+    column(
+      id = "create_study",
+      width = 8,
+      box(
+        width = NULL,
+        title = "Add new study",
+        column(
+          6,
           div(
-            style = "display: inline-block;vertical-align: middle;width: 200px",
-            textInput(
-              "add_study_identifier",
-              label = "Add ID of cancer study",
-              placeholder = "e.g. brca_joneslab_2013"
+            div(
+              style = "display: inline-block;vertical-align: middle;width: 200px",
+              textInput(
+                "add_study_identifier",
+                label = "Add ID of cancer study",
+                placeholder = "e.g. brca_joneslab_2013"
+              )
+            ),
+            div(
+              style = "display: inline-block;vertical-align: middle;",
+              popify(
+                bsButton(
+                  "q1",
+                  label = "",
+                  icon = icon("question"),
+                  style = "info",
+                  size = "extra-small"
+                ),
+                "cancer_study_identifier",
+                "A string used to uniquely identify this cancer study within the database."
+              )
             )
           ),
           div(
-            style = "display: inline-block;vertical-align: middle;",
-            popify(
-              bsButton(
-                "q1",
-                label = "",
-                icon = icon("question"),
-                style = "info",
-                size = "extra-small"
-              ),
-              "cancer_study_identifier",
-              "A string used to uniquely identify this cancer study within the database."
-            )
-          )
-        ),
-        div(
-          div(
-            style = "display: inline-block;vertical-align: middle;width: 200px",
-            textInput("add_study_name",
-                      label = "Add name of cancer study",
-                      placeholder = "e.g. Breast Cancer (Jones Lab 2013)")
-          ),
-          div(style = "display: inline-block;vertical-align: middle;",
+            div(
+              style = "display: inline-block;vertical-align: middle;width: 200px",
+              textInput("add_study_name",
+                label = "Add name of cancer study",
+                placeholder = "e.g. Breast Cancer (Jones Lab 2013)"
+              )
+            ),
+            div(
+              style = "display: inline-block;vertical-align: middle;",
               popify(
                 bsButton(
                   "q2",
@@ -63,131 +93,122 @@ studyTab <- tabItem(
                 ),
                 "name",
                 "The name of the cancer study."
-              ))
-        ),
-        div(
-          div(
-            style = "display: inline-block;vertical-align: middle;width: 200px",
-            textInput("add_short_name",
-                      label = "Add short name of cancer study",
-                      placeholder = "e.g. BRCA (Jones)")
+              )
+            )
           ),
-          div(style = "display: inline-block;vertical-align: middle;", popify(
-            bsButton(
-              "q3",
-              label = "",
-              icon = icon("question"),
-              style = "info",
-              size = "extra-small"
+          div(
+            div(
+              style = "display: inline-block;vertical-align: middle;width: 200px",
+              textInput("add_short_name",
+                label = "Add short name of cancer study",
+                placeholder = "e.g. BRCA (Jones)"
+              )
             ),
-            "short_name",
-            "A short name used for display used on various web pages within the cBioPortal."
-          ))
-        ),
-        div(
-          div(
-            style = "display: inline-block;vertical-align: middle;width: 200px",
-            textInput("pmid",
-                      label = "(Optional) Pubmed ids"),
-          ),
-          div(
-            style = "display: inline-block;vertical-align: middle;", popify(
+            div(style = "display: inline-block;vertical-align: middle;", popify(
               bsButton(
-                "q7",
+                "q3",
                 label = "",
                 icon = icon("question"),
                 style = "info",
                 size = "extra-small"
               ),
-              "pmid (Optional)",
-              "One or more relevant pubmed ids (comma separated without whitespace). If used, the field citation has to be filled, too."
+              "short_name",
+              "A short name used for display used on various web pages within the cBioPortal."
             ))
-        ),
-        uiOutput("ui_type_of_cancer"),
-        actionButton("add_study", "Add study")
-      ),
-      column(
-        6,
-        textAreaInput(
-          "description",
-          label = "Add description of the cancer study",
-          height = "100px",
-          resize = "vertical",
-          placeholder = "Comprehensive profiling of 103 breast cancer samples. Generated by the Jones Lab 2013"
-        ),
-        textInput("citation",
-                      label = "(Optional) A relevant ciation",
-                      placeholder = "e.g. TCGA, Nature 2012", width="200px"),
-        div(
-          div(
-            style = "display: inline-block;vertical-align: middle;width: 200px",
-            textInput("pmid",
-                      label = "(Optional) Pubmed ids"),
           ),
           div(
-            style = "display: inline-block;vertical-align: middle;", popify(
-            bsButton(
-              "q4",
-              label = "",
-              icon = icon("question"),
-              style = "info",
-              size = "extra-small"
+            div(
+              style = "display: inline-block;vertical-align: middle;width: 200px",
+              textInput("pmid",
+                label = "(Optional) Pubmed ids"
+              ),
             ),
-            "pmid (Optional)",
-            "One or more relevant pubmed ids (comma separated without whitespace). If used, the field citation has to be filled, too."
-          ))
+            div(
+              style = "display: inline-block;vertical-align: middle;", popify(
+                bsButton(
+                  "q7",
+                  label = "",
+                  icon = icon("question"),
+                  style = "info",
+                  size = "extra-small"
+                ),
+                "pmid (Optional)",
+                "One or more relevant pubmed ids (comma separated without whitespace). If used, the field citation has to be filled, too."
+              )
+            )
+          ),
+          uiOutput("ui_type_of_cancer"),
+          actionButton("add_study", "Add study", class = "btn-success")
         ),
-        div(
-          div(
-            style = "display: inline-block;vertical-align: middle;width: 200px",
-            textInput("groups",
-                      label = "(Optional) Groups",
-                      placeholder = "e.g. PUBLIC;GDAC;SU2C-PI3K"),
+        column(
+          6,
+          textAreaInput(
+            "description",
+            label = "Add description of the cancer study",
+            height = "100px",
+            resize = "vertical",
+            placeholder = "Comprehensive profiling of 103 breast cancer samples. Generated by the Jones Lab 2013"
+          ),
+          textInput("citation",
+            label = "(Optional) A relevant ciation",
+            placeholder = "e.g. TCGA, Nature 2012", width = "200px"
           ),
           div(
-            style = "display: inline-block;vertical-align: middle;", popify(
-              bsButton(
-                "q5",
-                label = "",
-                icon = icon("question"),
-                style = "info",
-                size = "extra-small"
+            div(
+              style = "display: inline-block;vertical-align: middle;width: 200px",
+              textInput("groups",
+                label = "(Optional) Groups",
+                placeholder = "e.g. PUBLIC;GDAC;SU2C-PI3K"
               ),
-              "groups (Optional)",
-              "When using an authenticating cBioPortal, lists the user-groups that are allowed access to this study. Multiple groups are separated with a semicolon. The study will be invisible to users not in at least one of the listed groups, as if it was not loaded at all."
-            ))
-        ),
-        div(
-          div(
-            style = "display: inline-block;vertical-align: middle;width: 200px",
-            textInput("reference_genome",
-                      label = "(Optional) Reference genome",
-                      placeholder = "e.g. hg19, hg38"),
+            ),
+            div(
+              style = "display: inline-block;vertical-align: middle;", popify(
+                bsButton(
+                  "q5",
+                  label = "",
+                  icon = icon("question"),
+                  style = "info",
+                  size = "extra-small"
+                ),
+                "groups (Optional)",
+                "When using an authenticating cBioPortal, lists the user-groups that are allowed access to this study. Multiple groups are separated with a semicolon. The study will be invisible to users not in at least one of the listed groups, as if it was not loaded at all."
+              )
+            )
           ),
           div(
-            style = "display: inline-block;vertical-align: middle;", popify(
-              bsButton(
-                "q6",
-                label = "",
-                icon = icon("question"),
-                style = "info",
-                size = "extra-small"
+            div(
+              style = "display: inline-block;vertical-align: middle;width: 200px",
+              selectInput("reference_genome",
+                label = "(Optional) Reference genome",
+                choices = c('hg19', 'hg38', 'mm10')
               ),
-              "reference_genome  (Optional)",
-              "The study reference genome (e.g. hg19, hg38). Without specifying this property, the study will be assigned to the reference genome specified in portal.properties (property ucsc.build)."
-            ))
+            ),
+            div(
+              style = "display: inline-block;vertical-align: middle;", popify(
+                bsButton(
+                  "q6",
+                  label = "",
+                  icon = icon("question"),
+                  style = "info",
+                  size = "extra-small"
+                ),
+                "reference_genome  (Optional)",
+                "The study reference genome (e.g. hg19, hg38). Without specifying this property, the study will be assigned to the reference genome specified in portal.properties (property ucsc.build)."
+              )
+            )
+          )
         )
-
-
+      ),
+      div(id = "cancer_type_table",
+        box(
+          width = NULL,
+          collapsible = TRUE,
+          collapsed = TRUE,
+          solidHeader = TRUE,
+          title = "Alternatively select cancer type here",
+          DT::DTOutput("oncotree_table")
+        )
       )
-    ),
-    box(
-      width = NULL,
-      collapsible = TRUE,
-      collapsed = TRUE,
-      solidHeader = TRUE,
-      title = "Alternatively select cancer type here",
-      DT::DTOutput("oncotree_table")
     )
-  ))
+  )
 )

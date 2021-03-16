@@ -11,7 +11,6 @@ addColumn_UI <- function(id, label = "Add column") {
   ns <- NS(id)
 
   actionButton(ns("AddColumn"), label, icon = icon("plus-sign", lib = "glyphicon"))
-
 }
 
 #' Server logic of module for adding a column
@@ -27,13 +26,15 @@ addColumn_Server <- function(input, output, session, data) {
     showModal(
       modalDialog(
         title = "Add new column",
-        #uiOutput(paste0("AddCol",id,"UI")),
+        # uiOutput(paste0("AddCol",id,"UI")),
         uiOutput(ns("AddCol")),
         easyClose = FALSE,
-        footer = tagList(modalButton("Cancel"),
-                         actionButton(
-                           ns("ModalbuttonAddCol"), "Add column"
-                         ))
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(
+            ns("ModalbuttonAddCol"), "Add column"
+          )
+        )
       )
     )
   })
@@ -55,14 +56,16 @@ addColumn_Server <- function(input, output, session, data) {
   observeEvent(input$ModalbuttonAddCol, {
     if (input$colname == "") {
       showNotification("Column name cannot be empty.",
-                       type = "error",
-                       duration = NULL)
+        type = "error",
+        duration = NULL
+      )
     } else if (toupper(input$colname) %in% colnames(data)) {
       showNotification("Column already exists.",
-                       type = "error",
-                       duration = NULL)
+        type = "error",
+        duration = NULL
+      )
     } else {
-      colname <- .create_name(input$colname)
+      colname <- create_name(input$colname)
       data() %>% dplyr::mutate(!!(colname) := "") -> params$df
       removeModal()
     }
@@ -71,7 +74,6 @@ addColumn_Server <- function(input, output, session, data) {
   return(reactive({
     params$df
   }))
-
 }
 # delete column ----------------------------------------------------------------
 
@@ -86,9 +88,9 @@ deleteColumn_UI <- function(id, label = "Delete column(s)") {
   ns <- NS(id)
 
   actionButton(ns("DeleteColumn"),
-               label,
-               icon = icon("minus-sign", lib = "glyphicon"))
-
+    label,
+    icon = icon("minus-sign", lib = "glyphicon")
+  )
 }
 
 #' Server logic of module for deleting a column
@@ -127,14 +129,13 @@ deleteColumn_Server <-
     observeEvent(input$ModalbuttonDeleteCol, {
       params$df <-
         data()[, !(names(data()) %in% input$DelColname), drop = FALSE]
-      #data() <- data[,!(names(data()) %in% input$DelColname), drop = FALSE]
+      # data() <- data[,!(names(data()) %in% input$DelColname), drop = FALSE]
       removeModal()
     })
 
     return(reactive({
       params$df
     }))
-
   }
 
 # delete entry -----------------------------------------------------------------
@@ -150,7 +151,6 @@ deleteRow_UI <- function(id, label = "Delete") {
   ns <- NS(id)
 
   actionButton(ns("DeleteEntry"), label, icon = icon("remove", lib = "glyphicon"))
-
 }
 
 #' Server logic of module for removing a row
@@ -167,18 +167,21 @@ deleteRow_Server <-
       ns <- session$ns
       if (is.null(selected_row())) {
         showNotification("Please select a row",
-                         type = "warning",
-                         duration = NULL)
+          type = "warning",
+          duration = NULL
+        )
       } else {
         showModal(
           modalDialog(
             "Do you want to delete the selected entry?",
             title = "Delete",
             easyClose = FALSE,
-            footer = tagList(modalButton("Cancel"),
-                             actionButton(
-                               ns("ModalbuttonDeleteEntry"), "Delete"
-                             ))
+            footer = tagList(
+              modalButton("Cancel"),
+              actionButton(
+                ns("ModalbuttonDeleteEntry"), "Delete"
+              )
+            )
           )
         )
       }
@@ -208,7 +211,6 @@ addRow_UI <- function(id, label = "Add") {
   ns <- NS(id)
 
   actionButton(ns("AddEntry"), label, icon = icon("plus", lib = "glyphicon"))
-
 }
 
 #' Server logic of module for adding a row
@@ -238,87 +240,96 @@ addRow_Server <-
         title = "New entry",
         uiOutput(ns("addUI")),
         easyClose = FALSE,
-        footer = tagList(modalButton("Cancel"),
-                         actionButton(ns(
-                           "ModalbuttonAdd"
-                         ), "Add"))
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(ns(
+            "ModalbuttonAdd"
+          ), "Add")
+        )
       ))
     })
 
     output$addUI <- renderUI({
       ns <- session$ns
-      lapply(colnames(data()),
-             function(colname) {
-               if (colname == "PATIENT_ID") {
-                 fluidRow(column(
-                   width = 8,
-                   selectInput(
-                     inputId = ns(colname),
-                     label = "Select the Patient ID",
-                     choices = unique(patient_ids()[which(!is.na(patient_ids()))]),
-                     selected = 1
-                   ),
-                 ))
-               } else if (colname == "EVENT_TYPE") {
+      lapply(
+        colnames(data()),
+        function(colname) {
+          if (colname == "PATIENT_ID") {
+            fluidRow(column(
+              width = 8,
+              selectInput(
+                inputId = ns(colname),
+                label = "Select the Patient ID",
+                choices = unique(patient_ids()[which(!is.na(patient_ids()))]),
+                selected = 1
+              ),
+            ))
+          } else if (colname == "EVENT_TYPE") {
 
-               } else if (colname == "START_DATE") {
-                 fluidRow(column(
-                   width = 8,
-                   dateInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     format = "dd.mm.yyyy"
-                   ),
-                 ))
-               } else if (colname == "STOP_DATE") {
-                 if (mode == "timeline") {
-                   fluidRow(column(
-                     width = 8,
-                     dateInput(
-                       inputId = ns(colname),
-                       label = colname,
-                       format = "dd.mm.yyyy"
-                     ),
-                   ))
-                 }
-               } else if (colname == "TREATMENT_TYPE") {
-                 fluidRow(column(
-                   width = 8,
-                   selectInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     choices = c("Medical Therapy", "Radiation Therapy"),
-                     selected = 1
-                   ),
-                 ))
-               } else if (colname == "SUBTYPE") {
-                 fluidRow(column(
-                   width = 8,
-                   selectInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     choices = c(
-                       "",
-                       "Chemotherapy",
-                       "Hormone Therapy",
-                       "Targeted Therapy",
-                       "WPRT",
-                       "IVRT"
-                     ),
-                     selected = 1
-                   ),
-                 ))
-               } else {
-                 fluidRow(column(
-                   width = 8,
-                   textInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     value = ""
-                   ),
-                 ))
-               }
-             })
+          } else if (colname == "START_DATE") {
+            fluidRow(column(
+              width = 8,
+              dateInput(
+                inputId = ns(colname),
+                label = colname,
+                format = "dd.mm.yyyy"
+              ),
+            ))
+          } else if (colname == "STOP_DATE") {
+            if (mode == "timeline") {
+              fluidRow(column(
+                width = 8,
+                dateInput(
+                  inputId = ns(colname),
+                  label = colname,
+                  format = "dd.mm.yyyy"
+                ),
+              ))
+            }
+          } else if (colname == "TREATMENT_TYPE") {
+            fluidRow(column(
+              width = 8,
+              selectInput(
+                inputId = ns(colname),
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                multiple = TRUE,
+                choices = c("Medical Therapy", "Radiation Therapy", "Non-surgical Local Treamtent"),
+                selected = 1
+              ),
+            ))
+          } else if (colname == "SUBTYPE") {
+            fluidRow(column(
+              width = 8,
+              selectInput(
+                inputId = ns(colname),
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                multiple = TRUE,
+                choices = c(
+                  "",
+                  "Monoclonal Antibody",
+                  "Antibody drug conjugate",
+                  "Immunotherapy",
+                  "Chemotherapy",
+                  "Hormone Therapy",
+                  "Targeted Therapy",
+                  "WPRT",
+                  "IVRT"
+                ),
+                selected = 1
+              ),
+            ))
+          } else {
+            fluidRow(column(
+              width = 8,
+              textInput(
+                inputId = ns(colname),
+                label = colname,
+                value = ""
+              ),
+            ))
+          }
+        }
+      )
     })
 
     # validate inputs in modalDialog and add new entry to table
@@ -331,8 +342,9 @@ addRow_Server <-
         toupper(gsub("-", "", session$ns("")))
       if (addPatientValues["PATIENT_ID"] == "") {
         showNotification("'Patient ID' is requiered.",
-                         type = "error",
-                         duration = NULL)
+          type = "error",
+          duration = NULL
+        )
       } else if (!addPatientValues["PATIENT_ID"] %in% dates_first_diagnosis()$PATIENT_ID) {
         showNotification(
           "Please provide a valid diagnosis date for this 'Patient ID'.",
@@ -340,25 +352,41 @@ addRow_Server <-
           duration = NULL
         )
       } else {
+        if ("SUBTYPE" %in% names(addPatientValues)) {
+          if(is.null(addPatientValues[["SUBTYPE"]])) addPatientValues[["SUBTYPE"]] <- ""
+          if(length(addPatientValues[["SUBTYPE"]])>1){
+            addPatientValues[["SUBTYPE"]] <- paste(addPatientValues[["SUBTYPE"]], collapse = " + ")
+          }
+        }
+        if ("TREATMENT_TYPE" %in% names(addPatientValues)) {
+          if(is.null(addPatientValues[["TREATMENT_TYPE"]])) addPatientValues[["TREATMENT_TYPE"]] <- ""
+          if(length(addPatientValues[["TREATMENT_TYPE"]])>1){
+            addPatientValues[["TREATMENT_TYPE"]] <- paste(addPatientValues[["TREATMENT_TYPE"]], collapse = " + ")
+          }
+        }
+        
         diagnosisDate <-
           dates_first_diagnosis()[which(dates_first_diagnosis()$PATIENT_ID == addPatientValues["PATIENT_ID"]), "DATE"]
-        if (mode == "timeline")
+        if (mode == "timeline") {
           stopDate <-
             as.Date(addPatientValues[["STOP_DATE"]])
-        else
+        } else {
           stopDate <- NULL
-        failed <- check_input_dates(as.Date(diagnosisDate),
-                                    as.Date(addPatientValues[["START_DATE"]]),
-                                    stopDate)
+        }
+        failed <- check_input_dates(
+          as.Date(diagnosisDate),
+          as.Date(addPatientValues[["START_DATE"]]),
+          stopDate
+        )
         if (failed == 1) {
           showNotification(
-            "'End date' cannot be earlier as 'start date'.",
+            "'Stop date' cannot be earlier as 'start date'.",
             type = "error",
             duration = NULL
           )
         } else if (failed == 2) {
           showNotification(
-            "'Start date' and 'End date' cannot be earlier as diagnosis date.",
+            "'Start date' and 'Stop date' cannot be earlier as diagnosis date.",
             type = "error",
             duration = NULL
           )
@@ -367,18 +395,23 @@ addRow_Server <-
           start <-
             as.numeric(
               as.Date(
-                addPatientValues[["START_DATE"]]) - as.Date(diagnosisDate))
-          if (mode == "timeline")
+                addPatientValues[["START_DATE"]]
+              ) - as.Date(diagnosisDate)
+            )
+          if (mode == "timeline") {
             end <-
               as.numeric(
-                as.Date(addPatientValues[["STOP_DATE"]]) - as.Date(diagnosisDate))
-          else
+                as.Date(addPatientValues[["STOP_DATE"]]) - as.Date(diagnosisDate)
+              )
+          } else {
             end <- ""
+          }
           addPatientValues$START_DATE <- start
           addPatientValues$STOP_DATE <- end
           params$df <-
-            plyr::rbind.fill(data(), as.data.frame(addPatientValues))
-          removeModal()
+           plyr::rbind.fill(data(), as.data.frame(addPatientValues))
+
+          removeModal()#
         }
       }
     })
@@ -400,7 +433,6 @@ editRow_UI <- function(id, label = "Edit") {
   ns <- NS(id)
 
   actionButton(ns("EditEntry"), label, icon = icon("pencil", lib = "glyphicon"))
-
 }
 
 #' Server logic of module for editing a row
@@ -429,95 +461,111 @@ editRow_Server <-
       ns <- session$ns
       if (is.null(selected_row())) {
         showNotification("Please select a row.",
-                         type = "warning",
-                         duration = NULL)
+          type = "warning",
+          duration = NULL
+        )
       } else {
         showModal(modalDialog(
           title = "Edit entry",
           uiOutput(ns("editUI")),
           easyClose = FALSE,
-          footer = tagList(modalButton("Cancel"),
-                           actionButton(ns(
-                             "ModalbuttonEdit"
-                           ), "Edit"))
+          footer = tagList(
+            modalButton("Cancel"),
+            actionButton(ns(
+              "ModalbuttonEdit"
+            ), "Edit")
+          )
         ))
       }
     })
 
     output$editUI <- renderUI({
       ns <- session$ns
-      lapply(colnames(data()),
-             function(colname) {
-               if (colname == "PATIENT_ID") {
-                 fluidRow(column(
-                   width = 8,
-                   selectInput(
-                     inputId = ns(colname),
-                     label = "Select the Patient ID",
-                     choices = unique(patient_ids()[which(!is.na(patient_ids()))]),
-                     selected = data()[selected_row(), colname]
-                   ),
-                 ))
-               } else if (colname == "EVENT_TYPE") {
+      lapply(
+        colnames(data()),
+        function(colname) {
+          if (colname == "PATIENT_ID") {
+            fluidRow(column(
+              width = 8,
+              selectInput(
+                inputId = ns(colname),
+                label = "Select the Patient ID",
+                choices = unique(patient_ids()[which(!is.na(patient_ids()))]),
+                selected = data()[selected_row(), colname]
+              ),
+            ))
+          } else if (colname == "EVENT_TYPE") {
 
-               } else if (colname == "START_DATE") {
-                 fluidRow(column(
-                   width = 8,
-                   dateInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     format = "dd.mm.yyyy"
-                   ),
-                 ))
-               } else if (colname == "STOP_DATE") {
-                 if (mode == "timeline") {
-                   fluidRow(column(
-                     width = 8,
-                     dateInput(
-                       inputId = ns(colname),
-                       label = colname,
-                       format = "dd.mm.yyyy"
-                     ),
-                   ))
-                 }
-               } else if (colname == "TREATMENT_TYPE") {
-                 fluidRow(column(
-                   width = 8,
-                   selectInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     choices = c("Medical Therapy", "Radiation Therapy"),
-                     selected = data()[selected_row(), colname]
-                   ),
-                 ))
-               } else if (colname == "SUBTYPE") {
-                 fluidRow(column(
-                   width = 8,
-                   selectInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     choices = c(
-                       "",
-                       "Chemotherapy",
-                       "Hormone Therapy",
-                       "Targeted Therapy",
-                       "WPRT",
-                       "IVRT"
-                     ),
-                     selected = data()[selected_row(), colname]
-                   ),
-                 ))
-               } else {
-                 fluidRow(column(
-                   width = 8,
-                   textInput(
-                     inputId = ns(colname),
-                     label = colname,
-                     value = data()[selected_row(), colname]
-                   ),
-                 ))
-               }
-             })
+          } else if (colname == "START_DATE") {
+            fluidRow(column(
+              width = 8,
+              dateInput(
+                inputId = ns(colname),
+                label = colname,
+                format = "dd.mm.yyyy"
+              ),
+            ))
+          } else if (colname == "STOP_DATE") {
+            if (mode == "timeline") {
+              fluidRow(column(
+                width = 8,
+                dateInput(
+                  inputId = ns(colname),
+                  label = colname,
+                  format = "dd.mm.yyyy"
+                ),
+              ))
+            }
+          } else if (colname == "TREATMENT_TYPE") {
+            treatment_value <- data()[selected_row(), colname]
+            req(treatment_value)
+            if(grepl(" \\+ ", treatment_value)) treatment_value <- unlist(strsplit(treatment_value, " \\+ "))
+            fluidRow(column(
+              width = 8,
+              selectInput(
+                inputId = ns(colname),
+                multiple = TRUE,
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                choices = c("Medical Therapy", "Radiation Therapy", "Non-surgical Local Treamtent"),
+                selected = data()[selected_row(), colname]
+              ),
+            ))
+          } else if (colname == "SUBTYPE") {
+            subtype_value <- data()[selected_row(), colname]
+            req(subtype_value)
+            if(grepl(" \\+ ", subtype_value)) subtype_value <- unlist(strsplit(subtype_value, " \\+ "))
+            fluidRow(column(
+              width = 8,
+              selectInput(
+                inputId = ns(colname),
+                label = paste(colname, "*Select multiple items for combination therapy"),
+                multiple = TRUE,
+                choices = c(
+                  "",
+                  "Monoclonal Antibody",
+                  "Antibody drug conjugate",
+                  "Immunotherapy",
+                  "Chemotherapy",
+                  "Hormone Therapy",
+                  "Targeted Therapy",
+                  "WPRT",
+                  "IVRT"
+                ),
+                selected = subtype_value
+              ),
+            ))
+          } else {
+            fluidRow(column(
+              width = 8,
+              textInput(
+                inputId = ns(colname),
+                label = colname,
+                value = data()[selected_row(), colname]
+              ),
+            ))
+          }
+        }
+      )
     })
 
     # validate inputs in modalDialog and edit entry to table
@@ -529,8 +577,9 @@ editRow_Server <-
       editValues$EVENT_TYPE <- toupper(gsub("-", "", session$ns("")))
       if (editValues["PATIENT_ID"] == "") {
         showNotification("'Patient ID' is requiered.",
-                         type = "error",
-                         duration = NULL)
+          type = "error",
+          duration = NULL
+        )
       } else if (!editValues["PATIENT_ID"] %in% dates_first_diagnosis()$PATIENT_ID) {
         showNotification(
           "Please provide a valid diagnosis date for this 'Patient ID'.",
@@ -538,16 +587,32 @@ editRow_Server <-
           duration = NULL
         )
       } else {
+        if ("SUBTYPE" %in% names(editValues)) {
+          if(is.null(editValues[["SUBTYPE"]])) editValues[["SUBTYPE"]] <- ""
+          if(length(editValues[["SUBTYPE"]])>1){
+            editValues[["SUBTYPE"]] <- paste(editValues[["SUBTYPE"]], collapse = " + ")
+          }
+        }
+        if ("TREATMENT_TYPE" %in% names(editValues)) {
+          if(is.null(editValues[["TREATMENT_TYPE"]])) editValues[["TREATMENT_TYPE"]] <- ""
+          if(length(editValues[["TREATMENT_TYPE"]])>1){
+            editValues[["TREATMENT_TYPE"]] <- paste(editValues[["TREATMENT_TYPE"]], collapse = " + ")
+          }
+        }
+        
         diagnosisDate <-
           dates_first_diagnosis()[which(dates_first_diagnosis()$PATIENT_ID == editValues["PATIENT_ID"]), "DATE"]
-        if (mode == "timeline")
+        if (mode == "timeline") {
           stopDate <-
             as.Date(editValues[["STOP_DATE"]])
-        else
+        } else {
           stopDate <- NULL
-        failed <- check_input_dates(as.Date(diagnosisDate),
-                                    as.Date(editValues[["START_DATE"]]),
-                                    stopDate)
+        }
+        failed <- check_input_dates(
+          as.Date(diagnosisDate),
+          as.Date(editValues[["START_DATE"]]),
+          stopDate
+        )
         if (failed == 1) {
           showNotification(
             "'End date' cannot be earlier as 'start date'.",
@@ -564,18 +629,19 @@ editRow_Server <-
           # edit row to data_timeline_treatment
           start <-
             as.numeric(as.Date(editValues[["START_DATE"]]) - as.Date(diagnosisDate))
-          if (mode == "timeline")
+          if (mode == "timeline") {
             end <-
               as.numeric(as.Date(editValues[["STOP_DATE"]]) - as.Date(diagnosisDate))
-          else
+          } else {
             end <- ""
+          }
           editValues$START_DATE <- start
           editValues$STOP_DATE <- end
 
-          #data()[selected_row(),1] <- editValues[[1]]
+          # data()[selected_row(),1] <- editValues[[1]]
           params$df <- data()
           for (i in colnames(params$df)) {
-            #print(editValues[[i]])
+            # print(editValues[[i]])
             params$df[selected_row(), i] <- editValues[i]
           }
           removeModal()
@@ -605,7 +671,6 @@ saveTimeline_UI <- function(id, label = "Save") {
     class = "btn-success",
     icon = icon("saved", lib = "glyphicon")
   )
-
 }
 
 #' Server logic of module for saving the source data
@@ -671,15 +736,20 @@ saveTimeline_Server <-
         file.path(study_dir, study_id(), meta_filename)
       )
       showNotification("Data saved successfully!",
-                       type = "message",
-                       duration = 10)
+        type = "message",
+        duration = 10
+      )
 
       # logging
-      if(!is.null(logDir)){
-        writeLogfile(outdir = logDir,
-                     modified_file = file.path(study_id(), data_filename))
-        writeLogfile(outdir = logDir,
-                     modified_file = file.path(study_id(), meta_filename))
+      if (!is.null(logDir)) {
+        writeLogfile(
+          outdir = logDir,
+          modified_file = file.path(study_id(), data_filename)
+        )
+        writeLogfile(
+          outdir = logDir,
+          modified_file = file.path(study_id(), meta_filename)
+        )
       }
     })
   }
