@@ -93,7 +93,7 @@ observeEvent(input$saveMAF, {
     file.path(study_dir, loadedData$studyID, "case_lists")
   if (!dir.exists(case_list_dir)) dir.create(case_list_dir)
   cases_samples <-
-    loadedData$data_clinical_sample[3:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
+    loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
   cases_sequenced_df <-
     data.frame(
       V1 = c(
@@ -111,7 +111,7 @@ observeEvent(input$saveMAF, {
         "Sequenced Tumors",
         paste0(
           "All sequenced samples (",
-          nrow(loadedData$data_clinical_sample) - 2,
+          nrow(loadedData$data_clinical_sample) - 3,
           " samples)"
         ),
         paste(cases_samples, collapse = "\t")
