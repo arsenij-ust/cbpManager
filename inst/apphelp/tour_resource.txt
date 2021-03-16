@@ -1,0 +1,8 @@
+element;intro
+#Welcome;Welcome to the interactive tour for <code>cbpManager</code>!<br><br>In the <b>Resources</b> tab, you can add additional resources to patients, samples and studies. It generates a hyperlink and a tab containing the web based resource, e.g. another webpage. With this principle you can add pdf, txt, png resources or webpages to your study.
+#resource_description;This box contains an additional description of the <b>Resource</b> tab.
+#resource_img;Here you can see an example image how the resources data will look later in cBioPortal.
+#define_resources;At first, we need to define a resource before adding a URL to a specific sample or patient. This table creates the necessary resource definition file. The resource definition file should follow this format, it has three required columns: <br><br><b>RESOURCE_ID</b>: a unique resource ID. This field allows only numbers, letters, points, underscores and hyphens.<br><br><b>DISPLAY_NAME</b>: a display name for resources. <br><br><b>RESOURCE_TYPE</b>: resource type for resources. It describes to which part of the study this resource is to be assigned and must be 'SAMPLE', 'PATIENT' or 'STUDY'.
+#resources_tabs;After we defined a resource, we can add a URL link to the study, a specific patient, or a specific sample. E.g. we defined a resource with the RESOURCE_ID 'test_resource' and the RESOURCE_TYPE 'PATIENT', then we go the the 'Patients' tabpanel in this area, click on the 'Add' button, select an existing PATIENT_ID, select our recource with the ID 'test_resource', and add a URL.
+#Thanks;Thank you for taking the <b>Resource</b> tab tour of <code>cbpManager</code>!
+

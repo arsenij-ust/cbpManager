@@ -2,13 +2,21 @@
 output$resourceDataImg <- renderImage({
   return(
     list(
-      src = system.file("apphelp", "resource_data.PNG", package = "cbpManager"),
+      src = system.file("www", "resource_data.PNG", package = "cbpManager"),
       contentType = "image/png",
       alt = "timeline-example",
       width = "auto"
     )
   )
 }, deleteFile = FALSE)
+
+# tour  ---------------------------------------------------------------
+observeEvent(input$tour_resource, {
+  tour <- read.delim(system.file("apphelp", "tour_resource.txt", package = "cbpManager"),
+                     sep = ";", stringsAsFactors = FALSE,
+                     row.names = NULL, quote = "")
+  rintrojs::introjs(session, options = list(steps = tour))
+})
 
 # Resource definition ---------------------------------------------------------------
 # Data table output
