@@ -684,6 +684,7 @@ saveTimeline_UI <- function(id, label = "Save") {
 saveTimeline_Server <-
   function(input, output, session, data, study_id) {
     observeEvent(input$SaveTimeline, {
+      req(study_id(), data())
       ns <- session$ns
       timeline_id <- tolower(gsub("-", "", session$ns("")))
       data_timeline <- data()

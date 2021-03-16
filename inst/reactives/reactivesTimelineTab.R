@@ -202,10 +202,11 @@ observeEvent(input$ModalbuttonDeleteDate, {
 
 # safe dates of first diagnosis
 observeEvent(input$datesSave, {
+  req(loadedData$studyID, loadedData$dates_first_diagnosis)
   write.table(
     loadedData$dates_first_diagnosis,
     file.path(
-      "study",
+      study_dir,
       loadedData$studyID,
       "dates_first_diagnosis.txt.temp"
     ),

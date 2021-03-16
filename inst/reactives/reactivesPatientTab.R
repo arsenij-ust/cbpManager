@@ -760,6 +760,7 @@ observeEvent(input$ModalbuttonDeleteColPatient, {
 observeEvent(input$SaveDataPatient,
   {
     # data_clinical_patient
+    req(loadedData$studyID, loadedData$data_clinical_patient)
     df <- convertDataFrame(loadedData$data_clinical_patient)
 
     write.table(

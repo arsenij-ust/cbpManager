@@ -618,9 +618,9 @@ saveResource_Server <-
            data_filename,
            meta_filename,
            resource_type = c("SAMPLE", "DEFINITION", "PATIENT", "STUDY")) {
-
     resource_type <- match.arg(resource_type)
     observeEvent(input$SaveResource, {
+      req(data(), study_id())
       ns <- session$ns
       resource_data <- data()
       data_filename_temp <-

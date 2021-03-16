@@ -48,7 +48,7 @@ timelineTab <- tabItem(
           actionButton("datesAdd", "Add date"),
           actionButton("datesEdit", "Edit date"),
           actionButton("datesDelete", "Delete date"),
-          actionButton("datesSave", "Save", class = "btn-success"),
+          actionButton("datesSave", "Save", class = "btn-success", icon = icon("saved", lib = "glyphicon")),
           br(), br(),
           DT::DTOutput("dateTable")
         )

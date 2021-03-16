@@ -53,6 +53,7 @@ output$MAFdata <- DT::renderDT({
 
 # save data ---------------------------------------------------------------
 observeEvent(input$saveMAF, {
+  req(loadedData$studyID, loadedData$data_mutations_extended, loadedData$data_mutations_filename)
   # if (!is.null(input$chooseMAF)) {
   # data_mutations_extended
   write.table(

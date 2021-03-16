@@ -475,6 +475,7 @@ observeEvent(input$ModalbuttonDeleteColSample, {
 # save sample table ---------------------------------------------------------------
 observeEvent(input$SaveDataSample,
   {
+    req(loadedData$studyID, loadedData$data_clinical_sample)
     # data_clinical_sample
     df <- convertDataFrame(loadedData$data_clinical_sample)
 
