@@ -21,6 +21,3 @@ utils::globalVariables(
     "logDir"
   )
 )
-
-# set max file size for MAF-file upload - 10 MB
-options(shiny.maxRequestSize = 10 * 1024^2)

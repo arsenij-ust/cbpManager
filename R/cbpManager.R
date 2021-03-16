@@ -46,6 +46,10 @@ cbpManager <- function(
       "##---------------------------------------------------------------------------##"
     )
   )
+  
+  # set max file size for MAF-file upload - 1GB
+  options(shiny.maxRequestSize = 1024 * 1024^2)
+  
   app <- shiny::shinyApp(
     ui = shinyAppUI,
     server = shinyAppServer
