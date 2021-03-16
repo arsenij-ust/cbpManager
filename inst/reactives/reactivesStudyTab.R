@@ -90,6 +90,9 @@ observeEvent(input$add_study, {
   } else {
     # create study directory
     dir.create(file.path(study_dir, studyID))
+    
+    if(input$type_of_cancer == "") cancer_type <- "other" else cancer_type <- input$type_of_cancer
+    
     # create meta_study data.frame
     meta_study_df <- data.frame(
       V1 = c(
@@ -102,7 +105,7 @@ observeEvent(input$add_study, {
         "reference_genome"
       ),
       V2 = c(
-        input$type_of_cancer,
+        cancer_type,
         studyID,
         input$add_study_name,
         input$description,
@@ -144,8 +147,6 @@ observeEvent(input$add_study, {
       )
     }
 
-
-
     # update UI "Select ID of cancer study"
     updateSelectInput(session,
       "cancer_study_identifier",
@@ -163,6 +164,8 @@ observeEvent(input$add_study, {
 observeEvent(input$overwrite_study, {
   # Sanitize study ID
   studyID <- create_name(input$add_study_identifier, toupper = FALSE)
+  
+  if(input$type_of_cancer == "") cancer_type <- "other" else cancer_type <- input$type_of_cancer
 
   # create meta_study data.frame
   meta_study_df <- data.frame(
@@ -176,7 +179,7 @@ observeEvent(input$overwrite_study, {
       "reference_genome"
     ),
     V2 = c(
-      input$type_of_cancer,
+      cancer_type,
       studyID,
       input$add_study_name,
       input$description,
