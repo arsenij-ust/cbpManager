@@ -1,0 +1,34 @@
+#
+# The 'importer' python module used by the cbpManager is part of cBioPortal.
+#
+
+#
+# Copyright (c) 2016 The Hyve B.V.
+# This code is licensed under the GNU Affero General Public License (AGPL),
+# version 3, or (at your option) any later version.
+#
+
+#
+# cBioPortal is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+#
+# Following changes were made:
+#
+# - 'cropped_validation_report_template.html.jinja' was added. 
+#   In the new template css parts and scripts were removed.
+#
+# - In 'validateData.py' a code block was added to generate a second 
+#   report using the 'cropped_validation_report_template.html.jinja' template.
+#

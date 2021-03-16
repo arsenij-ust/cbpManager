@@ -362,17 +362,6 @@ fncols <- function(data, cname) {
   return(data)
 }
 
-# generateTimelineUI <- function(colname, mode = c("add", "edit"), data = NULL, selected_row = NULL, patientIDs = NULL){
-#   mode <- match.arg(mode)
-#
-#
-#   fluidRow(column(
-#     width = 8,
-#     textInput(inputId=colname,
-#               label = colname,
-#               value = patientIDs),))
-# }
-
 #' Convert the cBioPortal sample- and patient-data file format into a data.frame
 #'
 #' This function takes a file object (from read.table), removes the # symbol,
@@ -478,6 +467,7 @@ writeLogfile <- function(outdir, modified_file, log_filename = "cbpManager_logfi
   timepoint <- Sys.time()
   log <- paste0(timepoint, "   User: ", userName, " modified file '", modified_file, "'")
   write(log, file = file.path(outdir, log_filename), append = TRUE)
+  invisible(file.path(outdir, log_filename))
 }
 
 #' Install conda environment with basilisk before launching the app

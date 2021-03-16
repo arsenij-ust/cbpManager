@@ -10,7 +10,7 @@ Description: This R package provides an R Shiny application that enables the use
     manage, and edit data and metadata files suitable for the import in cBioPortal for Cancer Genomics. 
     Create cancer studies and edit its metadata. Upload mutation data of a patient that will be concatenated to the data_mutation_extended.txt file of the study. 
     Create and edit clinical patient data, sample data, and timeline data. Create custom timeline tracks for patients.  
-License: MIT + file LICENSE
+License: AGPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
