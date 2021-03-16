@@ -55,6 +55,7 @@ shinyAppUI <- dashboardPage(
       menuItem("Sample", tabName = "sample"),
       menuItem("Mutations", tabName = "mutations"),
       menuItem("Timelines", tabName = "timelines"),
+      menuItem("Resources", tabName = "resource"),
       menuItem("Validation", tabName = "validation")
     ),
     tags$br(),
@@ -94,6 +95,9 @@ shinyAppUI <- dashboardPage(
 
       # Tab 5 Timelines - timelineTab.R
       timelineTab,
+
+      # Tab Resource data - resourceTab.R
+      resourceTab,
 
       # Tab 6 Validation - validationTab.R
       validationTab

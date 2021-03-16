@@ -13,7 +13,7 @@ patientTab <- tabItem(
     column(6,
       id = "patient_description",
       box(
-        id = "patient_description",
+        #id = "patient_description",
         title = "Description",
         collapsible = TRUE,
         collapsed = TRUE,

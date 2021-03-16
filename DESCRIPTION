@@ -29,6 +29,7 @@ Imports:
     dplyr,
     magrittr,
     jsonlite,
+    rapportools,
     basilisk,
     reticulate,
     shinyBS,
@@ -43,6 +44,7 @@ StagedInstall: no
 Collate:
     'basilisk.R'
     'dynamicTable.R'
+    'modulesResourceButtons.R'
     'cbpManager-pkg.R'
     'functions.R' 
     'global.R'

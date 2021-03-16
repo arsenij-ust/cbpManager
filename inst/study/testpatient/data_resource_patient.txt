@@ -1,0 +1,4 @@
+PATIENT_ID	RESOURCE_ID	URL
+Testpatient	PATIENT_NOTES	http://url-to-patient-notes-patient1
+Testpatient	PATIENT_NOTES	http://url-to-patient-notes-patient2
+Testpatient	PATIENT_NOTES	http://url-to-patient-notes-patient3

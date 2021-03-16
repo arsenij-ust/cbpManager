@@ -23,6 +23,7 @@
 #' @importFrom DT renderDT styleEqual DTOutput datatable formatStyle renderDataTable
 #' @importFrom rintrojs introjs introjsUI
 #' @importFrom shinyBS popify bsButton
+#' @importFrom rapportools is.empty
 #' @importFrom basilisk BasiliskEnvironment basiliskStart basiliskRun basiliskStop
 #' @importFrom reticulate import source_python
 #' @importFrom shinycssloaders withSpinner
