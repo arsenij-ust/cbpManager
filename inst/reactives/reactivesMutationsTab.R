@@ -23,25 +23,36 @@ observeEvent(input$tour_mutation, {
 
 # upload file ---------------------------------------------------------------
 observeEvent(input$chooseMAF, {
-  uploaded_data <-
-    as.data.frame(vroom::vroom(input$chooseMAF$datapath, delim = "\t"))
-  requiredCols <-
-    c(
-      "Hugo_Symbol",
-      "Tumor_Sample_Barcode",
-      "Variant_Classification",
-      "HGVSp_Short"
-    )
-  if (any(!requiredCols %in% colnames(uploaded_data))) {
+  if(!grepl("\\.[txt|tsv|maf|MAF|csv]", input$chooseMAF$name)){
+    print(input$chooseMAF$name)
     showNotification(
-      "One or more of the required columns are missing.",
+      "The file format is not supported. 
+      File should be '.txt', '.tsv', '.maf', '.MAF', or '.csv'.",
       type = "error",
-      duration = 10
+      duration = NULL
     )
   } else {
-    loadedData$data_mutations_extended <-
-      dplyr::bind_rows(uploaded_data, loadedData$data_mutations_extended)
+    uploaded_data <-
+      as.data.frame(vroom::vroom(input$chooseMAF$datapath, delim = "\t"))
+    requiredCols <-
+      c(
+        "Hugo_Symbol",
+        "Tumor_Sample_Barcode",
+        "Variant_Classification",
+        "HGVSp_Short"
+      )
+    if (any(!requiredCols %in% colnames(uploaded_data))) {
+      showNotification(
+        "One or more of the required columns are missing.",
+        type = "error",
+        duration = NULL
+      )
+    } else {
+      loadedData$data_mutations_extended <-
+        dplyr::bind_rows(uploaded_data, loadedData$data_mutations_extended)
+    }
   }
+  
 })
 
 # show table ---------------------------------------------------------------
