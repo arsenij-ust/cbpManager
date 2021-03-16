@@ -2,7 +2,7 @@
 output$resourceDataImg <- renderImage({
   return(
     list(
-      src = system.file("www", "resource_data.PNG", package = "cbpManager"),
+      src = system.file("apphelp", "resource_data.PNG", package = "cbpManager"),
       contentType = "image/png",
       alt = "timeline-example",
       width = "auto"
