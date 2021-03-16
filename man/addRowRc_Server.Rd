@@ -29,6 +29,8 @@ addRowRc_Server(
 \item{sample_ids}{reactive data.frame of existing patient IDs and sample IDs}
 
 \item{resource_ids}{reactive data.frame of data_resource_definition}
+
+\item{resource_type}{TODOTODO}
 }
 \value{
 reactive data.frame of modified source data

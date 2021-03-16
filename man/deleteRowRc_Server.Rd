@@ -26,6 +26,14 @@ deleteRowRc_Server(
 \item{data}{source data as data.frame}
 
 \item{selected_row}{Index of the selected row from the table}
+
+\item{mode}{TODOTODO}
+
+\item{sample_data}{TODOTODO}
+
+\item{patient_data}{TODOTODO}
+
+\item{study_data}{TODOTODO}
 }
 \value{
 reactive data.frame of modified source data

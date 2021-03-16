@@ -32,6 +32,8 @@ editRowRc_Server(
 \item{resource_ids}{reactive data.frame of data_resource_definition}
 
 \item{selected_row}{index of the selected row}
+
+\item{resource_type}{TODOTODO}
 }
 \value{
 reactive data.frame of modified source data

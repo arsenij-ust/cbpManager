@@ -3,6 +3,8 @@
 #'
 #' @param values list of input values
 #' @param resourceDf data.frame of data_resource_definition
+#' @param mode TODOTODO
+#'
 #' @return boolean
 validateResourceDefinition <- function(values, resourceDf, mode="add") {
   if (rapportools::is.empty(values[["RESOURCE_ID"]])) {
@@ -149,6 +151,8 @@ addRowRc_UI <- function(id, label = "Add") {
 #' @param patient_ids reactive vector of existing patient IDs
 #' @param sample_ids reactive data.frame of existing patient IDs and sample IDs
 #' @param resource_ids reactive data.frame of data_resource_definition
+#' @param resource_type TODOTODO
+#'
 #' @return reactive data.frame of modified source data
 addRowRc_Server <-
   function(input,
@@ -332,6 +336,8 @@ editRowRc_UI <- function(id, label = "Edit") {
 #' @param sample_ids reactive data.frame of existing patient IDs and sample IDs
 #' @param resource_ids reactive data.frame of data_resource_definition
 #' @param selected_row index of the selected row
+#' @param resource_type TODOTODO
+#'
 #' @return reactive data.frame of modified source data
 editRowRc_Server <-
   function(input,
@@ -530,7 +536,12 @@ deleteRowRc_UI <- function(id, label = "Delete") {
 #' @param output Shiny output
 #' @param session Shiny session
 #' @param data source data as data.frame
+#' @param mode TODOTODO
+#' @param sample_data TODOTODO
+#' @param patient_data TODOTODO
+#' @param study_data TODOTODO
 #' @param selected_row Index of the selected row from the table
+#'
 #' @return reactive data.frame of modified source data
 deleteRowRc_Server <-
   function(input, output, session, data, selected_row, mode="default", sample_data=NULL, patient_data=NULL, study_data=NULL) {
@@ -608,6 +619,10 @@ saveResource_UI <- function(id, label = "Save") {
 #' @param session Shiny session
 #' @param data source data as data.frame
 #' @param study_id the current study ID
+#' @param data_filename TODOTODO
+#' @param meta_filename TODOTODO
+#' @param resource_type TODOTODO
+#'
 #' @return nothing to return
 saveResource_Server <-
   function(input,

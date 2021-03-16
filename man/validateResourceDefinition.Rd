@@ -10,6 +10,8 @@ validateResourceDefinition(values, resourceDf, mode = "add")
 \item{values}{list of input values}
 
 \item{resourceDf}{data.frame of data_resource_definition}
+
+\item{mode}{TODOTODO}
 }
 \value{
 boolean

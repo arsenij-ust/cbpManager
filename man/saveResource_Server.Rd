@@ -25,6 +25,12 @@ saveResource_Server(
 \item{data}{source data as data.frame}
 
 \item{study_id}{the current study ID}
+
+\item{data_filename}{TODOTODO}
+
+\item{meta_filename}{TODOTODO}
+
+\item{resource_type}{TODOTODO}
 }
 \value{
 nothing to return
