@@ -1,5 +1,12 @@
 # Triggers the validation by clicking the "Validate" button
 validation <- eventReactive(input$runValidation, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please select and load a study in the 'Study' tab.",
+      type = "error",
+      duration = NULL
+    )
+  }
   req(loadedData$studyID)
   validateStudy()
 })

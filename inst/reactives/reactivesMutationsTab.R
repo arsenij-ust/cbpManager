@@ -63,6 +63,13 @@ output$MAFdata <- DT::renderDT({
 
 # save data ---------------------------------------------------------------
 observeEvent(input$saveMAF, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please select and load a study in the 'Study' tab.",
+      type = "error",
+      duration = NULL
+    )
+  }
   req(loadedData$studyID, loadedData$data_mutations_extended, loadedData$data_mutations_filename)
   # if (!is.null(input$chooseMAF)) {
   # data_mutations_extended

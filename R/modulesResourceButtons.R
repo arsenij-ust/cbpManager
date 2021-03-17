@@ -666,6 +666,13 @@ saveResource_Server <-
            resource_type = c("SAMPLE", "DEFINITION", "PATIENT", "STUDY")) {
     resource_type <- match.arg(resource_type)
     observeEvent(input$SaveResource, {
+      if(is.null(study_id())){
+        showNotification(
+          "Please select and load a study in the 'Study' tab.",
+          type = "error",
+          duration = NULL
+        )
+      }
       req(data(), study_id())
       ns <- session$ns
       resource_data <- data()

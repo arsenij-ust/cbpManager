@@ -684,6 +684,13 @@ saveTimeline_UI <- function(id, label = "Save") {
 saveTimeline_Server <-
   function(input, output, session, data, study_id) {
     observeEvent(input$SaveTimeline, {
+      if(is.null(study_id())){
+        showNotification(
+          "Please select and load a study in the 'Study' tab.",
+          type = "error",
+          duration = NULL
+        )
+      }
       req(study_id(), data())
       ns <- session$ns
       timeline_id <- tolower(gsub("-", "", session$ns("")))

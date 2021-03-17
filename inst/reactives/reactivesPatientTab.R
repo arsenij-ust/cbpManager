@@ -760,6 +760,13 @@ observeEvent(input$ModalbuttonDeleteColPatient, {
 observeEvent(input$SaveDataPatient,
   {
     # data_clinical_patient
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please select and load a study in the 'Study' tab.",
+        type = "error",
+        duration = NULL
+      )
+    }
     req(loadedData$studyID, loadedData$data_clinical_patient)
     df <- convertDataFrame(loadedData$data_clinical_patient)
 

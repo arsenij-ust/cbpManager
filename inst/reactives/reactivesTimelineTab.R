@@ -202,6 +202,13 @@ observeEvent(input$ModalbuttonDeleteDate, {
 
 # safe dates of first diagnosis
 observeEvent(input$datesSave, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please select and load a study in the 'Study' tab.",
+      type = "error",
+      duration = NULL
+    )
+  }
   req(loadedData$studyID, loadedData$dates_first_diagnosis)
   write.table(
     loadedData$dates_first_diagnosis,
@@ -864,7 +871,14 @@ observeEvent(input$ct_ModalbuttonEdit, {
 
 # save custom timeline table ---------------------------------------------------------------
 observeEvent(input$SaveTimeline_ct, {
-  req(customTimelines$selectedTrack)
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please select and load a study in the 'Study' tab.",
+      type = "error",
+      duration = NULL
+    )
+  }
+  req(customTimelines$selectedTrack, loadedData$studyID)
   timeline_id <- customTimelines$timelines[customTimelines$timelines$name == customTimelines$selectedTrack, ]$shortName
   data <- loadedData[[customTimelines$selectedTrack]]
   data_timeline <- data

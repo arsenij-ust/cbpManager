@@ -475,6 +475,13 @@ observeEvent(input$ModalbuttonDeleteColSample, {
 # save sample table ---------------------------------------------------------------
 observeEvent(input$SaveDataSample,
   {
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please select and load a study in the 'Study' tab.",
+        type = "error",
+        duration = NULL
+      )
+    }
     req(loadedData$studyID, loadedData$data_clinical_sample)
     # data_clinical_sample
     df <- convertDataFrame(loadedData$data_clinical_sample)
