@@ -179,7 +179,7 @@ observeEvent(input$ModalbuttonAddPatient, {
       loadedData$data_clinical_patient <-
       rbind(loadedData$data_clinical_patient, addPatientValues[colnames(loadedData$data_clinical_patient)])
     } else {
-      print(
+      message(
         "Number of input values does not match with number of columns. 
         Please contact the support."
       )
@@ -197,7 +197,7 @@ observeEvent(input$ModalbuttonAddPatient, {
       loadedData$data_clinical_patient <-
       rbind(loadedData$data_clinical_patient, addPatientValues[colnames(loadedData$data_clinical_patient)])
     } else {
-      print(
+      message(
         "Number of input values does not match with number of columns. 
         Please contact the support."
       )
