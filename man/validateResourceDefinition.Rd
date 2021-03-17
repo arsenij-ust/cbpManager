@@ -7,9 +7,11 @@
 validateResourceDefinition(values, resourceDf, mode = "add")
 }
 \arguments{
-\item{values}{list of input values}
+\item{values}{List of input values}
 
 \item{resourceDf}{data.frame of data_resource_definition}
+
+\item{mode}{The mode of the function ('add' or 'edit')}
 }
 \value{
 boolean

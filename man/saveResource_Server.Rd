@@ -22,9 +22,16 @@ saveResource_Server(
 
 \item{session}{Shiny session}
 
-\item{data}{source data as data.frame}
+\item{data}{Source data as data.frame}
 
-\item{study_id}{the current study ID}
+\item{study_id}{The current study ID}
+
+\item{data_filename}{File name of the data file}
+
+\item{meta_filename}{file name of the meta file}
+
+\item{resource_type}{The type of the resource.
+Can be "definition", "sample", "patient", "study"}
 }
 \value{
 nothing to return

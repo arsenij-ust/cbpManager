@@ -7,9 +7,9 @@
 editRowRc_UI(id, label = "Edit")
 }
 \arguments{
-\item{id}{module id}
+\item{id}{Module id}
 
-\item{label}{label of the button}
+\item{label}{Label of the button}
 }
 \value{
 UI module
