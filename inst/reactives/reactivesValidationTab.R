@@ -40,13 +40,13 @@ validateStudy <- function() {
 output$validateUI <- renderUI({
   exitCode <- validation()
   if (exitCode == 0) {
-    print("Validation of study succeeded.")
+    message("Validation of study succeeded.")
   } else if (exitCode == 1) {
-    print("Validation of study failed.")
+    message("Validation of study failed.")
   } else if (exitCode == 2) {
-    print("Validation of study not performed as problems occurred.")
+    message("Validation of study not performed as problems occurred.")
   } else if (exitCode == 3) {
-    print("Validation of study succeeded with warnings.")
+    message("Validation of study succeeded with warnings.")
   } else if (exitCode == 4) {
     warning("Some problems occured during the installation of the conda environment.
 One or more of the necessary packages were not installed.
