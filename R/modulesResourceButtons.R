@@ -647,11 +647,12 @@ saveResource_UI <- function(id, label = "Save") {
 #' @param input Shiny input
 #' @param output Shiny output
 #' @param session Shiny session
-#' @param data source data as data.frame
-#' @param study_id the current study ID
-#' @param data_filename TODOTODO
-#' @param meta_filename TODOTODO
-#' @param resource_type TODOTODO
+#' @param data Source data as data.frame
+#' @param study_id The current study ID
+#' @param data_filename File name of the data file
+#' @param meta_filename file name of the meta file
+#' @param resource_type The type of the resource.
+#' Can be "definition", "sample", "patient", "study"
 #'
 #' @return nothing to return
 saveResource_Server <-
