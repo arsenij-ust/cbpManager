@@ -23,17 +23,17 @@ deleteRowRc_Server(
 
 \item{session}{Shiny session}
 
-\item{data}{source data as data.frame}
+\item{data}{Source data as data.frame}
 
 \item{selected_row}{Index of the selected row from the table}
 
-\item{mode}{TODOTODO}
+\item{mode}{If 'recursive' the resources bind to the resource definition will be deleted.}
 
-\item{sample_data}{TODOTODO}
+\item{sample_data}{Data of the resource from type 'sample'}
 
-\item{patient_data}{TODOTODO}
+\item{patient_data}{Data of the resource from type 'patient'}
 
-\item{study_data}{TODOTODO}
+\item{study_data}{Data of the resource from type 'study'}
 }
 \value{
 reactive data.frame of modified source data

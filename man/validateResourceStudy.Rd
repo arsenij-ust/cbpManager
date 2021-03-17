@@ -7,7 +7,7 @@
 validateResourceStudy(values)
 }
 \arguments{
-\item{values}{list of input values}
+\item{values}{List of input values}
 }
 \value{
 boolean

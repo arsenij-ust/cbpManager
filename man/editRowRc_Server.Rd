@@ -23,17 +23,18 @@ editRowRc_Server(
 
 \item{session}{Shiny session}
 
-\item{data}{source data as data.frame}
+\item{data}{Source data as data.frame}
 
-\item{patient_ids}{reactive vector of existing patient IDs}
+\item{patient_ids}{Reactive vector of existing patient IDs}
 
-\item{sample_ids}{reactive data.frame of existing patient IDs and sample IDs}
+\item{sample_ids}{Reactive data.frame of existing patient IDs and sample IDs}
 
-\item{resource_ids}{reactive data.frame of data_resource_definition}
+\item{resource_ids}{Reactive data.frame of data_resource_definition}
 
-\item{selected_row}{index of the selected row}
+\item{selected_row}{Index of the selected row}
 
-\item{resource_type}{TODOTODO}
+\item{resource_type}{The type of the resource.
+Can be "definition", "sample", "patient", "study"}
 }
 \value{
 reactive data.frame of modified source data
