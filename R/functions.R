@@ -491,3 +491,178 @@ Please try reinstalling cbpManager and basilisk or contact the support at https:
     }
   })
 }
+
+
+
+load_study <- function(studyID){
+  
+  # initialize reactive object
+  loadedData$studyID <- NULL
+  loadedData$data_clinical_patient <- data.frame(
+    PATIENT_ID = c("Patient Identifier", "Patient identifier", "STRING", "e.g. JohnDoe"),
+    ATTRIBUTE = c("Name of attr.", "Longer name of attr.", "STRING", "Value of attr."),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_clinical_sample <- data.frame(
+    PATIENT_ID = c("Patient Identifier", "Patient identifier", "STRING", "e.g. JohnDoe"),
+    SAMPLE_ID = c("Sample Identifier", "Sample identifier", "STRING", "e.g. JohnDoe_1"),
+    ATTRIBUTE = c("Name of attr.", "Longer name of attr.", "STRING", "Value of attr."),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_mutations_filename <- "data_mutations_extended.txt"
+  loadedData$data_mutations_extended <- data.frame(
+    Hugo_Symbol = character(),
+    Tumor_Sample_Barcode = character(),
+    Variant_Classification = character(),
+    HGVSp_Short = character()
+  )
+  loadedData$data_timeline_treatment <- data.frame(
+    PATIENT_ID = character(),
+    START_DATE = numeric(),
+    STOP_DATE = numeric(),
+    EVENT_TYPE = factor(levels = c("TREATMENT")),
+    TREATMENT_TYPE = factor(levels = c("Medical Therapy", "Radiation Therapy")),
+    SUBTYPE = character(),
+    AGENT = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_timeline_status <- data.frame(
+    PATIENT_ID = character(),
+    START_DATE = numeric(),
+    STOP_DATE = numeric(),
+    EVENT_TYPE = factor(levels = c("STATUS")),
+    STATUS = character(),
+    SOURCE = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_timeline_surgery <- data.frame(
+    PATIENT_ID = character(),
+    START_DATE = numeric(),
+    STOP_DATE = numeric(),
+    EVENT_TYPE = factor(levels = c("SURGERY")),
+    EVENT_TYPE_DETAILED = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$dates_first_diagnosis <-
+    data.frame(PATIENT_ID = character(), DATE = character())
+  
+  
+  customTimelines$timelines <- data.frame(
+    name = character(),
+    shortName = character(),
+    mode = factor(levels = c("timeline", "timepoint"))
+  )
+  
+  loadedData$data_resource_definition <- data.frame(
+    RESOURCE_ID = character(),
+    DISPLAY_NAME = character(),
+    RESOURCE_TYPE = factor(levels = c("SAMPLE", "PATIENT", "STUDY")),
+    DESCRIPTION = character(),
+    OPEN_BY_DEFAULT = logical(),
+    PRIORITY = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_resource_study <- data.frame(
+    RESOURCE_ID = character(),
+    URL = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_resource_patient <- data.frame(
+    PATIENT_ID = character(),
+    RESOURCE_ID = character(),
+    URL = character(),
+    stringsAsFactors = FALSE
+  )
+  loadedData$data_resource_sample <- data.frame(
+    PATIENT_ID = character(),
+    SAMPLE_ID = character(),
+    RESOURCE_ID = character(),
+    URL = character(),
+    stringsAsFactors = FALSE
+  )
+  
+  # list study files
+  #all_files <- list.files(file.path(study_dir, studyID))
+  all_files <- list.files(file.path("inst", "study", "testpatient"))
+  #all_files <- c("meta.test.txt", "test_metal.txt", "meta_test.txt", "test.meta.txt", "test_meta.txt", "metal_test.txt", "metastudy.txt")
+  
+  # extract meta files
+  all_filenames <- tools::file_path_sans_ext(all_files) # remove extensions
+  meta_files <- all_files[grep("^meta(\\.|_)|(\\.|_)meta$", all_filenames)]
+  
+  lapply(meta_files, function(meta_file) {
+    
+    if(meta_file == "meta_study.txt"){
+      loadedData$meta_study <-
+        read.table(
+          file.path("inst", "study", "testpatient", meta_file),
+          sep = ":",
+          strip.white = TRUE
+        )
+    } else {
+      meta_data <-
+      read.table(
+        file.path("inst", "study", "testpatient", meta_file),
+        sep = ":",
+        col.names = c("key", "value"),
+        strip.white = TRUE
+      )
+      rownames(meta_data) <- meta_data$key
+      #print(meta_data)
+      print(meta_data["datatype", "value"])
+      
+      if(meta_data["datatype", "value"] == "PATIENT_ATTRIBUTES") {
+        # set meta filename
+        loadedData$data_clinical_patient_metafile <- meta_file
+        # set data filename
+        loadedData$data_clinical_patient_datafile <-
+          meta_data["data_filename", "value"]
+        # set data
+        loadedData$data_clinical_patient <- read.table(
+          meta_data["data_filename", "value"],
+          sep = "\t",
+          colClasses = "character",
+          comment.char = ""
+        ) %>%
+          cBioPortalToDataFrame()
+      } else if(meta_data["datatype", "value"] == "SAMPLE_ATTRIBUTES") {
+        # save meta filename
+        loadedData$data_clinical_sample_metafile <- meta_file
+        # save data filename
+        loadedData$data_clinical_sample_datafile <-
+          meta_data["data_filename", "value"]
+        # save data
+        loadedData$data_clinical_sample <- read.table(
+          meta_data["data_filename", "value"],
+          sep = "\t",
+          colClasses = "character",
+          comment.char = ""
+        ) %>%
+          cBioPortalToDataFrame()
+      } else if(meta_data["datatype", "value"] == "MAF") {
+        # save meta filename
+        loadedData$data_mutations_extended_metafile <- meta_file
+        # save data filename
+        loadedData$data_mutations_extended_datafile <-
+          meta_data["data_filename", "value"]
+        # save data
+        loadedData$data_mutations_extended <- read.table(
+          meta_data["data_filename", "value"],
+          sep = "\t",
+          colClasses = "character",
+          comment.char = ""
+        ) %>%
+          cBioPortalToDataFrame()
+      }
+    }
+  })
+  
+}
+
+
+
+
+
+
+
+
