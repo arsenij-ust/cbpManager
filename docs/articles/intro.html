@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cbpManager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@
                   <a class="author_email" href="mailto:#"></a><a href="mailto:arsenij.ustjanzew@gmail.com" class="email">arsenij.ustjanzew@gmail.com</a>
       
                   
-            <h4 class="date">17 März 2021</h4>
+            <h4 class="date">19 April 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/arsenij-ust/cbpManager/blob/master/vignettes/intro.rmd"><code>vignettes/intro.rmd</code></a></small>
       <div class="hidden name"><code>intro.rmd</code></div>
@@ -98,7 +98,7 @@
 
     
     
-<p><br><strong>Authors</strong>: Arsenij Ustjanzew [aut, cre, cph] (<a href="https://orcid.org/0000-0002-1014-4521" class="uri">https://orcid.org/0000-0002-1014-4521</a>), Federico Marini [aut] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 0.99.0<br><strong>Compiled date</strong>: 2021-03-17<br><strong>License</strong>: AGPL-3 + file LICENSE<br></p>
+<p><br><strong>Authors</strong>: Arsenij Ustjanzew [aut, cre, cph] (<a href="https://orcid.org/0000-0002-1014-4521" class="uri">https://orcid.org/0000-0002-1014-4521</a>), Federico Marini [aut] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 0.99.1<br><strong>Compiled date</strong>: 2021-04-19<br><strong>License</strong>: AGPL-3 + file LICENSE<br></p>
 <p><img src="images/logo.png" align="center" width="150px"></p>
 <div id="introduction-and-scope" class="section level1">
 <h1 class="hasAnchor">
@@ -173,73 +173,61 @@
 <h3 class="hasAnchor">
 <a href="#editing-studies" class="anchor"></a>Editing studies:</h3>
 <p>On the “<strong>Study Metadata</strong>” page, new studies can be created and existing studies can be loaded.</p>
-<p align="center">
-<img src="images/1.PNG" style="width:1000px;"></p>
+<p><img src="images/1.PNG" width="100%"></p>
 <div id="creating-a-new-study" class="section level4">
 <h4 class="hasAnchor">
 <a href="#creating-a-new-study" class="anchor"></a>Creating a new study:</h4>
 <p>To create a new study, one must first create metadata of the study. This is done in the right box “Add new study”.</p>
 <p>After clicking the <code>Add study</code> button, the study will be created in a new folder (under the defined study folder the file <code>meta_study.txt</code> will be created). This folder is named after the input value of the <code>Add ID of cancer study</code> field. Metadata of a study can be changed by specifying the ID of an existing study.</p>
 <p>The “cancer type” can be entered either in the drop-down menu <code>Select the cancer type</code> or alternatively in the expanded table below the metadata fields:</p>
-<p align="center">
-<img src="images/3.PNG" style="width:1000px;"></p>
+<p><img src="images/3.PNG" width="100%"></p>
 </div>
 <div id="loading-an-existing-study" class="section level4">
 <h4 class="hasAnchor">
 <a href="#loading-an-existing-study" class="anchor"></a>Loading an existing study:</h4>
 <p>In order to further process data from a study, this study must be loaded. For this purpose, the respective study must be selected in the drop-down menu <code>Select ID of cancer study</code> on the left side of the page “Study Metadata”. After pressing the <code>Load study</code> button, loading is confirmed by the appearance of the metadata table:</p>
-<p align="center">
-<img src="images/4.PNG" style="width:500px;"></p>
+<p><img src="images/4.PNG" width="60%"></p>
 </div>
 </div>
 <div id="editing-patient-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#editing-patient-data" class="anchor"></a>Editing patient data:</h3>
 <p>The “Patient” page is used to edit clinical patient data. In the upper area, it has a “Description” box containing important information on filling in the patient data as well as instructions for handling, and a “Sample from cBioPortal” box with an exemplary representation of the patient data in cBioPortal (both boxes are collapsed in the following image for better clarity). The “Patient manager” area contains several function buttons and a central table with the patient information. The first three light blue lines must contain a short, long name and the data type of a column. Each additional line defines a patient.</p>
-<p align="center">
-<img src="images/5.PNG" style="width:1000px;"></p>
+<p><img src="images/5.PNG" width="100%"></p>
 <div id="add-new-attributes-columns" class="section level4">
 <h4 class="hasAnchor">
 <a href="#add-new-attributes-columns" class="anchor"></a>Add new attributes (columns):</h4>
 <p>By clicking the <code>Add column(s)</code> button, new attributes can be added to the table. You can choose from predefined attributes or create a user-defined attribute:</p>
-<p align="center">
-<img src="images/6.PNG" style="width:500px;"></p>
-<p align="center">
-<img src="images/6-2.PNG" style="width:500px;"></p>
+<p><img src="images/6.PNG" width="60%"></p>
+<p><img src="images/6-2.PNG" width="60%"></p>
 <p>The table will be extended by the selected columns:</p>
-<p align="center">
-<img src="images/7.PNG" style="width:1000px;"></p>
+<p><img src="images/7.PNG" width="100%"></p>
 </div>
 <div id="create-new-patients" class="section level4">
 <h4 class="hasAnchor">
 <a href="#create-new-patients" class="anchor"></a>Create new patients:</h4>
 <p>The <code>Add patient</code> button opens a dialog box containing one entry field per existing column. For predefined attributes, the input fields can be specific, e.g. drop-down menus, numeric, date input, etc. The field <code>PATIENT_ID</code> is mandatory.</p>
-<p align="center">
-<img src="images/8.PNG" style="width:500px;"></p>
+<p><img src="images/8.PNG" width="60%"></p>
 <p>After filling the fields and confirming with the <code>Add</code> button of the dialog window, the patient is added to the table:</p>
-<p align="center">
-<img src="images/10.PNG" style="width:1000px;"></p>
+<p><img src="images/10.PNG" width="100%"></p>
 </div>
 <div id="deleting-attributes" class="section level4">
 <h4 class="hasAnchor">
 <a href="#deleting-attributes" class="anchor"></a>Deleting attributes:</h4>
 <p>The <code>Delete column(s)</code> button opens a dialog window where you can select from already existing attributes of the table those that should be deleted. The deletion of the <code>PATIENT_ID</code> column is not allowed.</p>
-<p align="center">
-<img src="images/12.PNG" style="width:500px;"></p>
+<p><img src="images/12.PNG" width="60%"></p>
 </div>
 <div id="import-of-patients" class="section level4">
 <h4 class="hasAnchor">
 <a href="#import-of-patients" class="anchor"></a>Import of patients:</h4>
 <p>It is possible to import patient data from another study (<code>Import patient</code> button). In the dialog box the study has to be selected first and then the patient ID. During the import not only patient data are imported, but also sample data, mutation data and timeline entries of the respective patient.</p>
-<p align="center">
-<img src="images/9.PNG" style="width:500px;"></p>
+<p><img src="images/9.PNG" width="60%"></p>
 </div>
 <div id="editing-patient-data-1" class="section level4">
 <h4 class="hasAnchor">
 <a href="#editing-patient-data-1" class="anchor"></a>Editing patient data:</h4>
 <p>To edit a patient who has already been created, the patient’s row in the table must first be clicked. Then the respective row can be edited with the button <code>Edit patient</code>. Similarly, you can subsequently edit the short/long attribute name and the data type of the columns.</p>
-<p align="center">
-<img src="images/11.PNG" style="width:500px;"></p>
+<p><img src="images/11.PNG" width="60%"></p>
 </div>
 <div id="deleting-a-patient" class="section level4">
 <h4 class="hasAnchor">
@@ -258,29 +246,24 @@
 <a href="#editing-sample-data" class="anchor"></a>Editing sample data:</h3>
 <p>The table of sampled data on the “Sample” page is similar to the table of patient data. However, here the columns <code>PATIENT_ID</code> and <code>SAMPLE_ID</code> are mandatory. The operation of editing the table is also analogous to that of patients.</p>
 <p><strong>Warning:</strong> To create a sample (row) and assign it to a patient, patients must be created first.</p>
-<p align="center">
-<img src="images/13.PNG" style="width:1000px;"></p>
+<p><img src="images/13.PNG" width="100%"></p>
 </div>
 <div id="mutation-data-maf" class="section level3">
 <h3 class="hasAnchor">
 <a href="#mutation-data-maf" class="anchor"></a>Mutation data (MAF):</h3>
 <p>The “Mutations” page offers the user the possibility to upload MAF files. If mutation data is already available, the content of the MAF file will be concatinated to the already existing data, taking into account the columns. The MAF file must meet certain requirements, i.e. contain specific columns (see <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5">link</a>). Similarly, the changes must be finalized by saving.</p>
-<p align="center">
-<img src="images/13.PNG" style="width:1000px;"></p>
+<p><img src="images/14.PNG" width="100%"></p>
 </div>
 <div id="editing-timelines" class="section level3">
 <h3 class="hasAnchor">
 <a href="#editing-timelines" class="anchor"></a>Editing timelines:</h3>
 <p>The “Timelines” page offers the possibility to edit the timeline tracks “Treatment”, “Surgery” and “Status”. Furthermore, it is possible to create and edit user-defined timeline tracks.</p>
 <p>Since cBioPortal uses the number of days since the initial diagnosis instead of a specific date for the start or end of a timeline event, one would have to specify the initial diagnosis date for each event as well. This is repetitive and time-consuming in total, which is why we decided to create a patient first diagnosis date table as an intermediate step. So before you can add timeline events to a timeline track, you have to assign a diagnosis date to the patient. This is done in the box <code>Add date of the first diagnosis to a Patient ID</code>. In the timeline tracks you only have to select the patient ID to which this event belongs and the cbpManager calculates the number of days until the given date automatically.</p>
-<p align="center">
-<img src="images/15.PNG" style="width:1000px;"></p>
+<p><img src="images/15.PNG" width="100%"></p>
 <p>The three timeline tracks “Treatment”, “Surgery” and “Status” are shown in the tabs:</p>
-<p align="center">
-<img src="images/16.PNG" style="width:1000px;"></p>
+<p><img src="images/16.PNG" width="100%"></p>
 <p>To create custom timeline tracks, you must first specify the name of the timeline track and define whether the event has a time span (<code>timeline</code>) or is a point event (<code>timepoint</code>). This is relevant because timeline events have a start and stop date and timepoint events only need to have a start date. To edit a timeline track, you should select it from the drop-down menu and click <code>Edit track</code> to confirm the selection. The data of the timeline track will be displayed in the table below. Again, each change must be saved with <code>Save</code> to make it persistent.</p>
-<p align="center">
-<img src="images/17.PNG" style="width:1000px;"></p>
+<p><img src="images/17.PNG" width="100%"></p>
 </div>
 <div id="manage-resources-data" class="section level3">
 <h3 class="hasAnchor">
@@ -293,16 +276,14 @@
 <li>RESOURCE_TYPE: resource type for resources. It describes to which part of the study this resource is to be assigned and must be ‘SAMPLE’, ‘PATIENT’ or ‘STUDY’.</li>
 </ul>
 <p>After we defined a resource, we can add a URL link to the study, a specific patient, or a specific sample. E.g. we defined a resource with the RESOURCE_ID ‘test_resource’ and the RESOURCE_TYPE ‘PATIENT’, then we go the the ‘Patients’ tabpanel in this area, click on the ‘Add’ button, select an existing PATIENT_ID, select our recource with the ID ‘test_resource’, and add a URL.</p>
-<p align="center">
-<img src="images/19.PNG" style="width:1000px;"></p>
+<p><img src="images/19.PNG" width="100%"></p>
 </div>
 <div id="validating-created-study" class="section level3">
 <h3 class="hasAnchor">
 <a href="#validating-created-study" class="anchor"></a>Validating created study</h3>
 <p>The tab “Validation” allows the user quickly validate the created or modified study files. The validation checks whether the study is suitable for the upload in cBioPortal. In background the cBioPortal <code>validateData.py</code> script is used.</p>
 <p>The report generation is triggered by the <code>Validate</code> button. After, the report can be downloaded.</p>
-<p align="center">
-<img src="images/18.PNG" style="width:1000px;"></p>
+<p><img src="images/18.PNG" width="100%"></p>
 </div>
 </div>
 <div id="upload-to-cbioportal-for-cancer-genomics-" class="section level2">
@@ -318,7 +299,7 @@
 <code class="sourceCode R"><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.0.4 (2021-02-15)</span>
 <span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span>
-<span class="co">#&gt; Running under: Windows 10 x64 (build 18363)</span>
+<span class="co">#&gt; Running under: Windows 10 x64 (build 19042)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
 <span class="co">#&gt; </span>
@@ -336,16 +317,16 @@
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] knitr_1.31          magrittr_2.0.1      grDevices_4.0.4    </span>
 <span class="co">#&gt;  [4] R6_2.5.0            ragg_1.1.1          rlang_0.4.10       </span>
-<span class="co">#&gt;  [7] fastmap_1.1.0       stringr_1.4.0       tools_4.0.4        </span>
-<span class="co">#&gt; [10] utils_4.0.4         xfun_0.21           jquerylib_0.1.3    </span>
-<span class="co">#&gt; [13] htmltools_0.5.1.1   stats_4.0.4         systemfonts_1.0.1  </span>
-<span class="co">#&gt; [16] yaml_2.2.1          assertthat_0.2.1    digest_0.6.27      </span>
-<span class="co">#&gt; [19] rprojroot_2.0.2     pkgdown_1.6.1       crayon_1.4.1       </span>
-<span class="co">#&gt; [22] textshaping_0.3.1   BiocManager_1.30.10 sass_0.3.1         </span>
+<span class="co">#&gt;  [7] fastmap_1.1.0       stringr_1.4.0       highr_0.8          </span>
+<span class="co">#&gt; [10] tools_4.0.4         utils_4.0.4         xfun_0.21          </span>
+<span class="co">#&gt; [13] jquerylib_0.1.3     htmltools_0.5.1.1   stats_4.0.4        </span>
+<span class="co">#&gt; [16] systemfonts_1.0.1   yaml_2.2.1          rprojroot_2.0.2    </span>
+<span class="co">#&gt; [19] digest_0.6.27       pkgdown_1.6.1       crayon_1.4.1       </span>
+<span class="co">#&gt; [22] textshaping_0.3.2   BiocManager_1.30.10 sass_0.3.1         </span>
 <span class="co">#&gt; [25] graphics_4.0.4      fs_1.5.0            memoise_2.0.0      </span>
 <span class="co">#&gt; [28] cachem_1.0.4        evaluate_0.14       rmarkdown_2.7      </span>
 <span class="co">#&gt; [31] stringi_1.5.3       compiler_4.0.4      bslib_0.2.4        </span>
-<span class="co">#&gt; [34] methods_4.0.4       desc_1.2.0          jsonlite_1.7.2</span></code></pre></div>
+<span class="co">#&gt; [34] methods_4.0.4       desc_1.3.0          jsonlite_1.7.2</span></code></pre></div>
 </div>
   </div>
 

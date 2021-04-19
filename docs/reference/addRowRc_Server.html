@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>UI elements of module for removing a row — deleteRow_UI • cbpManager</title>
+<title>Server logic of Resource tab module for adding a row — addRowRc_Server • cbpManager</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="UI elements of module for removing a row — deleteRow_UI" />
-<meta property="og:description" content="UI elements of module for removing a row" />
+<meta property="og:title" content="Server logic of Resource tab module for adding a row — addRowRc_Server" />
+<meta property="og:description" content="Server logic of Resource tab module for adding a row" />
 
 
 
@@ -123,33 +123,67 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>UI elements of module for removing a row</h1>
-    <small class="dont-index">Source: <a href='https://github.com/arsenij-ust/cbpManager/blob/master/R/dynamicTable.R'><code>R/dynamicTable.R</code></a></small>
-    <div class="hidden name"><code>deleteRow_UI.Rd</code></div>
+    <h1>Server logic of Resource tab module for adding a row</h1>
+    <small class="dont-index">Source: <a href='https://github.com/arsenij-ust/cbpManager/blob/master/R/modulesResourceButtons.R'><code>R/modulesResourceButtons.R</code></a></small>
+    <div class="hidden name"><code>addRowRc_Server.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>UI elements of module for removing a row</p>
+    <p>Server logic of Resource tab module for adding a row</p>
     </div>
 
-    <pre class="usage"><span class='fu'>deleteRow_UI</span><span class='op'>(</span><span class='va'>id</span>, label <span class='op'>=</span> <span class='st'>"Delete"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>addRowRc_Server</span><span class='op'>(</span>
+  <span class='va'>input</span>,
+  <span class='va'>output</span>,
+  <span class='va'>session</span>,
+  <span class='va'>data</span>,
+  patient_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sample_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  resource_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  resource_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"definition"</span>, <span class='st'>"sample"</span>, <span class='st'>"patient"</span>, <span class='st'>"study"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>module id</p></td>
+      <th>input</th>
+      <td><p>Shiny input</p></td>
     </tr>
     <tr>
-      <th>label</th>
-      <td><p>label of the button</p></td>
+      <th>output</th>
+      <td><p>Shiny output</p></td>
+    </tr>
+    <tr>
+      <th>session</th>
+      <td><p>Shiny session</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>Source data as data.frame</p></td>
+    </tr>
+    <tr>
+      <th>patient_ids</th>
+      <td><p>Reactive vector of existing patient IDs</p></td>
+    </tr>
+    <tr>
+      <th>sample_ids</th>
+      <td><p>Reactive data.frame of existing patient IDs and sample IDs</p></td>
+    </tr>
+    <tr>
+      <th>resource_ids</th>
+      <td><p>Reactive data.frame of data_resource_definition</p></td>
+    </tr>
+    <tr>
+      <th>resource_type</th>
+      <td><p>The type of the resource.
+Can be "definition", "sample", "patient", "study"</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>UI module</p>
+    <p>reactive data.frame of modified source data</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
