@@ -17,3 +17,7 @@ data.frame
 \description{
 Add empty column to a data.frame, if column does not exist in the data.frame
 }
+\examples{
+cbpManager:::fncols(data.frame(a=c(1,2,3), b=c(4,5,6)), "new")
+
+}

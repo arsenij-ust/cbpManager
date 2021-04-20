@@ -95,7 +95,6 @@ shinyAppServer <- function(input, output, session) {
   # oncotree cancer types
   oncotree <<- jsonlite::fromJSON(system.file("extdata", "oncotree.json", package = "cbpManager"))
   oncotree$code <<- tolower(oncotree$code)
-  #unique(oncotree$tissue)
   tumor_tissue_site <<- unique(oncotree$tissue[which(!is.na(oncotree$tissue))])
   cancer_type <<- unique(oncotree$mainType[which(!is.na(oncotree$mainType))])
   oncotree_code <<- unique(oncotree$code[which(!is.na(oncotree$code))])

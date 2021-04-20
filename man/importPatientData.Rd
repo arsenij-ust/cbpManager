@@ -22,7 +22,7 @@ importPatientData(
 
 \item{patIDs}{PATIENT_IDs of patients that should be imported}
 
-\item{data}{Source data ,to be subsetted according to patIDs}
+\item{data}{Source data, to be subsetted according to patIDs}
 
 \item{associatedSampleIDs}{The sample IDs associated to the patIDs}
 }

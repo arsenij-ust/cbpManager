@@ -560,7 +560,6 @@ observeEvent(input$AddColumn_ct, {
   showModal(
     modalDialog(
       title = "Add new column",
-      # uiOutput(paste0("AddCol",id,"UI")),
       uiOutput("ct_AddCol_UI"),
       easyClose = FALSE,
       footer = tagList(
@@ -590,7 +589,7 @@ observeEvent(input$ct_ModalbuttonAddCol, {
     showNotification("Column already exists.", type = "error", duration = NULL)
   } else {
     ct_colname <- create_name(input$ct_colname)
-    data %>% dplyr::mutate(!!(ct_colname) := "") -> loadedData[[customTimelines$selectedTrack]]
+    loadedData[[customTimelines$selectedTrack]] <- data %>% dplyr::mutate(!!(ct_colname) := "")
     removeModal()
   }
 })
@@ -859,9 +858,7 @@ observeEvent(input$ct_ModalbuttonEdit, {
       editValues$START_DATE <- start
       editValues$STOP_DATE <- end
 
-      # data()[selected_row(),1] <- editValues[[1]]
       for (i in colnames(data)) {
-        # print(editValues[[i]])
         loadedData[[customTimelines$selectedTrack]][selected_row, i] <- editValues[i]
       }
       removeModal()

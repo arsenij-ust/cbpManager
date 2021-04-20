@@ -84,7 +84,7 @@ Arsenij Ustjanzew (arsenij.ustjanzew@uni-mainz.de)
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://gitlab.miracum.org/mainz/cbpmanager/-/issues) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/arsenij-ust/cbpManager/issues) or submit PRs.
 
 
 ## License

@@ -26,7 +26,6 @@ addColumn_Server <- function(input, output, session, data) {
     showModal(
       modalDialog(
         title = "Add new column",
-        # uiOutput(paste0("AddCol",id,"UI")),
         uiOutput(ns("AddCol")),
         easyClose = FALSE,
         footer = tagList(
@@ -66,7 +65,7 @@ addColumn_Server <- function(input, output, session, data) {
       )
     } else {
       colname <- create_name(input$colname)
-      data() %>% dplyr::mutate(!!(colname) := "") -> params$df
+      params$df <- data() %>% dplyr::mutate(!!(colname) := "")
       removeModal()
     }
   })
@@ -129,7 +128,6 @@ deleteColumn_Server <-
     observeEvent(input$ModalbuttonDeleteCol, {
       params$df <-
         data()[, !(names(data()) %in% input$DelColname), drop = FALSE]
-      # data() <- data[,!(names(data()) %in% input$DelColname), drop = FALSE]
       removeModal()
     })
 
@@ -411,7 +409,7 @@ addRow_Server <-
           params$df <-
            plyr::rbind.fill(data(), as.data.frame(addPatientValues))
 
-          removeModal()#
+          removeModal()
         }
       }
     })
@@ -638,10 +636,8 @@ editRow_Server <-
           editValues$START_DATE <- start
           editValues$STOP_DATE <- end
 
-          # data()[selected_row(),1] <- editValues[[1]]
           params$df <- data()
           for (i in colnames(params$df)) {
-            # print(editValues[[i]])
             params$df[selected_row(), i] <- editValues[i]
           }
           removeModal()
