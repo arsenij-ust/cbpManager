@@ -19,3 +19,7 @@ Nothing to return
 \description{
 Write a line to a logfile containing the date, time, username (from Shinyproxy), and the name of the modified file.
 }
+\examples{
+cbpManager:::writeLogfile(tempdir(), "data_clinical_patient.txt")
+
+}

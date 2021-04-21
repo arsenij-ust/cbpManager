@@ -15,3 +15,12 @@ Data.frame formated for the cBioPortal file format
 \description{
 Convert the data.frame to the appropriate file format for cBioPortal
 }
+\examples{
+cbpManager:::convertDataFrame(
+    data.frame(
+        ATTRIBUTE1=c("attr_1", "attribute 1", "STRING", "value_a1"), 
+        ATTRIBUTE2=c("attr_2", "attribute 2", "STRING", "value_b1")
+    )
+)
+
+}

@@ -19,3 +19,24 @@ Returns a number indicating the warning
 \description{
 Check the input of dates
 }
+\examples{
+cbpManager:::check_input_dates(
+    diagnosisDate = "2020-01-01", 
+    startDate = "2020-02-01", 
+    endDate = "2020-03-01"
+) #returns 0
+cbpManager:::check_input_dates(
+    diagnosisDate = "2020-01-01", 
+    startDate = "2019-02-01"
+) #returns 2
+cbpManager:::check_input_dates(
+    diagnosisDate = "2020-01-01", 
+    endDate = "2019-02-01"
+) #returns 2
+cbpManager:::check_input_dates(
+    diagnosisDate = "2020-01-01", 
+    startDate = "2020-03-01", 
+    endDate = "2020-02-01"
+) #returns 1
+
+}

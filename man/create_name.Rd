@@ -17,3 +17,8 @@ A sanitized string.
 \description{
 This function takes a character string, replaces spaces by underscores and runs make.names.
 }
+\examples{
+cbpManager:::create_name("Study name 1") #returns "STUDY_NAME_1"
+cbpManager:::create_name("FANCY;name", toupper = FALSE) #returns "fancy.name"
+
+}

@@ -17,3 +17,9 @@ vector with Sample IDs
 \description{
 Get Sample IDs associated with Patient IDs from the data_clinical_sample.txt file
 }
+\examples{
+cbpManager:::getSampleIDs(
+    system.file("study/testpatient/data_clinical_sample.txt", package = "cbpManager"), 
+    patIDs = "Testpatient")
+
+}

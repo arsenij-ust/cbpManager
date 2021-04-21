@@ -17,3 +17,9 @@ A oncotree specific shiny UI-widget
 \description{
 Create shiny UI-widget for specific columns of oncotree entries
 }
+\examples{
+oncotree <- jsonlite::fromJSON(system.file("extdata", "oncotree.json", package = "cbpManager"))
+cancer_type <- unique(oncotree$mainType[which(!is.na(oncotree$mainType))])
+cbpManager:::generateOncotreeUIwidgets("CANCER_TYPE", "add")
+
+}

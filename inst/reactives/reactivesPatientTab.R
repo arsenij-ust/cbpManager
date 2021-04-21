@@ -299,8 +299,6 @@ observeEvent(input$EditPatient,
   {
     if (is.null(input$patientTable_rows_selected)) {
       showNotification("Please select a row", type = "warning", duration = NULL)
-      # } else if(input$patientTable_rows_selected == 1 | input$patientTable_rows_selected == 2){
-      #  showNotification("Please select a row with a patient", type="warning", duration = NULL)
     } else if (input$patientTable_rows_selected == 1) {
       showModal(modalDialog(
         title = "Edit short name of attribute",

@@ -32,3 +32,7 @@ A sanitized string.
 \description{
 Generate UI input widget
 }
+\examples{
+cbpManager:::generateUIwidgets(colname = "attribute", mode = "add", tab = "Patient")
+
+}

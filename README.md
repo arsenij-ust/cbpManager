@@ -12,7 +12,7 @@ The R package cbpManager provides an R Shiny application that facilitates the ge
 - Adding MAF files (internally these are concatenated to the data_mutations_extended.txt file)
 - Edit timeline tracks (surgery, status, treatment)
 - Creation and editing of user-defined timeline tracks
-→ The functionality of the application is extended on a regular basis (long-term goal is to cover most of the cBioPortals format specifications)
+→ The functionality of the application is extended on a regular basis (long-term goal is to cover most of the cBioPortal's format specifications)
 
 <img src="vignettes/images/start.png" align="right" width="100%" />
 
@@ -84,7 +84,7 @@ Arsenij Ustjanzew (arsenij.ustjanzew@uni-mainz.de)
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://gitlab.miracum.org/mainz/cbpmanager/-/issues) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/arsenij-ust/cbpManager/issues) or submit PRs.
 
 
 ## License

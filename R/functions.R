@@ -2,6 +2,14 @@
 #'
 #' @param df data.frame
 #' @return Data.frame formated for the cBioPortal file format
+#' @examples
+#' cbpManager:::convertDataFrame(
+#'     data.frame(
+#'         ATTRIBUTE1=c("attr_1", "attribute 1", "STRING", "value_a1"), 
+#'         ATTRIBUTE2=c("attr_2", "attribute 2", "STRING", "value_b1")
+#'     )
+#' )
+#' 
 convertDataFrame <- function(df) {
   df[df == ""] <- NA
   short_names <- df[1, ]
@@ -28,6 +36,10 @@ convertDataFrame <- function(df) {
 #' @param mydate date
 #' @param date.format string describig the date format
 #' @return boolean
+#' @examples
+#' cbpManager:::IsDate("2020-02-20")
+#' cbpManager:::IsDate("20.01.2020", date.format = "%d.%m.%Y")
+#' 
 IsDate <- function(mydate, date.format = "%Y-%m-%d") {
   tryCatch(!is.na(as.Date(mydate, date.format)),
     error = function(err) {
@@ -42,24 +54,46 @@ IsDate <- function(mydate, date.format = "%Y-%m-%d") {
 #' @param startDate start date of timeline event
 #' @param endDate end date of timeline event
 #' @return Returns a number indicating the warning
+#' @examples
+#' cbpManager:::check_input_dates(
+#'     diagnosisDate = "2020-01-01", 
+#'     startDate = "2020-02-01", 
+#'     endDate = "2020-03-01"
+#' ) #returns 0
+#' cbpManager:::check_input_dates(
+#'     diagnosisDate = "2020-01-01", 
+#'     startDate = "2019-02-01"
+#' ) #returns 2
+#' cbpManager:::check_input_dates(
+#'     diagnosisDate = "2020-01-01", 
+#'     endDate = "2019-02-01"
+#' ) #returns 2
+#' cbpManager:::check_input_dates(
+#'     diagnosisDate = "2020-01-01", 
+#'     startDate = "2020-03-01", 
+#'     endDate = "2020-02-01"
+#' ) #returns 1
+#' 
 check_input_dates <- function(diagnosisDate, startDate = NULL, endDate = NULL) {
+  return_value <- 0
   if (!is.null(startDate)) {
     if (as.Date(startDate, "%Y-%m-%d") < as.Date(diagnosisDate, "%Y-%m-%d")) {
-      return(2)
+      return_value <- 2
     }
   }
   if (!is.null(endDate)) {
     if (as.Date(endDate, "%Y-%m-%d") <= as.Date(diagnosisDate, "%Y-%m-%d")) {
-      return(2)
+      return_value <- 2
     }
   }
   if (!is.null(startDate) & !is.null(endDate)) {
     if (as.Date(endDate, "%Y-%m-%d") <= as.Date(startDate, "%Y-%m-%d")) {
-      return(1)
+      return_value <- 1
     }
   }
-  return(0)
+  return(return_value)
 }
+
 
 #' Sanitize names
 #'
@@ -67,21 +101,19 @@ check_input_dates <- function(diagnosisDate, startDate = NULL, endDate = NULL) {
 #' @param x A character string.
 #' @param toupper If TRUE, the name wil be upper-case; if FALSE, the name will be lower-case.
 #' @return A sanitized string.
+#' @examples
+#' cbpManager:::create_name("Study name 1") #returns "STUDY_NAME_1"
+#' cbpManager:::create_name("FANCY;name", toupper = FALSE) #returns "fancy.name"
+#' 
 create_name <- function(x, toupper = TRUE) {
-  . <- NULL # workaround for R CMD check note: no visible binding for global variable '.'
   if (toupper) {
-    x %>%
-      toupper() %>%
-      gsub(x = ., pattern = " ", replacement = "_") %>%
-      make.names() %>%
-      return()
+    x <- toupper(x)
   } else {
-    x %>%
-      tolower() %>%
-      gsub(x = ., pattern = " ", replacement = "_") %>%
-      make.names() %>%
-      return()
+    x <- tolower(x)
   }
+  x <- gsub(x = x, pattern = " ", replacement = "_")
+  x <- make.names(x)
+  return(x)
 }
 
 #' Generate UI input widget
@@ -93,6 +125,9 @@ create_name <- function(x, toupper = TRUE) {
 #' @param selected_row A number indicating the row number of the selected row in the data.frame.
 #' @param patientIDs Vector of patient IDs used for drop down menu of the PATIENT_ID column
 #' @return A sanitized string.
+#' @examples 
+#' cbpManager:::generateUIwidgets(colname = "attribute", mode = "add", tab = "Patient")
+#' 
 generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient", "Sample"), data = NULL, selected_row = NULL, patientIDs = NULL) {
   mode <- match.arg(mode)
   tab <- match.arg(tab)
@@ -114,7 +149,6 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
     numvalue <- selected <- textvalue <- data[selected_row, colname]
   }
 
-  # if((colname == "PATIENT_ID" & mode == "edit")|(colname == "PATIENT_ID" & tab == "Sample")){
   if (colname == "PATIENT_ID" & tab == "Sample") {
     fluidRow(column(
       width = 8,
@@ -262,6 +296,11 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
 #' @param colname column name
 #' @param mode determines the inputId prefix of the UI-widget
 #' @return A oncotree specific shiny UI-widget
+#' @examples 
+#' oncotree <- jsonlite::fromJSON(system.file("extdata", "oncotree.json", package = "cbpManager"))
+#' cancer_type <- unique(oncotree$mainType[which(!is.na(oncotree$mainType))])
+#' cbpManager:::generateOncotreeUIwidgets("CANCER_TYPE", "add")
+#' 
 generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
   mode <- match.arg(mode)
 
@@ -291,16 +330,6 @@ generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
         selected = 1
       ),
     ))
-  # } else if (colname == "TUMOR_TISSUE_SITE") {
-  #   fluidRow(column(
-  #     width = 8,
-  #     selectInput(
-  #       inputId = paste0(id_prefix, "TUMOR_TISSUE_SITE"),
-  #       label = "TUMOR_TISSUE_SITE",
-  #       choices = c("other", tumor_tissue_site),
-  #       selected = 1
-  #     ),
-  #   ))
   } else if (colname == "ONCOTREE_CODE") {
     fluidRow(column(
       width = 8,
@@ -338,11 +367,6 @@ updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "
     choices = c("other", cancer_type_detailed),
     selected = oncotree$name[row_last_clicked]
   )
-  # updateSelectInput(session, paste0(id_prefix, "TUMOR_TISSUE_SITE"),
-  #   label = "TUMOR_TISSUE_SITE",
-  #   choices = c("other", tumor_tissue_site),
-  #   selected = oncotree$tissue[row_last_clicked]
-  # )
   updateSelectInput(session, paste0(id_prefix, "ONCOTREE_CODE"),
     label = "ONCOTREE_CODE",
     choices = c("", oncotree_code),
@@ -355,6 +379,9 @@ updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "
 #' @param data data.frame
 #' @param cname column name
 #' @return data.frame
+#' @examples 
+#' cbpManager:::fncols(data.frame(a=c(1,2,3), b=c(4,5,6)), "new")
+#' 
 fncols <- function(data, cname) {
   add <- cname[!cname %in% names(data)]
 
@@ -370,6 +397,13 @@ fncols <- function(data, cname) {
 #' use read.table as follows: \code{read.table(file, sep='\t', colClasses = 'character', comment.char = '')}
 #' @param data The data.frame of a cBioPortal sample/patient data file
 #' @return data.frame
+#' @examples 
+#' df <- data.frame(
+#'         V1=c("#attr_1", "#attribute 1", "#STRING", "#1", "ATTRIBUTE_1", "value_1"), 
+#'         V2=c("attr_2", "attribute 2", "STRING", "1", "ATTRIBUTE_2", "value_2")
+#'     )
+#' cbpManager:::cBioPortalToDataFrame(df)
+#' 
 cBioPortalToDataFrame <- function(data) {
   data$V1 <- sub(pattern = "^#", replacement = "", x = data$V1)
   colnames(data) <- data[5, ]
@@ -383,6 +417,11 @@ cBioPortalToDataFrame <- function(data) {
 #' @param file_path A character string.
 #' @param patIDs A character string.
 #' @return vector with Sample IDs
+#' @examples
+#' cbpManager:::getSampleIDs(
+#'     system.file("study/testpatient/data_clinical_sample.txt", package = "cbpManager"), 
+#'     patIDs = "Testpatient")
+#' 
 getSampleIDs <- function(file_path, patIDs) {
   if (file.exists(file_path)) {
     # read data file
@@ -405,9 +444,10 @@ getSampleIDs <- function(file_path, patIDs) {
 #' @param file_name Filename of source data
 #' @param file_path Filepath with filename of source data
 #' @param patIDs PATIENT_IDs of patients that should be imported
-#' @param data Source data ,to be subsetted according to patIDs
+#' @param data Source data, to be subsetted according to patIDs
 #' @param associatedSampleIDs The sample IDs associated to the patIDs
 #' @return data.frame
+#' 
 importPatientData <- function(mode = c("patient", "sample", "mutations", "timelines"), file_name, file_path, patIDs, data, associatedSampleIDs = NULL) {
   if (file.exists(file_path)) {
     # read data file
@@ -461,6 +501,9 @@ importPatientData <- function(mode = c("patient", "sample", "mutations", "timeli
 #' @param modified_file Name of the modified file
 #' @param log_filename Name of the logfile
 #' @return Nothing to return
+#' @examples 
+#' cbpManager:::writeLogfile(tempdir(), "data_clinical_patient.txt")
+#' 
 writeLogfile <- function(outdir, modified_file, log_filename = "cbpManager_logfile.txt") {
   userName <- Sys.getenv("SHINYPROXY_USERNAME")
   if (userName == "") userName <- "NO_USERNAME"
