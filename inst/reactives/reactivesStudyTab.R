@@ -281,6 +281,12 @@ observeEvent(input$upload, {
     Variant_Classification = character(),
     HGVSp_Short = character()
   )
+  loadedData$data_cna_filename <- "data_CNA.txt"
+  loadedData$data_cna_filename <- data.frame(
+    Hugo_Symbol = character(),
+    Testpatient_01 = numeric(),
+    Testpatient_01 = numeric()
+  )
   loadedData$data_timeline_treatment <- data.frame(
     PATIENT_ID = character(),
     START_DATE = numeric(),
@@ -412,6 +418,34 @@ observeEvent(input$upload, {
         fill = FALSE
       )
     loadedData$data_mutations_extended <- data_mutations_extended
+  }
+  
+  # read data_cna ---------------------------------------------------------------
+  meta_cna <-
+    file.path(study_dir, loadedData$studyID, "meta_CNA.txt")
+  if (file.exists(meta_cna)) {
+    meta_cna <- read.table(meta_cna, sep = ":")
+    loadedData$data_cna_filename <-
+      gsub(" ", "", meta_cna[meta_cna$V1 == "data_filename", ]$V2)
+  }
+  
+  data_cna_file <-
+    file.path(
+      study_dir,
+      loadedData$studyID,
+      loadedData$data_cna_filename
+    )
+  if (file.exists(data_cna_file)) {
+    data_cna <-
+      read.table(data_cna_file,
+                 sep = "\t",
+                 header = TRUE,
+                 comment.char = "#",
+                 stringsAsFactors = FALSE,
+                 quote = "",
+                 fill = FALSE
+      )
+    loadedData$data_cna <- data_cna
   }
 
   # read data_timeline_treatment ---------------------------------------------------------------

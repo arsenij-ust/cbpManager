@@ -42,8 +42,8 @@ observeEvent(input$chooseCNA, {
         duration = NULL
       )
     } else {
-      loadedData$data_cna_extended <-
-        dplyr::bind_rows(uploaded_data, loadedData$data_cna_extended)
+      loadedData$data_cna <-
+        dplyr::bind_rows(uploaded_data, loadedData$data_cna)
     }
   }
   
@@ -51,7 +51,7 @@ observeEvent(input$chooseCNA, {
 
 # show table ---------------------------------------------------------------
 output$CNAdata <- DT::renderDT({
-  DT::datatable(loadedData$data_cna_extended,
+  DT::datatable(loadedData$data_cna,
                 options = list(scrollX = TRUE)
   )
 })
@@ -65,9 +65,9 @@ observeEvent(input$saveCNA, {
       duration = NULL
     )
   }
-  req(loadedData$studyID, loadedData$data_cna_extended, loadedData$data_cna_filename)
+  req(loadedData$studyID, loadedData$data_cna, loadedData$data_cna_filename)
   write.table(
-    loadedData$data_cna_extended,
+    loadedData$data_cna,
     file.path(study_dir, loadedData$studyID, paste0(loadedData$data_cna_filename, ".temp")),
     append = FALSE,
     sep = "\t",
@@ -90,7 +90,7 @@ observeEvent(input$saveCNA, {
   
   #???????????????
   
-  # add cases_sequenced
+  # add cases_cna
   case_list_dir <-
     file.path(study_dir, loadedData$studyID, "case_lists")
   if (!dir.exists(case_list_dir)) dir.create(case_list_dir)
@@ -108,11 +108,11 @@ observeEvent(input$saveCNA, {
       ),
       V2 = c(
         loadedData$studyID,
-        paste0(loadedData$studyID, "_sequenced"),
-        "all_cases_with_mutation_data",
-        "Sequenced Tumors",
+        paste0(loadedData$studyID, "_cna"),
+        "all_cases_with_cna_data",
+        "Samples with CNA data",
         paste0(
-          "All sequenced samples (",
+          "All samples with CNA data (",
           nrow(loadedData$data_clinical_sample) - 3,
           " samples)"
         ),
@@ -120,8 +120,8 @@ observeEvent(input$saveCNA, {
       )
     )
   write.table(
-    cases_sequenced_df,
-    file.path(case_list_dir, "cases_sequenced.txt.temp"),
+    cases_cna_df,
+    file.path(case_list_dir, "cases_cna.txt.temp"),
     append = FALSE,
     sep = ": ",
     row.names = FALSE,
@@ -129,38 +129,38 @@ observeEvent(input$saveCNA, {
     quote = FALSE
   )
   file.rename(
-    file.path(case_list_dir, "cases_sequenced.txt.temp"),
-    file.path(case_list_dir, "cases_sequenced.txt")
+    file.path(case_list_dir, "cases_cna.txt.temp"),
+    file.path(case_list_dir, "cases_cna.txt")
   )
   
-  # cna_mutations_extended
-  if (!file.exists(file.path(study_dir, loadedData$studyID, "meta_cna_extended.txt"))) {
-    meta_cna_extended_df <-
+  # meta_CNA
+  if (!file.exists(file.path(study_dir, loadedData$studyID, "meta_CNA.txt"))) {
+    meta_cna_df <-
       data.frame(
         V1 = c(
           "cancer_study_identifier",
-          "stable_id",
-          "profile_name",
-          "profile_description",
           "genetic_alteration_type",
           "datatype",
+          "stable_id",
           "show_profile_in_analysis_tab",
+          "profile_name",
+          "profile_description",
           "data_filename"
         ),
         V2 = c(
           loadedData$studyID,
-          "mutations",
-          "Mutations",
-          "Extended MAF",
-          "MUTATION_EXTENDED",
-          "MAF",
+          "COPY_NUMBER_ALTERATION",
+          "DISCRETE",
+          "gistic",
           "true",
+          "Putative copy-number alterations from GISTIC",
+          "Putative copy-number from GISTIC 2.0. Values: -2 = homozygous deletion; -1 = hemizygous deletion; 0 = neutral / no change; 1 = gain; 2 = high level amplification.",
           loadedData$data_cna_filename
         )
       )
     write.table(
-      meta_cna_extended_df,
-      file.path(study_dir, loadedData$studyID, "meta_cna_extended.txt.temp"),
+      meta_cna_df,
+      file.path(study_dir, loadedData$studyID, "meta_CNA.txt.temp"),
       append = FALSE,
       sep = ": ",
       row.names = FALSE,
@@ -168,8 +168,8 @@ observeEvent(input$saveCNA, {
       quote = FALSE
     )
     file.rename(
-      file.path(study_dir, loadedData$studyID, "meta_cna_extended.txt.temp"),
-      file.path(study_dir, loadedData$studyID, "meta_cna_extended.txt")
+      file.path(study_dir, loadedData$studyID, "meta_CNA.txt.temp"),
+      file.path(study_dir, loadedData$studyID, "meta_CNA.txt")
     )
   }
   
@@ -177,7 +177,7 @@ observeEvent(input$saveCNA, {
   if (!is.null(logDir)) {
     writeLogfile(
       outdir = logDir,
-      modified_file = file.path(loadedData$studyID, "meta_cna_extended.txt")
+      modified_file = file.path(loadedData$studyID, "meta_CNA.txt")
     )
   }
   
