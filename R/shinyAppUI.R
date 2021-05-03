@@ -60,6 +60,7 @@ shinyAppUI <- dashboardPage(
       menuItem("Patient", tabName = "patient"),
       menuItem("Sample", tabName = "sample"),
       menuItem("Mutations", tabName = "mutations"),
+      menuItem("Copy Number Data", tabName = "cna"),
       menuItem("Timelines", tabName = "timelines"),
       menuItem("Resources", tabName = "resource"),
       menuItem("Validation", tabName = "validation")
@@ -98,6 +99,9 @@ shinyAppUI <- dashboardPage(
 
       # Tab 4 Mutations - mutationsTab.R
       mutationsTab,
+      
+      # Tab Copy Number Data - cnaTab.R
+      cnaTab,
 
       # Tab 5 Timelines - timelineTab.R
       timelineTab,

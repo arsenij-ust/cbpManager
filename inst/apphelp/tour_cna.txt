@@ -1,0 +1,8 @@
+element;intro
+#Welcome;Welcome to the interactive tour for <code>cbpManager</code>!<br><br>In the <b>Mutation</b> tab, you can add sample data to existing patients and edit already existing samples. In the following you will learn how to do this in detail.
+#cna_description;This box contains a description of the <b>Copy Number Data</b> tab.
+#cna_img;Here you can see an example image how the copy number data will look later in cBioPortal.
+#CNAdata;If the loaded study already has copy number data, it would be shown in this table.
+#chooseCNADiv;Upload a CNA file to the study. This file will be concatenated to the existing copy number data. Please have a look at the description box for the correct CNA format! If the upload was successful, the new copy number data is added to the table on the right.
+#saveCNA;Make the changes persistent by saving the file!
+#Thanks;Thank you for taking the <b>Copy Number Data</b> tab tour of <code>cbpManager</code>!
