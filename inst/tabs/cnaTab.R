@@ -50,7 +50,7 @@ cnaTab <- tabItem(
       column(
         3,
         div(id = "chooseCNADiv",
-            fileInput("chooseCNA", "Choose CNA File",
+            fileInput("chooseCNA", "Choose Copy Number Data File",
                       multiple = FALSE,
                       accept = c(
                         "text/tsv",
@@ -59,7 +59,7 @@ cnaTab <- tabItem(
                       )
             )
         ),
-        actionButton("saveCNA", "Save CNA file", class = "btn-success")
+        actionButton("saveCNA", "Save file", class = "btn-success")
       ),
       column(
         9,

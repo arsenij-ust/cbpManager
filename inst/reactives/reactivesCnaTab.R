@@ -88,8 +88,6 @@ observeEvent(input$saveCNA, {
     )
   }
   
-  #???????????????
-  
   # add cases_cna
   case_list_dir <-
     file.path(study_dir, loadedData$studyID, "case_lists")
