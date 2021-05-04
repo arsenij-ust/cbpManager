@@ -47,6 +47,24 @@ cnaTab <- tabItem(
   fluidRow(
     width = 12,
     box(
+      title = "Change default settings",
+      column(
+        3,
+        checkboxInput("cna_checkbox", "Change global description", value = FALSE)
+      ),
+      column(
+        9,
+        conditionalPanel(
+          condition = 'input.cna_checkbox == 1',
+          textInput(inputId = "cna_description", label = "Change global description")
+        )
+      ),
+      width = 12
+    )
+  ),
+  fluidRow(
+    width = 12,
+    box(
       column(
         3,
         div(id = "chooseCNADiv",

@@ -49,6 +49,11 @@ observeEvent(input$chooseCNA, {
   
 })
 
+# show text field -----------------------------------------------------------
+output$value <- renderText({
+  input$cna_description
+})
+
 # show table ---------------------------------------------------------------
 output$CNAdata <- DT::renderDT({
   DT::datatable(loadedData$data_cna,
@@ -152,7 +157,7 @@ observeEvent(input$saveCNA, {
           "gistic",
           "true",
           "Putative copy-number alterations from GISTIC",
-          "Putative copy-number from GISTIC 2.0. Values: -2 = homozygous deletion; -1 = hemizygous deletion; 0 = neutral / no change; 1 = gain; 2 = high level amplification.",
+          "Putative copy-number from GISTIC 2.0. Values. -2 = homozygous deletion; -1 = hemizygous deletion; 0 = neutral / no change; 1 = gain; 2 = high level amplification.",
           loadedData$data_cna_filename
         )
       )
