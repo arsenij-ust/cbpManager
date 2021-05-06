@@ -27,6 +27,7 @@
 #' @importFrom basilisk BasiliskEnvironment basiliskStart basiliskRun basiliskStop
 #' @importFrom reticulate import source_python
 #' @importFrom shinycssloaders withSpinner
+#' @improtFrom stringi stri_split
 #'
 #' @name cbpManager-pkg
 #' @docType package

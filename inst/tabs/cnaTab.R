@@ -49,14 +49,17 @@ cnaTab <- tabItem(
     box(
       title = "Change default settings",
       column(
-        3,
-        checkboxInput("cna_checkbox", "Change global description", value = FALSE)
-      ),
-      column(
         9,
+        checkboxInput("cna_checkbox", "Change global description", value = FALSE),
         conditionalPanel(
           condition = 'input.cna_checkbox == 1',
-          textInput(inputId = "cna_description", label = "Change global description")
+          box(
+            title = "Current description",
+            uiOutput("currDescrip"),
+            width = NULL
+          ),
+          textInput(inputId = "cna_description", label = "Change global description", value = "Enter new description..."),
+          actionButton("saveDescription", "Save new description", class = "btn-success")
         )
       ),
       width = 12

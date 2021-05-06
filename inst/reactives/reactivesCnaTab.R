@@ -46,12 +46,27 @@ observeEvent(input$chooseCNA, {
         dplyr::bind_rows(uploaded_data, loadedData$data_cna)
     }
   }
-  
 })
 
-# show text field -----------------------------------------------------------
-output$value <- renderText({
-  input$cna_description
+# cna description -----------------------------------------------------------
+observeEvent(input$saveDescription, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please select and load a study in the 'Study' tab.",
+      type = "error",
+      duration = NULL
+    )
+  }
+  req(loadedData$studyID, loadedData$data_cna)
+  str <- input$cna_description
+  write(x = str, file = file.path(study_dir, loadedData$studyID, "description_CNA.txt"))
+  
+  output$currDescrip <- renderUI({
+    rawText <- readLines(file.path(study_dir, loadedData$studyID, "description_CNA.txt"))
+    splitText <- stringi::stri_split(str = rawText, regex = "\\n")
+    replacedText <- lapply(splitText, p)
+    return(replacedText)
+  })
 })
 
 # show table ---------------------------------------------------------------
