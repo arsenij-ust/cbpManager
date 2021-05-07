@@ -47,19 +47,19 @@ cnaTab <- tabItem(
   fluidRow(
     width = 12,
     box(
-      title = "Change default settings",
+      title = "Change metadata of copy number alteration",
       column(
         9,
         checkboxInput("cna_checkbox", "Change global description", value = FALSE),
         conditionalPanel(
           condition = 'input.cna_checkbox == 1',
           box(
-            title = "Current description",
+            title = "Current profile description:",
             uiOutput("currDescrip"),
             width = NULL
           ),
-          textInput(inputId = "cna_description", label = "Change global description", value = "Enter new description..."),
-          actionButton("saveDescription", "Save new description", class = "btn-success")
+          textInput(inputId = "cna_description", label = "Change global description:"),
+          actionButton("saveMetadata", "Save metadata", class = "btn-success")
         )
       ),
       width = 12

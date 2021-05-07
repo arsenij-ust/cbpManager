@@ -49,7 +49,7 @@ observeEvent(input$chooseCNA, {
 })
 
 # cna description -----------------------------------------------------------
-observeEvent(input$saveDescription, {
+observeEvent(input$saveMetadata, {
   if(is.null(loadedData$studyID)){
     showNotification(
       "Please select and load a study in the 'Study' tab.",
@@ -57,16 +57,19 @@ observeEvent(input$saveDescription, {
       duration = NULL
     )
   }
-  req(loadedData$studyID, loadedData$data_cna)
-  str <- input$cna_description
-  write(x = str, file = file.path(study_dir, loadedData$studyID, "description_CNA.txt"))
-  
-  output$currDescrip <- renderUI({
-    rawText <- readLines(file.path(study_dir, loadedData$studyID, "description_CNA.txt"))
-    splitText <- stringi::stri_split(str = rawText, regex = "\\n")
-    replacedText <- lapply(splitText, p)
-    return(replacedText)
-  })
+  req(input$cna_description)
+  loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value <- input$cna_description
+  # todo: write meta_CNA.txt
+})
+
+output$currDescrip <- renderUI({
+  req(loadedData$meta_cna)
+  prof_desc <- loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value
+  if(!is.na(prof_desc)){
+    htmltools::p(prof_desc)
+  } else {
+    htmltools::p("No profile description.")
+  }
 })
 
 # show table ---------------------------------------------------------------

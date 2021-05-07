@@ -534,3 +534,30 @@ Please try reinstalling cbpManager and basilisk or contact the support at https:
     }
   })
 }
+
+#' TODOTODO
+#'
+#' @param filepath TODOTODO
+#' @return data.frame
+#' @examples 
+#' TODOTODO
+#' 
+read_meta <- function(filepath) {
+  meta_df <- data.frame(attribute = character(), value = character())
+  con = file(filepath, "r")
+  while (TRUE) {
+    line = readLines(con, n = 1)
+    if (length(line) == 0) {
+      break
+    }
+    splited_line <- stringr::str_split(line, ": ", n = 2)
+    meta_df <-
+      rbind(meta_df,
+            list(
+              attribute = splited_line[[1]][1], 
+              value = splited_line[[1]][2])
+      )
+  }
+  close(con)
+  return(meta_df)
+}

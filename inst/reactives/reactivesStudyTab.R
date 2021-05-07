@@ -282,10 +282,23 @@ observeEvent(input$upload, {
     HGVSp_Short = character()
   )
   loadedData$data_cna_filename <- "data_CNA.txt"
-  loadedData$data_cna_filename <- data.frame(
+  loadedData$meta_cna <- loadedData$meta_cna <- data.frame(
+    attribute = c(
+      "cancer_study_identifier",
+      "genetic_alteration_type",
+      "datatype",
+      "stable_id",
+      "show_profile_in_analysis_tab",
+      "profile_name",
+      "profile_description",
+      "data_filename"
+    ),
+    value = rep(NA, 8)
+  )
+  loadedData$data_cna <- data.frame(
     Hugo_Symbol = character(),
     Testpatient_01 = numeric(),
-    Testpatient_01 = numeric()
+    Testpatient_02 = numeric()
   )
   loadedData$data_timeline_treatment <- data.frame(
     PATIENT_ID = character(),
@@ -424,9 +437,8 @@ observeEvent(input$upload, {
   meta_cna <-
     file.path(study_dir, loadedData$studyID, "meta_CNA.txt")
   if (file.exists(meta_cna)) {
-    meta_cna <- read.table(meta_cna, sep = ":")
-    loadedData$data_cna_filename <-
-      gsub(" ", "", meta_cna[meta_cna$V1 == "data_filename", ]$V2)
+    loadedData$meta_cna <- read_meta(meta_cna)
+    loadedData$data_cna_filename <- loadedData$meta_cna[which(loadedData$meta_cna$attribute=="data_filename"),]$value
   }
   
   data_cna_file <-
