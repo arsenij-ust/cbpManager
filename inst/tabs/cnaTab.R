@@ -46,23 +46,65 @@ cnaTab <- tabItem(
   ),
   fluidRow(
     width = 12,
-    box(
-      title = "Change metadata of copy number alteration",
-      column(
-        9,
-        checkboxInput("cna_checkbox", "Change global description", value = FALSE),
-        conditionalPanel(
-          condition = 'input.cna_checkbox == 1',
-          box(
-            title = "Current profile description:",
-            uiOutput("currDescrip"),
-            width = NULL
-          ),
-          textInput(inputId = "cna_description", label = "Change global description:"),
+    column(
+      width = 12,
+      id = "cna_metadata",
+      box(
+        title = "Change metadata of copy number alteration",
+        collapsible = TRUE,
+        collapsed = TRUE,
+        solidHeader = TRUE,
+        width = NULL,
+        column(
+          6,
+          textInput(inputId = "cna_profile_name", label = "Change profile name:"),
+          textInput(inputId = "cna_profile_description", label = "Change profile description:"),
           actionButton("saveMetadata", "Save metadata", class = "btn-success")
+        ),
+        column(
+          6,
+          div( 
+            div(
+              h5(strong("Current profile name:")),
+              verbatimTextOutput("curr_profile_name")
+              ),
+            div(
+              style = "display: inline-block;vertical-align: middle;",
+              popify(
+                bsButton(
+                  "q8",
+                  label = "",
+                  icon = icon("question"),
+                  style = "info",
+                  size = "extra-small"
+                ),
+                "curr_profile_name",
+                "Designation of the input data."
+              )
+            )
+          ),
+          div(
+            div(
+              h5(strong("Current profile description:")),
+              verbatimTextOutput("curr_profile_description")
+            ),
+            div(
+              style = "display: inline-block;vertical-align: middle;",
+              popify(
+                bsButton(
+                  "q9",
+                  label = "",
+                  icon = icon("question"),
+                  style = "info",
+                  size = "extra-small"
+                ),
+                "curr_profile_description",
+                "Key for the copy number level specification used for each gene-sample combination."
+              )
+            )
+          )
         )
-      ),
-      width = 12
+      )
     )
   ),
   fluidRow(

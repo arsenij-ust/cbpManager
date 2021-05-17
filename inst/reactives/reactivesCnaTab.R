@@ -48,7 +48,7 @@ observeEvent(input$chooseCNA, {
   }
 })
 
-# cna description -----------------------------------------------------------
+# profile_name and profile_description -----------------------------------------------------------
 observeEvent(input$saveMetadata, {
   if(is.null(loadedData$studyID)){
     showNotification(
@@ -56,19 +56,83 @@ observeEvent(input$saveMetadata, {
       type = "error",
       duration = NULL
     )
+  } else {
+    req(input$cna_profile_name, input$cna_profile_description)
+    loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value <- input$cna_profile_name
+    loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value <- input$cna_profile_description
+    
+    # create meta_cna data.frame
+    meta_cna_df <- data.frame(
+      V1 = c(
+        "cancer_study_identifier",
+        "genetic_alteration_type",
+        "datatype",
+        "stable_id",
+        "show_profile_in_analysis_tab",
+        "profile_name",
+        "profile_description",
+        "data_filename"
+      ),
+      V2 = c(
+        loadedData$studyID,
+        "COPY_NUMBER_ALTERATION",
+        "DISCRETE",
+        "gistic",
+        "true",
+        input$cna_profile_name, 
+        input$cna_profile_description,
+        "data_CNA.txt"
+      )
+    )
+
+    # write meta_CNA.txt
+    write.table(
+      meta_cna_df,
+      file.path(study_dir, loadedData$studyID, "meta_CNA.txt.temp"),
+      append = FALSE, 
+      sep = ": ",
+      row.names = FALSE,
+      col.names = FALSE,
+      quote = FALSE
+    )
+    file.rename(
+      file.path(study_dir, loadedData$studyID, "meta_CNA.txt.temp"),
+      file.path(study_dir, loadedData$studyID, "meta_CNA.txt")
+    )
+    
+    # logging
+    if (!is.null(logDir)) {
+      writeLogfile(
+        outdir = logDir,
+        modified_file = file.path(loadedData$studyID, "meta_CNA.txt")
+      )
+    }
+    
+    showNotification(paste0("File meta_CNA.txt of study ", loadedData$studyID, " updated successfully!"),
+                     type = "message",
+                     duration = 10
+    )
+    removeModal()
   }
-  req(input$cna_description)
-  loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value <- input$cna_description
-  # todo: write meta_CNA.txt
 })
 
-output$currDescrip <- renderUI({
+output$curr_profile_name <- renderText({
+  req(loadedData$meta_cna)
+  prof_name <- loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value
+  if(!is.na(prof_name)){
+    prof_name
+  } else {
+    "No profile name."
+  }
+})
+
+output$curr_profile_description <- renderText({
   req(loadedData$meta_cna)
   prof_desc <- loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value
   if(!is.na(prof_desc)){
-    htmltools::p(prof_desc)
+    prof_desc
   } else {
-    htmltools::p("No profile description.")
+    "No profile description."
   }
 })
 
