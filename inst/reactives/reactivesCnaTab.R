@@ -21,31 +21,11 @@ observeEvent(input$tour_cna, {
   rintrojs::introjs(session, options = list(steps = tour))
 })
 
-# upload file ---------------------------------------------------------------
-observeEvent(input$chooseCNA, {
-  if(!grepl("\\.[txt|tsv]", input$chooseCNA$name)){
-    showNotification(
-      "The file format is not supported. 
-      File should be '.txt', '.tsv'.",
-      type = "error",
-      duration = NULL
-    )
-  } else {
-    uploaded_data <-
-      as.data.frame(vroom::vroom(input$chooseCNA$datapath, delim = "\t"))
-    requiredCols <-
-      "Hugo_Symbol" || "Entrez_Gene_Id"
-    if (any(!requiredCols %in% colnames(uploaded_data))) {
-      showNotification(
-        "One or more of the required columns are missing.",
-        type = "error",
-        duration = NULL
-      )
-    } else {
-      loadedData$data_cna <-
-        dplyr::bind_rows(uploaded_data, loadedData$data_cna)
-    }
-  }
+# show table ---------------------------------------------------------------
+output$CNAdata <- DT::renderDT({
+  DT::datatable(loadedData$data_cna,
+                options = list(scrollX = TRUE)
+  )
 })
 
 # profile_name and profile_description -----------------------------------------------------------
@@ -79,8 +59,8 @@ observeEvent(input$saveMetadata, {
         "DISCRETE",
         "gistic",
         "true",
-        input$cna_profile_name, 
-        input$cna_profile_description,
+        loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value, 
+        loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value,
         "data_CNA.txt"
       )
     )
@@ -136,11 +116,94 @@ output$curr_profile_description <- renderText({
   }
 })
 
-# show table ---------------------------------------------------------------
-output$CNAdata <- DT::renderDT({
-  DT::datatable(loadedData$data_cna,
-                options = list(scrollX = TRUE)
-  )
+# upload file ---------------------------------------------------------------
+observeEvent(input$chooseCNA, {
+  if(!grepl("\\.[txt|tsv]", input$chooseCNA$name)){
+    showNotification(
+      "The file format is not supported. 
+      File should be '.txt', '.tsv'.",
+      type = "error",
+      duration = NULL
+    )
+  } else {
+    uploaded_data <-
+      as.data.frame(vroom::vroom(input$chooseCNA$datapath, delim = "\t"))
+    requiredCols <-
+      c(
+        "Gene Symbol",
+        "Locus ID"
+        )
+    if (any(!requiredCols %in% colnames(uploaded_data))) {
+      showNotification(
+        "One or more of the required columns are missing.",
+        type = "error",
+        duration = NULL
+      )
+    } else {
+        colnames(uploaded_data)[which(names(uploaded_data) == "Gene Symbol")] <- "Hugo_Symbol"
+        colnames(uploaded_data)[which(names(uploaded_data) == "Locus ID")] <- "Entrez_Gene_Id"
+        uploaded_data$Cytoband <- NULL
+        
+        cases_samples <-
+          loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
+        
+        if (any(!colnames(uploaded_data)[,3:ncol(uploaded_data)] %in% cases_samples)) {
+          showNotification(
+            "Please enter all sample IDs on the study tab before proceeding.",
+            type = "error",
+            duration = NULL
+          )
+        } else {
+          
+          if (uploaded_data[uploaded_data$Entrez_Gene_Id < 0, ]){
+            
+            dataModal <- function(failed = FALSE) {
+              modalDialog(
+                title = "Warning",
+                "Negative values in the Locus ID/Entrez_Gene_Id column will prevent the data from being 
+                uploaded to cBioPortal. Choose one of the following options:",
+                radioButtons("options", label = "Choose an option to continue:", choices = list(
+                  "Delete rows with negative values and merge data (recommended)" = 1, 
+                  "Keep all data and merge despite negative values" = 2,
+                  "Cancel file upload" = 3), selected = 1),
+                
+                footer = tagList(
+                  modalButton("Cancel"),
+                  actionButton("ok", "OK")
+                )
+              )
+            }
+            
+            showModal(dataModal())
+            
+            observeEvent(input$ok, {
+              if (input$options == "1") {
+                deleted_rows <-
+                  rownames(uploaded_data[uploaded_data$Entrez_Gene_Id < 0,])
+                uploaded_data[-c(deleted_rows),]
+                loadedData$data_cna <-
+                  dplyr::bind_rows(uploaded_data, loadedData$data_cna)
+              } else if (input$options == "2") {
+                loadedData$data_cna <-
+                  dplyr::bind_rows(uploaded_data, loadedData$data_cna)
+              } else if (input$options == "3") {
+                showNotification(
+                  "The upload of a copy number data file was canceled.",
+                  type = "message",
+                  duration = NULL
+                )
+                break
+              }
+            })
+            
+          } else {
+            loadedData$data_cna <-
+              dplyr::bind_rows(uploaded_data, loadedData$data_cna)
+          }
+          
+        }
+    }
+  }
 })
 
 # save data ---------------------------------------------------------------
@@ -152,6 +215,7 @@ observeEvent(input$saveCNA, {
       duration = NULL
     )
   }
+  
   req(loadedData$studyID, loadedData$data_cna, loadedData$data_cna_filename)
   write.table(
     loadedData$data_cna,
@@ -181,7 +245,7 @@ observeEvent(input$saveCNA, {
   if (!dir.exists(case_list_dir)) dir.create(case_list_dir)
   cases_samples <-
     loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
-  cases_sequenced_df <-
+  cases_cna_df <-
     data.frame(
       V1 = c(
         "cancer_study_identifier",
@@ -238,8 +302,8 @@ observeEvent(input$saveCNA, {
           "DISCRETE",
           "gistic",
           "true",
-          "Putative copy-number alterations from GISTIC",
-          "Putative copy-number from GISTIC 2.0. Values. -2 = homozygous deletion; -1 = hemizygous deletion; 0 = neutral / no change; 1 = gain; 2 = high level amplification.",
+          loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value, 
+          loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value,
           loadedData$data_cna_filename
         )
       )
