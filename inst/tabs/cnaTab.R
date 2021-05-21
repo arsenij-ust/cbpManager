@@ -57,17 +57,10 @@ cnaTab <- tabItem(
         width = NULL,
         column(
           6,
-          textInput(inputId = "cna_profile_name", label = "Change profile name:"),
-          textInput(inputId = "cna_profile_description", label = "Change profile description:"),
-          actionButton("saveMetadata", "Save metadata", class = "btn-success")
-        ),
-        column(
-          6,
-          div( 
+          div(
             div(
-              h5(strong("Current profile name:")),
-              verbatimTextOutput("curr_profile_name")
-              ),
+              textInput(inputId = "cna_profile_name", label = "Change profile name:")
+            ),
             div(
               style = "display: inline-block;vertical-align: middle;",
               popify(
@@ -78,15 +71,14 @@ cnaTab <- tabItem(
                   style = "info",
                   size = "extra-small"
                 ),
-                "curr_profile_name",
+                "Profile name",
                 "Designation of the input data."
               )
             )
           ),
           div(
             div(
-              h5(strong("Current profile description:")),
-              verbatimTextOutput("curr_profile_description")
+              textInput(inputId = "cna_profile_description", label = "Change profile description:")
             ),
             div(
               style = "display: inline-block;vertical-align: middle;",
@@ -98,15 +90,25 @@ cnaTab <- tabItem(
                   style = "info",
                   size = "extra-small"
                 ),
-                "curr_profile_description",
+                "Profile description",
                 "Key for the copy number level specification used for each gene-sample combination."
               )
             )
-          )
+          ),
+          actionButton("saveMetadata", "Save metadata", class = "btn-success")
+        ),
+        column(
+          6,
+          h5(strong("Current profile name:")),
+          verbatimTextOutput("curr_profile_name"),
+          
+          h5(strong("Current profile description:")),
+          verbatimTextOutput("curr_profile_description")
         )
       )
     )
   ),
+      
   fluidRow(
     width = 12,
     box(

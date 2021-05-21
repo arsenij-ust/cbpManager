@@ -57,7 +57,7 @@ observeEvent(input$saveMetadata, {
         loadedData$studyID,
         "COPY_NUMBER_ALTERATION",
         "DISCRETE",
-        "gistic",
+        "cna",
         "true",
         loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value, 
         loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value,
@@ -118,9 +118,9 @@ output$curr_profile_description <- renderText({
 
 # upload file ---------------------------------------------------------------
 observeEvent(input$chooseCNA, {
-  if(!grepl("\\.[txt|tsv]", input$chooseCNA$name)){
+  if (!grepl("\\.[txt|tsv]", input$chooseCNA$name)) {
     showNotification(
-      "The file format is not supported. 
+      "The file format is not supported.
       File should be '.txt', '.tsv'.",
       type = "error",
       duration = NULL
@@ -129,10 +129,8 @@ observeEvent(input$chooseCNA, {
     uploaded_data <-
       as.data.frame(vroom::vroom(input$chooseCNA$datapath, delim = "\t"))
     requiredCols <-
-      c(
-        "Gene Symbol",
-        "Locus ID"
-        )
+      c("Gene Symbol",
+        "Locus ID")
     if (any(!requiredCols %in% colnames(uploaded_data))) {
       showNotification(
         "One or more of the required columns are missing.",
@@ -140,14 +138,23 @@ observeEvent(input$chooseCNA, {
         duration = NULL
       )
     } else {
-        colnames(uploaded_data)[which(names(uploaded_data) == "Gene Symbol")] <- "Hugo_Symbol"
-        colnames(uploaded_data)[which(names(uploaded_data) == "Locus ID")] <- "Entrez_Gene_Id"
-        uploaded_data$Cytoband <- NULL
-        
+      colnames(uploaded_data)[which(names(uploaded_data) == "Gene Symbol")] <-
+        "Hugo_Symbol"
+      colnames(uploaded_data)[which(names(uploaded_data) == "Locus ID")] <-
+        "Entrez_Gene_Id"
+      uploaded_data$Cytoband <- NULL
+      
+      if (is.null(loadedData$studyID)) {
+        showNotification(
+          "Please select and load a study in the 'Study' tab.",
+          type = "error",
+          duration = NULL
+        )
+      } else {
         cases_samples <-
           loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
         
-        if (any(!colnames(uploaded_data)[,3:ncol(uploaded_data)] %in% cases_samples)) {
+        if (any(!colnames(uploaded_data)[3:ncol(uploaded_data)] %in% cases_samples)) {
           showNotification(
             "Please enter all sample IDs on the study tab before proceeding.",
             type = "error",
@@ -155,17 +162,30 @@ observeEvent(input$chooseCNA, {
           )
         } else {
           
-          if (uploaded_data[uploaded_data$Entrez_Gene_Id < 0, ]){
-            
+          neg = FALSE
+          for (i in 2:nrow(uploaded_data)) {
+            if (uploaded_data$Entrez_Gene_Id[i]<0) {
+              neg = TRUE
+              break
+            }
+          }
+
+          if (neg == TRUE) {
             dataModal <- function(failed = FALSE) {
               modalDialog(
                 title = "Warning",
-                "Negative values in the Locus ID/Entrez_Gene_Id column will prevent the data from being 
-                uploaded to cBioPortal. Choose one of the following options:",
-                radioButtons("options", label = "Choose an option to continue:", choices = list(
-                  "Delete rows with negative values and merge data (recommended)" = 1, 
-                  "Keep all data and merge despite negative values" = 2,
-                  "Cancel file upload" = 3), selected = 1),
+                "Negative values in the Locus ID/Entrez_Gene_Id column will prevent the data from being
+                uploaded to cBioPortal. Choose one of the following options.",
+                radioButtons(
+                  "options",
+                  label = "Choose an option to continue:",
+                  choices = list(
+                    "Delete rows with negative values and merge data (recommended)" = 1,
+                    "Keep all data and merge despite negative values" = 2,
+                    "Cancel file upload" = 3
+                  ),
+                  selected = 1
+                ),
                 
                 footer = tagList(
                   modalButton("Cancel"),
@@ -178,21 +198,23 @@ observeEvent(input$chooseCNA, {
             
             observeEvent(input$ok, {
               if (input$options == "1") {
-                deleted_rows <-
-                  rownames(uploaded_data[uploaded_data$Entrez_Gene_Id < 0,])
-                uploaded_data[-c(deleted_rows),]
+                uploaded_data <- uploaded_data[uploaded_data$Entrez_Gene_Id>-1, ]
                 loadedData$data_cna <-
                   dplyr::bind_rows(uploaded_data, loadedData$data_cna)
+                removeModal()
               } else if (input$options == "2") {
                 loadedData$data_cna <-
                   dplyr::bind_rows(uploaded_data, loadedData$data_cna)
+                removeModal()
+                
               } else if (input$options == "3") {
                 showNotification(
                   "The upload of a copy number data file was canceled.",
                   type = "message",
                   duration = NULL
                 )
-                break
+                removeModal()
+                neg = FALSE
               }
             })
             
@@ -200,12 +222,12 @@ observeEvent(input$chooseCNA, {
             loadedData$data_cna <-
               dplyr::bind_rows(uploaded_data, loadedData$data_cna)
           }
-          
         }
+      }
     }
   }
 })
-
+      
 # save data ---------------------------------------------------------------
 observeEvent(input$saveCNA, {
   if(is.null(loadedData$studyID)){
@@ -214,8 +236,7 @@ observeEvent(input$saveCNA, {
       type = "error",
       duration = NULL
     )
-  }
-  
+  } 
   req(loadedData$studyID, loadedData$data_cna, loadedData$data_cna_filename)
   write.table(
     loadedData$data_cna,
@@ -300,7 +321,7 @@ observeEvent(input$saveCNA, {
           loadedData$studyID,
           "COPY_NUMBER_ALTERATION",
           "DISCRETE",
-          "gistic",
+          "cna",
           "true",
           loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value, 
           loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value,
