@@ -535,12 +535,12 @@ Please try reinstalling cbpManager and basilisk or contact the support at https:
   })
 }
 
-#' TODOTODO
+#' Read a metafile line by line into a data frame and divide each line at its first colon and add the two parts respectively to the first and second column of the data frame. 
 #'
-#' @param filepath TODOTODO
+#' @param filepath Filepath with filename of metafile. 
 #' @return data.frame
 #' @examples 
-#' TODOTODO
+#' read_meta(file.path(study_dir, loadedData$studyID, "meta_CNA.txt"))
 #' 
 read_meta <- function(filepath) {
   meta_df <- data.frame(attribute = character(), value = character())

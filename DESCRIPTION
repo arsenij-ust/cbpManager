@@ -34,8 +34,7 @@ Imports:
     reticulate,
     shinyBS,
     shinycssloaders,
-    rintrojs, 
-    stringi
+    rintrojs
 Suggests: 
     knitr,
     BiocStyle,
