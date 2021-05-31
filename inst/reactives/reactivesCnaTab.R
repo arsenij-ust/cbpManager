@@ -117,7 +117,50 @@ output$curr_profile_description <- renderText({
 })
 
 # upload file ---------------------------------------------------------------
+
+dataModal <- function(failed = FALSE) {
+  modalDialog(
+    title = "Warning",
+    "Negative values in the Locus ID/Entrez_Gene_Id column will prevent the data from being
+                uploaded to cBioPortal. Choose one of the following options.",
+    radioButtons(
+      "options",
+      label = "Choose an option to continue:",
+      choices = list(
+        "Delete rows with negative values and merge data (recommended)" = 1,
+        "Keep all data and merge despite negative values" = 2,
+        "Cancel file upload" = 3
+      ),
+      selected = 1
+    ),
+    
+    footer = tagList(modalButton("Cancel"),
+                     actionButton("ok", "OK")
+    )
+  )
+}
+
 observeEvent(input$chooseCNA, {
+  
+  # check if a study is loaded and access respective samples
+  loaded <- NULL
+  if (is.null(loadedData$studyID)) {
+    loaded = FALSE
+    showNotification(
+      "Please select and load a study in the 'Study' tab.",
+      type = "error",
+      duration = NULL
+    )
+  } else {
+    loaded = TRUE
+  }
+  
+  if (loaded == TRUE) {
+    cases_samples <-
+      loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
+  }
+  
+  # check file format before upload
   if (!grepl("\\.[txt|tsv]", input$chooseCNA$name)) {
     showNotification(
       "The file format is not supported.
@@ -131,6 +174,8 @@ observeEvent(input$chooseCNA, {
     requiredCols <-
       c("Gene Symbol",
         "Locus ID")
+    
+    # check presence of required columns before renaming/deleting columns
     if (any(!requiredCols %in% colnames(uploaded_data))) {
       showNotification(
         "One or more of the required columns are missing.",
@@ -143,90 +188,69 @@ observeEvent(input$chooseCNA, {
       colnames(uploaded_data)[which(names(uploaded_data) == "Locus ID")] <-
         "Entrez_Gene_Id"
       uploaded_data$Cytoband <- NULL
-      
-      if (is.null(loadedData$studyID)) {
-        showNotification(
-          "Please select and load a study in the 'Study' tab.",
-          type = "error",
-          duration = NULL
-        )
-      } else {
-        cases_samples <-
-          loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample), "SAMPLE_ID"]
-        
-        if (any(!colnames(uploaded_data)[3:ncol(uploaded_data)] %in% cases_samples)) {
-          showNotification(
-            "Please enter all sample IDs on the study tab before proceeding.",
-            type = "error",
-            duration = NULL
-          )
-        } else {
-          
-          neg = FALSE
-          for (i in 2:nrow(uploaded_data)) {
-            if (uploaded_data$Entrez_Gene_Id[i]<0) {
-              neg = TRUE
-              break
-            }
-          }
-
-          if (neg == TRUE) {
-            dataModal <- function(failed = FALSE) {
-              modalDialog(
-                title = "Warning",
-                "Negative values in the Locus ID/Entrez_Gene_Id column will prevent the data from being
-                uploaded to cBioPortal. Choose one of the following options.",
-                radioButtons(
-                  "options",
-                  label = "Choose an option to continue:",
-                  choices = list(
-                    "Delete rows with negative values and merge data (recommended)" = 1,
-                    "Keep all data and merge despite negative values" = 2,
-                    "Cancel file upload" = 3
-                  ),
-                  selected = 1
-                ),
-                
-                footer = tagList(
-                  modalButton("Cancel"),
-                  actionButton("ok", "OK")
-                )
-              )
-            }
-            
-            showModal(dataModal())
-            
-            observeEvent(input$ok, {
-              if (input$options == "1") {
-                uploaded_data <- uploaded_data[uploaded_data$Entrez_Gene_Id>-1, ]
-                loadedData$data_cna <-
-                  dplyr::bind_rows(uploaded_data, loadedData$data_cna)
-                removeModal()
-              } else if (input$options == "2") {
-                loadedData$data_cna <-
-                  dplyr::bind_rows(uploaded_data, loadedData$data_cna)
-                removeModal()
-                
-              } else if (input$options == "3") {
-                showNotification(
-                  "The upload of a copy number data file was canceled.",
-                  type = "message",
-                  duration = NULL
-                )
-                removeModal()
-                neg = FALSE
-              }
-            })
-            
-          } else {
-            loadedData$data_cna <-
-              dplyr::bind_rows(uploaded_data, loadedData$data_cna)
-          }
-        }
-      }
     }
   }
+  
+  # check if all sample IDs have been added to the loaded study 
+  added <- NULL
+  if ((loaded == TRUE) && (any(!colnames(uploaded_data)[3:ncol(uploaded_data)] %in% cases_samples))) {
+    added = FALSE
+    showNotification(
+      "Please enter all sample IDs on the study tab before proceeding.",
+      type = "error",
+      duration = NULL
+    )
+  } else if ((loaded == TRUE) && (any(colnames(uploaded_data)[3:ncol(uploaded_data)] %in% cases_samples))) {
+    added = TRUE
+  }
+  
+  # check if there is a negative value in the column "Entrez_Gene_Id"        
+  neg <- NULL
+  for (i in 2:nrow(uploaded_data)) {
+    if (uploaded_data$Entrez_Gene_Id[i] < 0) {
+      neg = TRUE
+      break
+    } else {
+      neg = FALSE
+    }
+  }
+  
+  # in case of a negative value show a modalDialog with three options; otherwise merge data directly
+  if (loaded == TRUE && added == TRUE && neg == TRUE) {
+    showModal(dataModal())
+  }
 })
+
+# The following section doesn't work. 
+observeEvent(input$ok, {
+  if (input$options == "1") {
+    uploaded_data <- uploaded_data[uploaded_data$Entrez_Gene_Id > -1, ]
+    neg = FALSE
+    removeModal()
+  } else if (input$options == "2") {
+    neg = FALSE
+    removeModal()
+  } else if (input$options == "3") {
+    showNotification(
+      "The upload of a copy number data file was canceled.",
+      type = "message",
+      duration = NULL
+    )
+    neg = TRUE
+    removeModal()
+  }
+})
+
+# The following section hasn't been tested yet.   
+'  if (loaded == TRUE && added == TRUE && neg == FALSE) {
+    merged_df = merge(uploaded_data, loadedData$data_cna, by = "Hugo_Symbol")
+    new_rows = setdiff(uploaded_data, loadedData$data_cna)
+    if(!is.null(new_rows)) {
+      loadedData$data_cna <- dplyr::bind_rows(new_rows, merged_df)
+    } else {
+      loadedData$data_cna <- merged_df
+    }
+  }'
       
 # save data ---------------------------------------------------------------
 observeEvent(input$saveCNA, {

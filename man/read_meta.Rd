@@ -2,20 +2,20 @@
 % Please edit documentation in R/functions.R
 \name{read_meta}
 \alias{read_meta}
-\title{TODOTODO}
+\title{Read a metafile line by line into a data frame and divide each line at its first colon and add the two parts respectively to the first and second column of the data frame.}
 \usage{
 read_meta(filepath)
 }
 \arguments{
-\item{filepath}{TODOTODO}
+\item{filepath}{Filepath with filename of metafile.}
 }
 \value{
 data.frame
 }
 \description{
-TODOTODO
+Read a metafile line by line into a data frame and divide each line at its first colon and add the two parts respectively to the first and second column of the data frame.
 }
 \examples{
-TODOTODO
+read_meta(file.path(study_dir, loadedData$studyID, "meta_CNA.txt"))
 
 }
