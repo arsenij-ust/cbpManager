@@ -296,9 +296,7 @@ observeEvent(input$upload, {
     value = rep(NA, 8)
   )
   loadedData$data_cna <- data.frame(
-    Hugo_Symbol = character(),
-    Testpatient_01 = numeric(),
-    Testpatient_02 = numeric()
+    Hugo_Symbol = character()
   )
   loadedData$data_timeline_treatment <- data.frame(
     PATIENT_ID = character(),
