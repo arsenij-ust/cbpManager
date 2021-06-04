@@ -263,7 +263,7 @@ observeEvent(input$ok, {
   }
   
   if (neg == FALSE) {
-    uploaded_data$df <- merge(uploaded_data$df, loadedData$data_cna, by = "Hugo_Symbol", all = TRUE)
+    uploaded_data$df <- merge(uploaded_data$df, loadedData$data_cna, all = TRUE)
   }
 })
 
