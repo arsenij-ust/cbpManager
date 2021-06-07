@@ -38,9 +38,12 @@ observeEvent(input$saveMetadata, {
       duration = NULL
     )
   } else {
-    req(input$cna_profile_name, input$cna_profile_description)
-    loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value <- input$cna_profile_name
-    loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value <- input$cna_profile_description
+    if (!is.null(input$cna_profile_name)) {
+      loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value <- input$cna_profile_name
+    }
+    if (!is.null(input$cna_profile_description)) {
+      loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value <- input$cna_profile_description
+    }
     
     # create meta_cna data.frame
     meta_cna_df <- data.frame(
@@ -143,9 +146,17 @@ dataModal <- function(failed = FALSE) {
 
 # initiate a reactive object
 uploaded_data <- reactiveValues(df = NULL)
+validated_data <- reactiveValues(df = NULL)
 
 # management of file upload
 observeEvent(input$chooseCNA, {
+  
+  output$CNAdata <- DT::renderDT({
+    if (!is.null(loadedData$studyID)) {
+      DT::datatable(loadedData$data_cna,
+                    options = list(scrollX = TRUE))
+    }
+  })
   
   # check if a study is loaded
   loaded <- NULL
@@ -179,9 +190,12 @@ observeEvent(input$chooseCNA, {
   } else {
     uploaded_data$df <-
       as.data.frame(vroom::vroom(input$chooseCNA$datapath, delim = "\t"))
-    requiredCols <-
-      c("Gene Symbol",
-        "Locus ID")
+    
+    if ("Hugo_Symbol" %in% colnames(uploaded_data$df)) {
+      requiredCols <- "Hugo_Symbol" # upload of any .txt file
+    } else {
+      requiredCols <- "Gene Symbol" # upload of GISTIC output
+    } 
     
     # check presence of required columns before renaming/deleting columns
     if (any(!requiredCols %in% colnames(uploaded_data$df))) {
@@ -191,6 +205,7 @@ observeEvent(input$chooseCNA, {
         duration = NULL
       )
     } else {
+      # adjustments when GISTIC output is uploaded
       colnames(uploaded_data$df)[which(names(uploaded_data$df) == "Gene Symbol")] <-
         "Hugo_Symbol"
       colnames(uploaded_data$df)[which(names(uploaded_data$df) == "Locus ID")] <-
@@ -214,28 +229,42 @@ observeEvent(input$chooseCNA, {
     }
   }
   
-  # if study is loaded and all samples are added, show data of uploaded file in table
   if (loaded == TRUE && added == TRUE) {
+    validated_data$df <- loadedData$data_cna
+    
+    # if study is loaded and all samples are added, show data of uploaded file in table
     output$CNAdata <- DT::renderDT({
       DT::datatable(uploaded_data$df,
                     options = list(scrollX = TRUE))
     })
-    
+  }
+  
     # check if there is a negative value in the column "Entrez_Gene_Id"        
     neg <- NULL
-    for (i in 2:nrow(uploaded_data$df)) {
-      if (uploaded_data$df$Entrez_Gene_Id[i] < 0) {
-        neg = TRUE
-        break
-      } else {
-        neg = FALSE
+    if ("Entrez_Gene_Id" %in% colnames(uploaded_data$df)) {
+      for (i in 2:nrow(uploaded_data$df)) {
+        if (uploaded_data$df$Entrez_Gene_Id[i] < 0) {
+          neg = TRUE
+          break
+        } else {
+          neg = FALSE
+        }
       }
+    } else {
+      neg = FALSE
     }
-  }
   
   # in case of a negative value show a modal dialog with three options
   if (loaded == TRUE && added == TRUE && neg == TRUE) {
     showModal(dataModal())
+  } else if (loaded == TRUE && added == TRUE && neg == FALSE) {
+    uploaded_data$df <- merge(uploaded_data$df, loadedData$data_cna, all = TRUE)
+    validated_data$df <- uploaded_data$df
+    
+    # reset
+    loaded <- NULL
+    added <- NULL
+    neg <- NULL
   }
 })
 
@@ -258,25 +287,54 @@ observeEvent(input$ok, {
         DT::datatable(loadedData$data_cna,
                       options = list(scrollX = TRUE))
     })
+    validated_data$df <- NULL
     neg = TRUE
     removeModal()
   }
   
   if (neg == FALSE) {
     uploaded_data$df <- merge(uploaded_data$df, loadedData$data_cna, all = TRUE)
+    validated_data$df <- uploaded_data$df
+    
+    # reset 
+    loaded <- NULL
+    added <- NULL
+    neg <- NULL
   }
 })
 
 # save data ---------------------------------------------------------------
 observeEvent(input$saveCNA, {
-  if(is.null(loadedData$studyID)){
+  if(is.null(loadedData$studyID)) {
     showNotification(
       "Please select and load a study in the 'Study' tab.",
       type = "error",
       duration = NULL
     )
-  } 
-  loadedData$data_cna <- uploaded_data$df 
+  }
+  
+  if (!is.null(validated_data$df)) {
+    loadedData$data_cna <- validated_data$df
+    showNotification("CNA file submitted successfully!",
+                     type = "message",
+                     duration = 10
+    )
+    output$CNAdata <- DT::renderDT({
+      if (!is.null(loadedData$studyID)) {
+        DT::datatable(loadedData$data_cna,
+                      options = list(scrollX = TRUE))
+      }
+    })
+    # reset
+    validated_data$df <- NULL
+  } else {
+    showNotification(
+      "Please upload a file.",
+      type = "error",
+      duration = NULL
+    )
+  }
+  
   req(loadedData$studyID, loadedData$data_cna, loadedData$data_cna_filename)
   write.table(
     loadedData$data_cna,
@@ -390,9 +448,4 @@ observeEvent(input$saveCNA, {
       modified_file = file.path(loadedData$studyID, "meta_CNA.txt")
     )
   }
-  
-  showNotification("CNA file submitted successfully!",
-                   type = "message",
-                   duration = 10
-  )
 })
