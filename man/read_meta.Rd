@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{read_meta}
 \alias{read_meta}
-\title{Read a metafile line by line into a data frame and divide each line at its first colon and add the two parts respectively to the first and second column of the data frame.}
+\title{Read a metafile line by line into a data frame.}
 \usage{
 read_meta(filepath)
 }
@@ -13,9 +13,9 @@ read_meta(filepath)
 data.frame
 }
 \description{
-Read a metafile line by line into a data frame and divide each line at its first colon and add the two parts respectively to the first and second column of the data frame.
+Read a metafile line by line into a data frame.
 }
 \examples{
-read_meta(file.path(study_dir, loadedData$studyID, "meta_CNA.txt"))
+read_meta(system.file("study", "testpatient", "meta_CNA.txt", package = "cbpManager"))
 
 }
