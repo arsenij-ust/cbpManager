@@ -22,4 +22,4 @@ The discrete copy number data file contains for each gene-sample combination a c
 - "1" indicates a low-level gain
 - "2" is a high-level amplification
 
-The information "profile_name" and "profile_description" listed in the metafile can be adapted to the uploaded file. It is recommended to provide the source and a brief characterization of the data under "profile_name" and to define the interpretation of the copy number level in the "profile_description". 
+The information "profile_name" and "profile_description" listed in the metafile can be adapted to the uploaded file (see "Change metadata of copy number alteration" below). It is recommended to provide the source and a brief characterization of the data under "profile_name" and to define the interpretation of the copy number level in the "profile_description". 
