@@ -46,28 +46,7 @@ observeEvent(input$saveMetadata, {
     }
     
     # create meta_cna data.frame
-    meta_cna_df <- data.frame(
-      V1 = c(
-        "cancer_study_identifier",
-        "genetic_alteration_type",
-        "datatype",
-        "stable_id",
-        "show_profile_in_analysis_tab",
-        "profile_name",
-        "profile_description",
-        "data_filename"
-      ),
-      V2 = c(
-        loadedData$studyID,
-        "COPY_NUMBER_ALTERATION",
-        "DISCRETE",
-        paste0(loadedData$studyID, "_cna"),
-        "true",
-        loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value, 
-        loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value,
-        "data_CNA.txt"
-      )
-    )
+    meta_cna_df <- loadedData$meta_cna
 
     # write meta_CNA.txt
     write.table(

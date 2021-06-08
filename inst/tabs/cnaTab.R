@@ -72,7 +72,7 @@ cnaTab <- tabItem(
                   size = "extra-small"
                 ),
                 "Profile name",
-                "Designation of the input data."
+                "A name for the discrete copy number data, e.g. 'Putative copy-number alterations from GISTIC'."
               )
             )
           ),
@@ -91,7 +91,7 @@ cnaTab <- tabItem(
                   size = "extra-small"
                 ),
                 "Profile description",
-                "Key for the copy number level specification used for each gene-sample combination."
+                "A description of the copy number data."
               )
             )
           ),
@@ -134,4 +134,3 @@ cnaTab <- tabItem(
     )
   )
 )
-

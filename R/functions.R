@@ -535,29 +535,11 @@ Please try reinstalling cbpManager and basilisk or contact the support at https:
   })
 }
 
-#' Read a metafile line by line into a data frame and divide each line at its first colon and add the two parts respectively to the first and second column of the data frame. 
+#' Read a metafile line by line into a data frame. 
 #'
 #' @param filepath Filepath with filename of metafile. 
 #' @return data.frame
 #' @examples 
 #' read_meta(file.path(study_dir, loadedData$studyID, "meta_CNA.txt"))
 #' 
-read_meta <- function(filepath) {
-  meta_df <- data.frame(attribute = character(), value = character())
-  con = file(filepath, "r")
-  while (TRUE) {
-    line = readLines(con, n = 1)
-    if (length(line) == 0) {
-      break
-    }
-    splited_line <- stringr::str_split(line, ": ", n = 2)
-    meta_df <-
-      rbind(meta_df,
-            list(
-              attribute = splited_line[[1]][1], 
-              value = splited_line[[1]][2])
-      )
-  }
-  close(con)
-  return(meta_df)
-}
+read_meta(system.file("study", "testpatient", "meta_CNA.txt", package = "cbpManager"))
