@@ -510,7 +510,6 @@ editRowRc_Server <-
         if (validateResourceSample(values = editResourceValues)) {
           params$df <- data()
           for (i in colnames(params$df)) {
-            # print(editValues[[i]])
             params$df[selected_row(), i] <- editResourceValues[i]
           }
           removeModal()
@@ -520,7 +519,6 @@ editRowRc_Server <-
         if (validateResourcePatient(values = editResourceValues)) {
           params$df <- data()
           for (i in colnames(params$df)) {
-            # print(editValues[[i]])
             params$df[selected_row(), i] <- editResourceValues[i]
           }
           removeModal()
@@ -530,7 +528,6 @@ editRowRc_Server <-
         if (validateResourceStudy(values = editResourceValues)) {
           params$df <- data()
           for (i in colnames(params$df)) {
-            # print(editValues[[i]])
             params$df[selected_row(), i] <- editResourceValues[i]
           }
           removeModal()

@@ -129,9 +129,9 @@ For further details see [File Formats](https://docs.cbioportal.org/5.1-data-load
 
 On the "**Study Metadata**" page, new studies can be created and existing studies can be loaded.
 
-<p align="center">
-<img src="images/1.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/1.PNG"))
+```
 
 #### Creating a new study:
 
@@ -141,81 +141,81 @@ After clicking the `Add study` button, the study will be created in a new folder
 
 The "cancer type" can be entered either in the drop-down menu `Select the cancer type` or alternatively in the expanded table below the metadata fields:
 
-<p align="center">
-<img src="images/3.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/3.PNG"))
+```
 
 #### Loading an existing study:
 
 In order to further process data from a study, this study must be loaded. For this purpose, the respective study must be selected in the drop-down menu `Select ID of cancer study` on the left side of the page "Study Metadata". After pressing the `Load study` button, loading is confirmed by the appearance of the metadata table:
 
-<p align="center">
-<img src="images/4.PNG" style="width:500px;"/>
-</p>
+```{r, out.width="60%", echo=FALSE}
+knitr::include_graphics(file.path("images/4.PNG"))
+```
 
 ### Editing patient data:
 
 The "Patient" page is used to edit clinical patient data. In the upper area, it has a "Description" box containing important information on filling in the patient data as well as instructions for handling, and a "Sample from cBioPortal" box with an exemplary representation of the patient data in cBioPortal (both boxes are collapsed in the following image for better clarity). The "Patient manager" area contains several function buttons and a central table with the patient information. The first three light blue lines must contain a short, long name and the data type of a column. Each additional line defines a patient. 
 
-<p align="center">
-<img src="images/5.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/5.PNG"))
+```
 
 #### Add new attributes (columns):
 
 By clicking the `Add column(s)` button, new attributes can be added to the table. You can choose from predefined attributes or create a user-defined attribute:
 
-<p align="center">
-<img src="images/6.PNG" style="width:500px;"/>
-</p>
+```{r, out.width="60%", echo=FALSE}
+knitr::include_graphics(file.path("images/6.PNG"))
+```
 
-<p align="center">
-<img src="images/6-2.PNG" style="width:500px;"/>
-</p>
+```{r, out.width="60%", echo=FALSE}
+knitr::include_graphics(file.path("images/6-2.PNG"))
+```
 
 The table will be extended by the selected columns:
 
-<p align="center">
-<img src="images/7.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/7.PNG"))
+```
 
 #### Create new patients:
 
 The `Add patient` button opens a dialog box containing one entry field per existing column. For predefined attributes, the input fields can be specific, e.g. drop-down menus, numeric, date input, etc. The field `PATIENT_ID` is mandatory.
 
-<p align="center">
-<img src="images/8.PNG" style="width:500px;"/>
-</p>
+```{r, out.width="60%", echo=FALSE}
+knitr::include_graphics(file.path("images/8.PNG"))
+```
 
 After filling the fields and confirming with the `Add` button of the dialog window, the patient is added to the table:
 
-<p align="center">
-<img src="images/10.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/10.PNG"))
+```
 
 #### Deleting attributes:
 
 The `Delete column(s)` button opens a dialog window where you can select from already existing attributes of the table those that should be deleted. The deletion of the `PATIENT_ID` column is not allowed.
 
-<p align="center">
-<img src="images/12.PNG" style="width:500px;"/>
-</p>
+```{r, out.width="60%", echo=FALSE}
+knitr::include_graphics(file.path("images/12.PNG"))
+```
 
 #### Import of patients:
 
 It is possible to import patient data from another study (`Import patient` button). In the dialog box the study has to be selected first and then the patient ID. During the import not only patient data are imported, but also sample data, mutation data and timeline entries of the respective patient. 
 
-<p align="center">
-<img src="images/9.PNG" style="width:500px;"/>
-</p>
+```{r, out.width="60%", echo=FALSE}
+knitr::include_graphics(file.path("images/9.PNG"))
+```
 
 #### Editing patient data:
 
 To edit a patient who has already been created, the patient's row in the table must first be clicked. Then the respective row can be edited with the button `Edit patient`. Similarly, you can subsequently edit the short/long attribute name and the data type of the columns.
 
-<p align="center">
-<img src="images/11.PNG" style="width:500px;"/>
-</p>
+```{r, out.width="60%", echo=FALSE}
+knitr::include_graphics(file.path("images/11.PNG"))
+```
 
 #### Deleting a patient:
 
@@ -233,17 +233,17 @@ The table of sampled data on the "Sample" page is similar to the table of patien
 
 **Warning:** To create a sample (row) and assign it to a patient, patients must be created first.
 
-<p align="center">
-<img src="images/13.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/13.PNG"))
+```
 
 ### Mutation data (MAF):
 
 The "Mutations" page offers the user the possibility to upload MAF files. If mutation data is already available, the content of the MAF file will be concatinated to the already existing data, taking into account the columns. The MAF file must meet certain requirements, i.e. contain specific columns (see [link](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5)). Similarly, the changes must be finalized by saving.
 
-<p align="center">
-<img src="images/13.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/14.PNG"))
+```
 
 ### Editing timelines:
 
@@ -251,21 +251,37 @@ The "Timelines" page offers the possibility to edit the timeline tracks "Treatme
 
 Since cBioPortal uses the number of days since the initial diagnosis instead of a specific date for the start or end of a timeline event, one would have to specify the initial diagnosis date for each event as well. This is repetitive and time-consuming in total, which is why we decided to create a patient first diagnosis date table as an intermediate step. So before you can add timeline events to a timeline track, you have to assign a diagnosis date to the patient. This is done in the box `Add date of the first diagnosis to a Patient ID`. In the timeline tracks you only have to select the patient ID to which this event belongs and the cbpManager calculates the number of days until the given date automatically.
 
-<p align="center">
-<img src="images/15.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/15.PNG"))
+```
 
 The three timeline tracks "Treatment", "Surgery" and "Status" are shown in the tabs:
 
-<p align="center">
-<img src="images/16.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/16.PNG"))
+```
 
 To create custom timeline tracks, you must first specify the name of the timeline track and define whether the event has a time span (`timeline`) or is a point event (`timepoint`). This is relevant because timeline events have a start and stop date and timepoint events only need to have a start date. To edit a timeline track, you should select it from the drop-down menu and click `Edit track` to confirm the selection. The data of the timeline track will be displayed in the table below. Again, each change must be saved with `Save` to make it persistent. 
 
-<p align="center">
-<img src="images/17.PNG" style="width:1000px;"/>
-</p>
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/17.PNG"))
+```
+
+### Manage resources data:
+
+In the "Resources" tab, you can add additional resources to patients, samples and studies. It generates in cBioPortal a hyperlink and a tab containing the web based resource, e.g. another webpage. With this principle you can add pdf, txt, png resources or webpages to your study.
+
+At first, we need to define a resource before adding a URL to a specific sample or patient. The first table creates the necessary resource definition file. The resource definition file should follow this format, it has three required columns: 
+
+- RESOURCE_ID: a unique resource ID. This field allows only numbers, letters, points, underscores and hyphens.
+- DISPLAY_NAME: a display name for resources.
+- RESOURCE_TYPE: resource type for resources. It describes to which part of the study this resource is to be assigned and must be 'SAMPLE', 'PATIENT' or 'STUDY'.
+
+After we defined a resource, we can add a URL link to the study, a specific patient, or a specific sample. E.g. we defined a resource with the RESOURCE_ID 'test_resource' and the RESOURCE_TYPE 'PATIENT', then we go the the 'Patients' tabpanel in this area, click on the 'Add' button, select an existing PATIENT_ID, select our recource with the ID 'test_resource', and add a URL.
+
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/19.PNG"))
+```
 
 ### Validating created study
 
@@ -273,10 +289,9 @@ The tab "Validation" allows the user quickly validate the created or modified st
 
 The report generation is triggered by the `Validate` button. After, the report can be downloaded.
 
-<p align="center">
-<img src="images/18.PNG" style="width:1000px;"/>
-</p>
-
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/18.PNG"))
+```
 
 ## Upload to cBioPortal for Cancer Genomics.
 

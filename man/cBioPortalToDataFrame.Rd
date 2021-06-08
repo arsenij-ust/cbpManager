@@ -18,3 +18,11 @@ sets the 5th row as the column names of the data.frame
 and removes the rows containing the priority, data type and column name.
 use read.table as follows: \code{read.table(file, sep='\t', colClasses = 'character', comment.char = '')}
 }
+\examples{
+df <- data.frame(
+        V1=c("#attr_1", "#attribute 1", "#STRING", "#1", "ATTRIBUTE_1", "value_1"), 
+        V2=c("attr_2", "attribute 2", "STRING", "1", "ATTRIBUTE_2", "value_2")
+    )
+cbpManager:::cBioPortalToDataFrame(df)
+
+}

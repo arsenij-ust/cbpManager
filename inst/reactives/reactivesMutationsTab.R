@@ -71,8 +71,6 @@ observeEvent(input$saveMAF, {
     )
   }
   req(loadedData$studyID, loadedData$data_mutations_extended, loadedData$data_mutations_filename)
-  # if (!is.null(input$chooseMAF)) {
-  # data_mutations_extended
   write.table(
     loadedData$data_mutations_extended,
     file.path(study_dir, loadedData$studyID, paste0(loadedData$data_mutations_filename, ".temp")),
@@ -190,9 +188,4 @@ observeEvent(input$saveMAF, {
     type = "message",
     duration = 10
   )
-  # } else {
-  #   showNotification("Please select a valid MAF file.",
-  #                    type = "warning",
-  #                    duration = NULL)
-  # }
 })

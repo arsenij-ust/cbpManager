@@ -362,13 +362,13 @@ observeEvent(input$upload, {
     file.path(study_dir, loadedData$studyID, "data_clinical_patient.txt")
   if (file.exists(data_clinical_patient_file)) {
     # read file and convert to data.frame
-    read.table(
+    data_clinical_patient <- read.table(
       data_clinical_patient_file,
       sep = "\t",
       colClasses = "character",
       comment.char = ""
     ) %>%
-      cBioPortalToDataFrame() -> data_clinical_patient
+      cBioPortalToDataFrame()
     loadedData$data_clinical_patient <- data_clinical_patient
   }
 
@@ -376,13 +376,13 @@ observeEvent(input$upload, {
   data_clinical_sample_file <-
     file.path(study_dir, loadedData$studyID, "data_clinical_sample.txt")
   if (file.exists(data_clinical_sample_file)) {
-    read.table(
+    data_clinical_sample <- read.table(
       data_clinical_sample_file,
       sep = "\t",
       colClasses = "character",
       comment.char = ""
     ) %>%
-      cBioPortalToDataFrame() -> data_clinical_sample
+      cBioPortalToDataFrame()
     loadedData$data_clinical_sample <- data_clinical_sample
   }
 
@@ -540,15 +540,6 @@ observeEvent(input$upload, {
                  header = TRUE)
     loadedData$data_resource_sample <- data_resource_sample
   }
-
-  # update Shiny drop down widgets ---------------------------------------------------------------
-  # updateSelectInput(
-  #   session, "patientSelDelCol",
-  #   choices = setdiff(colnames(loadedData$data_clinical_patient), c("PATIENT_ID"))
-  # )
-  # updateSelectInput(session, "sampleSelDelCol",
-  #                   choices = setdiff(colnames(loadedData$data_clinical_sample), c("PATIENT_ID", "SAMPLE_ID"))
-  # )
 
   showNotification(paste0("Study ", loadedData$studyID, " loaded successfully! You can now proceed with the Patient tab."),
     type = "message",

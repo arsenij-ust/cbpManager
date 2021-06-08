@@ -17,3 +17,8 @@ boolean
 \description{
 Check if input is in the appropriate date format
 }
+\examples{
+cbpManager:::IsDate("2020-02-20")
+cbpManager:::IsDate("20.01.2020", date.format = "\%d.\%m.\%Y")
+
+}
