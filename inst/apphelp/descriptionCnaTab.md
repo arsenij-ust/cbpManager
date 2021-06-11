@@ -4,16 +4,14 @@
 
 #### Description of a valid copy number alteration data file:
 
-The user can currently upload the file "all_thresholded.by_genes.txt" derived from GISTIC 2.0 or a tab-separated file containing the following columns:
+The user can currently upload the file **"all_thresholded.by_genes.txt"** derived from GISTIC 2.0 or a **tab-separated file** containing the following columns:
 
 One or both of:
 
 - **Hugo_Symbol (Required)**: A HUGO gene symbol.
 - **Entrez_Gene_Id (Optional, but recommended)**: An Entrez Gene identifier.
 
-For each sample in the dataset an additional column is required using the sample ID as column header. Please make sure that all of the sample IDs have been added to the loaded study via the sample tab before the file upload.
-
-- **SAMPLE_ID**: A sample ID. This field can only contain numbers, letters, points, underscores and hyphens.
+**For each sample in the dataset an additional column is required using the sample ID as column header.** Please make sure that all of the sample IDs have been added to the loaded study via the Sample tab before upload the file.
 
 The discrete copy number data file contains for each gene-sample combination a copy number level. By default the following applies:
 - "-2" is a deep loss, possibly a homozygous deletion

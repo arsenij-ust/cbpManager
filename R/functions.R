@@ -540,7 +540,7 @@ Please try reinstalling cbpManager and basilisk or contact the support at https:
 #' @param filepath Filepath with filename of metafile. 
 #' @return data.frame
 #' @examples 
-#' read_meta(system.file("study", "testpatient", "meta_CNA.txt", package = "cbpManager"))
+#' cbpManager:::read_meta(system.file("study", "testpatient", "meta_CNA.txt", package = "cbpManager"))
 #' 
 read_meta <- function(filepath) {
   meta_df <- data.frame(attribute = character(), value = character())

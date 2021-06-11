@@ -453,7 +453,8 @@ observeEvent(input$upload, {
                  comment.char = "#",
                  stringsAsFactors = FALSE,
                  quote = "",
-                 fill = FALSE
+                 fill = FALSE,
+                 check.names = FALSE
       )
     loadedData$data_cna <- data_cna
   }

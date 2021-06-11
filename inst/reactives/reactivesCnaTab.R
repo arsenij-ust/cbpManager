@@ -38,19 +38,19 @@ observeEvent(input$saveMetadata, {
       duration = NULL
     )
   } else {
-    if (!is.null(input$cna_profile_name)) {
+    if (!rapportools::is.empty(input$cna_profile_name)) {
       loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_name"),]$value <- input$cna_profile_name
     }
-    if (!is.null(input$cna_profile_description)) {
+    if (!rapportools::is.empty(input$cna_profile_description)) {
       loadedData$meta_cna[which(loadedData$meta_cna$attribute=="profile_description"),]$value <- input$cna_profile_description
     }
     
     # create meta_cna data.frame
-    meta_cna_df <- loadedData$meta_cna
+    #meta_cna_df <- loadedData$meta_cna
 
     # write meta_CNA.txt
     write.table(
-      meta_cna_df,
+      loadedData$meta_cna,
       file.path(study_dir, loadedData$studyID, "meta_CNA.txt.temp"),
       append = FALSE, 
       sep = ": ",
@@ -123,7 +123,7 @@ dataModal <- function(failed = FALSE) {
   )
 }
 
-# initiate a reactive object
+# initiate reactive objects
 uploaded_data <- reactiveValues(df = NULL)
 validated_data <- reactiveValues(df = NULL)
 
@@ -146,9 +146,11 @@ observeEvent(input$chooseCNA, {
       type = "error",
       duration = NULL
     )
-  } else {
-    loaded = TRUE
-  }
+    return(NULL)
+  } 
+  # else {
+  #   loaded = TRUE
+  # }
   
   # if a study is loaded, access respective samples and cna data
   if (loaded == TRUE) {
@@ -381,7 +383,7 @@ observeEvent(input$saveCNA, {
   )
   
   # meta_CNA
-  if (!file.exists(file.path(study_dir, loadedData$studyID, "meta_CNA.txt"))) {
+  if (file.path(study_dir, loadedData$studyID, "meta_CNA.txt")) {
     meta_cna_df <-
       data.frame(
         V1 = c(

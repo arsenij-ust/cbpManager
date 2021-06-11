@@ -16,6 +16,6 @@ data.frame
 Read a metafile line by line into a data frame.
 }
 \examples{
-read_meta(system.file("study", "testpatient", "meta_CNA.txt", package = "cbpManager"))
+cbpManager:::read_meta(system.file("study", "testpatient", "meta_CNA.txt", package = "cbpManager"))
 
 }
