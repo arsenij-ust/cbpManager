@@ -72,7 +72,7 @@ cnaTab <- tabItem(
                   size = "extra-small"
                 ),
                 "Profile name",
-                "A name for the discrete copy number data, e.g. 'Putative copy-number alterations from GISTIC'."
+                "A name for the discrete copy number data, e.g. Putative copy-number alterations from GISTIC."
               )
             )
           ),
