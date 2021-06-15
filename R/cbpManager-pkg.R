@@ -6,7 +6,7 @@
 #' @author Arsenij Ustjanzew \email{arsenij.ustjanzew@@gmail.com}
 #'
 #' @importFrom magrittr %>% %<>%
-#' @importFrom shiny actionButton column dateInput fluidRow icon invalidateLater
+#' @importFrom shiny actionButton column dateInput fluidRow icon invalidateLater splitLayout
 #' modalButton modalDialog NS numericInput observeEvent reactive reactiveValues
 #' reactiveValuesToList removeModal renderText renderUI runApp selectInput
 #' shinyApp showModal showNotification textInput uiOutput updateSelectInput
@@ -17,7 +17,7 @@
 #' @importFrom dplyr bind_rows mutate
 #' @importFrom jsonlite fromJSON
 #' @importFrom vroom vroom
-#' @importFrom htmltools tagList
+#' @importFrom htmltools tagList HTML
 #' @importFrom shinydashboard box dashboardBody dashboardHeader dashboardPage
 #' dashboardSidebar menuItem sidebarMenu tabBox tabItem tabItems
 #' @importFrom DT renderDT styleEqual DTOutput datatable formatStyle renderDataTable

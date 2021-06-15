@@ -45,6 +45,9 @@ cnaTab <- tabItem(
     )
   ),
   fluidRow(
+    tags$head(
+      tags$style(HTML('#q8, #q9{margin-top: 24px}'))
+    ),
     width = 12,
     column(
       width = 12,
@@ -57,52 +60,44 @@ cnaTab <- tabItem(
         width = NULL,
         column(
           6,
-          div(
-            div(
-              textInput(inputId = "cna_profile_name", label = "Change profile name:")
-            ),
-            div(
-              style = "display: inline-block;vertical-align: middle;",
-              popify(
-                bsButton(
-                  "q8",
-                  label = "",
-                  icon = icon("question"),
-                  style = "info",
-                  size = "extra-small"
-                ),
-                "Profile name",
-                "A name for the discrete copy number data, e.g. Putative copy-number alterations from GISTIC."
-              )
+          splitLayout(
+            cellWidths = c("93%", "7%"),
+            textInput(inputId = "cna_profile_name", label = "Change profile name:"),
+            popify(
+              bsButton(
+                "q8",
+                label = "",
+                icon = icon("question"),
+                style = "info",
+                size = "extra-small"
+              ),
+              "Profile name",
+              "A name for the discrete copy number data, e.g. Putative copy-number alterations from GISTIC."
             )
           ),
-          div(
-            div(
-              textInput(inputId = "cna_profile_description", label = "Change profile description:")
-            ),
-            div(
-              style = "display: inline-block;vertical-align: middle;",
-              popify(
-                bsButton(
-                  "q9",
-                  label = "",
-                  icon = icon("question"),
-                  style = "info",
-                  size = "extra-small"
-                ),
-                "Profile description",
-                "A description of the copy number data."
-              )
+          splitLayout(
+            cellWidths = c("93%", "7%"),
+            textInput(inputId = "cna_profile_description", label = "Change profile description:"),
+            popify(
+              bsButton(
+                "q9",
+                label = "",
+                icon = icon("question"),
+                style = "info",
+                size = "extra-small"
+              ),
+              "Profile description",
+              "A description of the copy number data."
             )
           ),
           actionButton("saveMetadata", "Save metadata", class = "btn-success")
         ),
         column(
           6,
-          h5(strong("Current profile name:")),
+          htmltools::HTML("<label class='control-label'>Current profile name:</label>"),
           verbatimTextOutput("curr_profile_name"),
           
-          h5(strong("Current profile description:")),
+          htmltools::HTML("<label class='control-label'>Current profile description:</label>"),
           verbatimTextOutput("curr_profile_description")
         )
       )
