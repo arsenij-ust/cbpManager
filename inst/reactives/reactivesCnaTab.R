@@ -146,11 +146,10 @@ observeEvent(input$chooseCNA, {
       type = "error",
       duration = NULL
     )
-    return(NULL)
-  } 
-  # else {
-  #   loaded = TRUE
-  # }
+    # return(NULL)
+  } else {
+    loaded = TRUE
+  }
   
   # if a study is loaded, access respective samples and cna data
   if (loaded == TRUE) {
@@ -201,7 +200,7 @@ observeEvent(input$chooseCNA, {
     if (any(!colnames(uploaded_data$df)[3:ncol(uploaded_data$df)] %in% cases_samples)) {
       added = FALSE
       showNotification(
-        "Please enter all sample IDs on the study tab before proceeding.",
+        "Please enter all sample IDs in the 'Sample' tab before proceeding.",
         type = "error",
         duration = NULL
       )
@@ -295,8 +294,15 @@ observeEvent(input$saveCNA, {
   }
   
   if (!is.null(validated_data$df)) {
+    validated_data$df$Entrez_Gene_Id[is.na(validated_data$df$Entrez_Gene_Id)] <- ""
+    
+    if ("Entrez_Gene_Id" %in% colnames(validated_data$df)) {
+      validated_data$df <-
+        validated_data$df %>% dplyr::select(Hugo_Symbol, Entrez_Gene_Id, everything())
+    }
+    
     loadedData$data_cna <- validated_data$df
-    showNotification("CNA file submitted successfully!",
+    showNotification("Copy number data file submitted successfully!",
                      type = "message",
                      duration = 10
     )
@@ -383,7 +389,7 @@ observeEvent(input$saveCNA, {
   )
   
   # meta_CNA
-  if (file.path(study_dir, loadedData$studyID, "meta_CNA.txt")) {
+  if (!file.exists(file.path(study_dir, loadedData$studyID, "meta_CNA.txt"))) {
     meta_cna_df <-
       data.frame(
         V1 = c(
