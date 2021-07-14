@@ -65,7 +65,7 @@ output$MAFdata <- DT::renderDT({
 observeEvent(input$saveMAF, {
   if(is.null(loadedData$studyID)){
     showNotification(
-      "Please select and load a study in the 'Study' tab.",
+      "Please load a study in the 'Study' tab first.",
       type = "error",
       duration = NULL
     )

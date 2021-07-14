@@ -70,18 +70,28 @@ output$AddSampleUIs <- renderUI({
 # show modalDialog for new sample
 observeEvent(
   input$NewSample,
-  showModal(
-    modalDialog(
-      size = "m",
-      title = "Add sample",
-      uiOutput("AddSampleUIs"),
-      easyClose = FALSE,
-      footer = tagList(
-        modalButton("Cancel"),
-        actionButton("ModalbuttonAddSample", "Add")
+  {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
+    showModal(
+      modalDialog(
+        size = "m",
+        title = "Add sample",
+        uiOutput("AddSampleUIs"),
+        easyClose = FALSE,
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton("ModalbuttonAddSample", "Add")
+        )
       )
     )
-  )
+  }
 )
 # validate inputs in modalDialog and add new sample to table
 observeEvent(input$ModalbuttonAddSample, {
@@ -189,6 +199,14 @@ output$EditDataTypeSampleUIs <- renderUI({
 # ModalDialog for editing a patient
 observeEvent(input$EditSample,
   {
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please load a study in the 'Study' tab first.",
+        type = "error",
+        duration = NULL
+      )
+      return(NULL)
+    }
     if (is.null(input$sampleTable_rows_selected)) {
       showNotification("Please select a row", type = "warning", duration = NULL)
     } else if (input$sampleTable_rows_selected == 1) {
@@ -278,6 +296,14 @@ observeEvent(input$ModalbuttonEditSample, {
 
 # delete sample ---------------------------------------------------------------
 observeEvent(input$DeleteSample, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   if (is.null(input$sampleTable_rows_selected)) {
     showNotification("Please select a row", type = "warning", duration = NULL)
   } else if (input$sampleTable_rows_selected == 1 |
@@ -313,6 +339,14 @@ observeEvent(input$ModalbuttonDeleteSample, {
 # ModalDialog for adding a column
 observeEvent(input$AddColumnSample,
   {
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please load a study in the 'Study' tab first.",
+        type = "error",
+        duration = NULL
+      )
+      return(NULL)
+    }
     showModal(
       modalDialog(
         title = "Add new column(s)",
@@ -429,7 +463,7 @@ observeEvent(input$ModalbuttonAddColSample, {
         duration = NULL
       )
     } else {
-      colname <- .create_name(input$colnameSample)
+      colname <- create_name(input$colnameSample)
       loadedData$data_clinical_sample %<>% mutate(!!(colname) := "")
       loadedData$data_clinical_sample[1, colname] <-
         input$visShortNameSample
@@ -444,6 +478,14 @@ observeEvent(input$ModalbuttonAddColSample, {
 
 # delete column ---------------------------------------------------------------
 observeEvent(input$DeleteColumnSample, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   showModal(
     modalDialog(
       title = "Delete column(s)",
@@ -477,7 +519,7 @@ observeEvent(input$SaveDataSample,
   {
     if(is.null(loadedData$studyID)){
       showNotification(
-        "Please select and load a study in the 'Study' tab.",
+        "Please load a study in the 'Study' tab first.",
         type = "error",
         duration = NULL
       )

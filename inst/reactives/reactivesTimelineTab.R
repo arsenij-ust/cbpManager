@@ -44,6 +44,14 @@ output$dateTable <- DT::renderDT({
 
 # show modalDialog for new date entry
 observeEvent(input$datesAdd, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   showModal(
     modalDialog(
       size = "m",
@@ -110,6 +118,14 @@ observeEvent(input$ModalbuttonAddDate, {
 
 # edit date
 observeEvent(input$datesEdit, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   if (is.null(input$dateTable_rows_selected)) {
     showNotification("Please select a row.",
       type = "warning",
@@ -173,6 +189,14 @@ observeEvent(input$ModalbuttonEditDate, {
 
 # delete date entry
 observeEvent(input$datesDelete, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   if (is.null(input$dateTable_rows_selected)) {
     showNotification("Please select a row.",
       type = "warning",
@@ -204,7 +228,7 @@ observeEvent(input$ModalbuttonDeleteDate, {
 observeEvent(input$datesSave, {
   if(is.null(loadedData$studyID)){
     showNotification(
-      "Please select and load a study in the 'Study' tab.",
+      "Please load a study in the 'Study' tab first.",
       type = "error",
       duration = NULL
     )
@@ -528,6 +552,14 @@ output$selectTrackUI <- renderUI({
 
 
 observeEvent(input$editTrack, {
+  if(is.null(input$selectTrack)){
+    showNotification(
+      "Please select a timeline track first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   customTimelines$selectedTrack <- customTimelines$timelines[customTimelines$timelines$shortName == input$selectTrack, ]$name
 })
 
