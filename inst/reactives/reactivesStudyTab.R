@@ -23,7 +23,7 @@ observeEvent(input$tour_study, {
 
 # list files of study_dir ---------------------------------------------------------------
 cancer_study_rc <- reactive({
-  list.files(study_dir)
+  list.dirs(study_dir, full.names = FALSE, recursive = FALSE)
 })
 
 # dynamic cancer type selection with table ---------------------------------------------------------------
@@ -75,7 +75,7 @@ observeEvent(input$add_study, {
   studyID <- create_name(input$add_study_identifier, toupper = FALSE)
 
   # check if provided study ID already exists
-  if (studyID %in% list.files(study_dir)) {
+  if (studyID %in% list.dirs(study_dir, full.names = FALSE, recursive = FALSE)) {
     showModal(
       modalDialog(
         title = "Study ID already exists",
@@ -150,7 +150,7 @@ observeEvent(input$add_study, {
     # update UI "Select ID of cancer study"
     updateSelectInput(session,
       "cancer_study_identifier",
-      choices = c("", list.files(study_dir))
+      choices = c("", list.dirs(study_dir, full.names = FALSE, recursive = FALSE))
     )
 
     showNotification(paste0("Study ", studyID, " added successfully!"),
@@ -224,7 +224,7 @@ observeEvent(input$overwrite_study, {
   # update UI "Select ID of cancer study"
   updateSelectInput(session,
     "cancer_study_identifier",
-    choices = c("", list.files(study_dir))
+    choices = c("", list.dirs(study_dir, full.names = FALSE, recursive = FALSE))
   )
 
   showNotification(paste0("Study ", studyID, " updated successfully!"),
