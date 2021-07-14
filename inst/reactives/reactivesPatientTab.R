@@ -112,25 +112,35 @@ output$oncotree_tableModal <- DT::renderDT({
 
 # show modalDialog for new patient
 observeEvent(
-  input$NewPatient,
-  showModal(
-    modalDialog(
-      title = "Add patient",
-      uiOutput("AddPatientUIs"),
-      hr(),
-      h4("Add oncotree specific entries:"),
-      p(
-        "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', and 'CANCER_TYPE_DETAILED' does not exist yet, they will be added to the table."
-      ),
-      checkboxInput("addoncotree", label = "Add oncotree", value = FALSE),
-      uiOutput("AddOncotreeUIs"),
-      easyClose = FALSE,
-      footer = tagList(
-        modalButton("Cancel"),
-        actionButton("ModalbuttonAddPatient", "Add")
+  input$NewPatient,{
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please load a study in the 'Study' tab first.",
+        type = "error",
+        duration = NULL
+      )
+      return(NULL)
+    }
+
+    showModal(
+      modalDialog(
+        title = "Add patient",
+        uiOutput("AddPatientUIs"),
+        hr(),
+        h4("Add oncotree specific entries:"),
+        p(
+          "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', and 'CANCER_TYPE_DETAILED' does not exist yet, they will be added to the table."
+        ),
+        checkboxInput("addoncotree", label = "Add oncotree", value = FALSE),
+        uiOutput("AddOncotreeUIs"),
+        easyClose = FALSE,
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton("ModalbuttonAddPatient", "Add")
+        )
       )
     )
-  )
+  }
 )
 # validate inputs in modalDialog and add new patient to table
 observeEvent(input$ModalbuttonAddPatient, {
@@ -297,6 +307,14 @@ output$EditDataTypePatUIs <- renderUI({
 # ModalDialog for editing a patient
 observeEvent(input$EditPatient,
   {
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please load a study in the 'Study' tab first.",
+        type = "error",
+        duration = NULL
+      )
+      return(NULL)
+    }
     if (is.null(input$patientTable_rows_selected)) {
       showNotification("Please select a row", type = "warning", duration = NULL)
     } else if (input$patientTable_rows_selected == 1) {
@@ -406,6 +424,14 @@ observeEvent(input$ModalbuttonEditPatient, {
 # ModalDialog for editing a patient
 observeEvent(input$ImportPatient,
   {
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please load a study in the 'Study' tab first.",
+        type = "error",
+        duration = NULL
+      )
+      return(NULL)
+    }
     showModal(
       modalDialog(
         title = "Import patient from another study",
@@ -565,6 +591,14 @@ observeEvent(input$ModalbuttonImportPatient, {
 
 # delete patient  ---------------------------------------------------------------
 observeEvent(input$DeletePatient, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   if (is.null(input$patientTable_rows_selected)) {
     showNotification("Please select a row", type = "warning", duration = NULL)
   } else if (input$patientTable_rows_selected == 1 |
@@ -600,6 +634,14 @@ observeEvent(input$ModalbuttonDeletePatient, {
 # ModalDialog for adding a column
 observeEvent(input$AddColumnPatient,
   {
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please load a study in the 'Study' tab first.",
+        type = "error",
+        duration = NULL
+      )
+      return(NULL)
+    }
     showModal(
       modalDialog(
         title = "Add new column(s)",
@@ -728,6 +770,14 @@ observeEvent(input$ModalbuttonAddColPatient, {
 
 # delete column  ---------------------------------------------------------------
 observeEvent(input$DeleteColumnPatient, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   showModal(
     modalDialog(
       title = "Delete column(s)",
@@ -760,7 +810,7 @@ observeEvent(input$SaveDataPatient,
     # data_clinical_patient
     if(is.null(loadedData$studyID)){
       showNotification(
-        "Please select and load a study in the 'Study' tab.",
+        "Please load a study in the 'Study' tab first.",
         type = "error",
         duration = NULL
       )
