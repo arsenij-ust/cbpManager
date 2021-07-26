@@ -285,6 +285,12 @@ observeEvent(input$ModalbuttonEditSample, {
       type = "error",
       duration = NULL
     )
+  } else if (editSampleValues["SAMPLE_ID"] %in% loadedData$data_clinical_sample[- input$sampleTable_rows_selected, "SAMPLE_ID"]) {
+      showNotification(
+        "SAMPLE_ID already exists.",
+        type = "error",
+        duration = NULL
+      )
   } else {
     for (i in colnames(loadedData$data_clinical_sample)) {
       loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
