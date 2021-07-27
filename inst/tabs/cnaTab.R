@@ -1,0 +1,131 @@
+cnaTab <- tabItem(
+  tabName = "cna",
+  div(style="display:inline-block",h2("Copy Number Data")),
+  div(style="display:inline-block; padding-bottom:15px; margin-left:30px",bsButton(
+    "tour_cna",
+    label = "Tour",
+    icon = icon("question"),
+    style = "info",
+    size = "extra-small"
+  )),
+  fluidRow(
+    width = 12,
+    column(
+      width = 6,
+      id = "cna_description",
+      box(
+        title = "Description",
+        collapsible = TRUE,
+        collapsed = TRUE,
+        solidHeader = TRUE,
+        includeMarkdown(system.file("apphelp", "descriptionCnaTab.md", package = "cbpManager")),
+        width = NULL
+      )
+    ),
+    column(
+      width = 6,
+      id = "cna_img",
+      box(
+        title = "Sample from cBioPortal",
+        collapsible = TRUE,
+        collapsed = FALSE,
+        solidHeader = TRUE,
+        tags$head(
+          tags$style(
+            type = "text/css",
+            "#CopyNumberDataImg img {max-width: 100%; width: 100%; height: auto}"
+          )
+        ),
+        imageOutput(
+          "CopyNumberDataImg",
+          height = "auto"
+        ),
+        width = NULL
+      )
+    )
+  ),
+  fluidRow(
+    tags$head(
+      tags$style(HTML('#q8, #q9{margin-top: 24px}'))
+    ),
+    width = 12,
+    column(
+      width = 12,
+      id = "cna_metadata",
+      box(
+        title = "Change metadata of copy number alteration",
+        collapsible = TRUE,
+        collapsed = TRUE,
+        solidHeader = TRUE,
+        width = NULL,
+        column(
+          6,
+          splitLayout(
+            cellWidths = c("93%", "7%"),
+            textInput(inputId = "cna_profile_name", label = "Change profile name:"),
+            popify(
+              bsButton(
+                "q8",
+                label = "",
+                icon = icon("question"),
+                style = "info",
+                size = "extra-small"
+              ),
+              "Profile name",
+              "A name for the discrete copy number data, e.g. Putative copy-number alterations from GISTIC."
+            )
+          ),
+          splitLayout(
+            cellWidths = c("93%", "7%"),
+            textInput(inputId = "cna_profile_description", label = "Change profile description:"),
+            popify(
+              bsButton(
+                "q9",
+                label = "",
+                icon = icon("question"),
+                style = "info",
+                size = "extra-small"
+              ),
+              "Profile description",
+              "A description of the copy number data."
+            )
+          ),
+          actionButton("saveMetadata", "Save metadata", class = "btn-success")
+        ),
+        column(
+          6,
+          htmltools::HTML("<label class='control-label'>Current profile name:</label>"),
+          verbatimTextOutput("curr_profile_name"),
+          
+          htmltools::HTML("<label class='control-label'>Current profile description:</label>"),
+          verbatimTextOutput("curr_profile_description")
+        )
+      )
+    )
+  ),
+      
+  fluidRow(
+    width = 12,
+    box(
+      column(
+        3,
+        div(id = "chooseCNADiv",
+            fileInput("chooseCNA", "Choose Copy Number Data File",
+                      multiple = FALSE,
+                      accept = c(
+                        "text/tsv",
+                        "text/tab-separated-values,text/plain",
+                        ".tsv", ".txt"
+                      )
+            )
+        ),
+        actionButton("saveCNA", "Save file", class = "btn-success")
+      ),
+      column(
+        9,
+        DT::DTOutput("CNAdata")
+      ),
+      width = 12
+    )
+  )
+)

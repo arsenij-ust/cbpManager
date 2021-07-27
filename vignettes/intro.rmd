@@ -239,7 +239,15 @@ knitr::include_graphics(file.path("images/13.PNG"))
 
 ### Mutation data (MAF):
 
-The "Mutations" page offers the user the possibility to upload MAF files. If mutation data is already available, the content of the MAF file will be concatinated to the already existing data, taking into account the columns. The MAF file must meet certain requirements, i.e. contain specific columns (see [link](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5)). Similarly, the changes must be finalized by saving.
+The "Mutations" page offers the user the possibility to upload MAF files. If mutation data is already available, the content of the MAF file will be concatenated to the already existing data, taking into account the columns. The MAF file must meet certain requirements, i.e. contain specific columns (see [link](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5)). Similarly, the changes must be finalized by saving.
+
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path("images/20.PNG"))
+```
+
+### Copy number alteration (CNA):
+
+The "Copy Number Data" page offers the user the possibility to upload a file containing information about copy number alterations (CNA) of genes. If CNA data is already available, the content of the uploaded file will be concatenated to the already existing data, taking into account the rows and columns. The uploaded file must meet certain requirements, i.e. contain specific columns (see the example described [here](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-1)). Alternatively to a tab-separated file, meeting these requirements, the output file "all_thresholded.by_genes.txt" derived from GISTIC 2.0 can be uploaded directly. If the file upload was successful (without any error messages), you can see the preview of the resulting file in the table on the right. In the preview table the content of the file is combined with already existing data. **To generate the required study files and make the changes permanent, you need to click on the "Save file" button.**
 
 ```{r, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path("images/14.PNG"))
