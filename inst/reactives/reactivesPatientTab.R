@@ -317,7 +317,9 @@ observeEvent(input$EditPatient,
     }
     if (is.null(input$patientTable_rows_selected)) {
       showNotification("Please select a row", type = "warning", duration = NULL)
-    } else if (input$patientTable_rows_selected == 1) {
+      return(NULL)
+    }
+    if (input$patientTable_rows_selected == 1) {
       showModal(modalDialog(
         title = "Edit short name of attribute",
         uiOutput("EditNamePatUIs"),
@@ -387,7 +389,13 @@ observeEvent(input$ModalbuttonEditPatient, {
       type = "error",
       duration = NULL
     )
-  }  else if (input$addoncotree) {
+  } else if (editPatientValues["PATIENT_ID"] %in% loadedData$data_clinical_patient[- input$patientTable_rows_selected, "PATIENT_ID"]) {
+    showNotification(
+      "PATIENT_ID already exists.",
+      type = "error",
+      duration = NULL
+    )
+  } else if (input$addoncotree) {
     reqColumns <-
       c(
         "ONCOTREE_CODE",
