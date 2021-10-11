@@ -47,7 +47,7 @@ output$sampleTable <- DT::renderDT({
 # get IDs (for other tabs)
 sample_id_df <- reactiveValues(ids = NULL)
 observeEvent(loadedData$data_clinical_sample, {
-  sample_ids_df <- loadedData$data_clinical_sample[3:nrow(loadedData$data_clinical_sample),c("PATIENT_ID", "SAMPLE_ID")]
+  sample_ids_df <- loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample),c("PATIENT_ID", "SAMPLE_ID")]
   sample_id_df$ids <- sample_ids_df
 })
 
