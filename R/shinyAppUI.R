@@ -72,7 +72,19 @@ shinyAppUI <- dashboardPage(
           color: black;}"
       )
     ),
-    uiOutput("ui_loaded_study_info")
+    uiOutput("ui_loaded_study_info"),
+    uiOutput("package_version"),
+    tags$head(
+      tags$style("
+      #package_version {
+        position: absolute;
+        bottom: 0;
+        align: center;
+        padding-left: 80px;
+      }
+
+    ")
+    )
   ),
   dashboardBody(
     tags$head(

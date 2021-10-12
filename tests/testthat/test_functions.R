@@ -88,11 +88,11 @@ test_that("cBioPortalToDataFrame works correctly", {
 })
 
 test_that("getSampleIDs works correctly", {
-  expect_equal(
+  expect_true(all.equal(
     cbpManager:::getSampleIDs("test_data/data_clinical_sample.txt",
                               "Testpatient"),
     c("Testpatient_01", "Testpatient_02")
-  )
+  ))
 })
 
 

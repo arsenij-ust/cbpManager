@@ -1,8 +1,11 @@
 # Bugfixes:
 
-* cbpManager 1.1.2 & cbpManager 1.0.2:
-  - Prevent changing PATIENT_ID / SAMPLE_ID to an existing one when editing a patient / sample.
+* cbpManager 1.1.3 & cbpManager 1.0.3 (Oct 12, 2021):
+  - Show cbpManager version
+  - Minor bugfixes
 
+* cbpManager 1.1.2 & cbpManager 1.0.2 (Aug 4, 2021):
+  - Prevent changing PATIENT_ID / SAMPLE_ID to an existing one when editing a patient / sample.
 
 * cbpManager 1.1.1 & cbpManager 1.0.1 (Jul 19, 2021):
   - Show only directories instead of files and directories in the study selection
