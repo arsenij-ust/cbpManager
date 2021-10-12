@@ -22,44 +22,52 @@ observeEvent(input$tour_mutation, {
 })
 
 # upload file ---------------------------------------------------------------
-# observeEvent(input$chooseMAF, {
-#   if(!grepl("\\.[txt|tsv|maf|MAF|csv]", input$chooseMAF$name)){
-#     showNotification(
-#       "The file format is not supported. 
-#       File should be '.txt', '.tsv', '.maf', '.MAF', or '.csv'.",
-#       type = "error",
-#       duration = NULL
-#     )
-#   } else {
-#     uploaded_data <-
-#       as.data.frame(vroom::vroom(input$chooseMAF$datapath, delim = "\t"))
-#     requiredCols <-
-#       c(
-#         "Hugo_Symbol",
-#         "Tumor_Sample_Barcode",
-#         "Variant_Classification",
-#         "HGVSp_Short"
-#       )
-#     if (any(!requiredCols %in% colnames(uploaded_data))) {
-#       showNotification(
-#         "One or more of the required columns are missing.",
-#         type = "error",
-#         duration = NULL
-#       )
-#     } else {
-#       loadedData$data_mutations_extended <-
-#         dplyr::bind_rows(uploaded_data, loadedData$data_mutations_extended)
-#     }
-#   }
-#   
-# })
+upload <- reactiveValues(data = NULL)
+observeEvent(input$chooseMAF, {
+  if(!grepl("\\.[txt|tsv|maf|MAF|csv]", input$chooseMAF$name)){
+    showNotification(
+      "The file format is not supported.
+      File should be '.txt', '.tsv', '.maf', '.MAF', or '.csv'.",
+      type = "error",
+      duration = NULL
+    )
+  } else {
+    uploaded_data <-
+      as.data.frame(vroom::vroom(input$chooseMAF$datapath, delim = "\t"))
+    requiredCols <-
+      c(
+        "Hugo_Symbol",
+        "Tumor_Sample_Barcode",
+        "Variant_Classification",
+        "HGVSp_Short"
+      )
+    if (any(!requiredCols %in% colnames(uploaded_data))) {
+      showNotification(
+        "One or more of the required columns are missing. Required column names are: Hugo_Symbol, Tumor_Sample_Barcode, Variant_Classification, and HGVSp_Short. Please upload file again.",
+        type = "error",
+        duration = NULL
+      )
+    } else {
+      upload$data <- uploaded_data
+    }
+  }
+
+})
+
+observeEvent(input$AddPreview, {
+  loadedData$data_mutations_extended <- 
+    dplyr::bind_rows(upload$data, loadedData$data_mutations_extended)
+})
 
 # show table ---------------------------------------------------------------
-# output$previewMAF <- DT::renderDT({
-#   DT::datatable(loadedData$data_mutations_extended,
-#     options = list(scrollX = TRUE)
-#   )
-# })
+output$previewMAF <- DT::renderDT({
+  #if(!is.na(uploadedMAF)){
+  DT::datatable(upload$data,
+    options = list(scrollX = TRUE)
+  )
+  #}
+  
+})
 
 output$mafTable <- DT::renderDT({
   if (!is.null(loadedData$data_mutations_extended)) {
@@ -76,6 +84,10 @@ output$mafTable <- DT::renderDT({
 })
 
 Valid_Variant_Classification <- c("Unknown", "Frame_Shift_Del", "Frame_Shift_Ins", "In_Frame_Del", "In_Frame_Ins", "Missense_Mutation", "Nonsense_Mutation", "Silent", "Splice_Site", "Translation_Start_Site", "Nonstop_Mutation", "3'UTR", "3'Flank", "5'UTR", "5'Flank", "IGR", "Intron", "RNA", "Targeted_Region", "De_novo_Start_InFrame", "De_novo_Start_OutOfFrame", "Splice_Region")
+
+predefined_MAF_columns <- c(
+"Entrez_Gene_Id", "Center", "NCBI_Build", "Chromosome", "Start_Position", "End_Position", "Strand", "Variant_Type", "Reference_Allele", "Tumor_Seq_Allele1", "Tumor_Seq_Allele2", "dbSNP_RS1", "dbSNP_Val_Status1", "Matched_Norm_Sample_Barcode1", "Match_Norm_Seq_Allele1", "Match_Norm_Seq_Allele2", "Tumor_Validation_Allele1", "Tumor_Validation_Allele2", "Match_Norm_Validation_Allele11", "Match_Norm_Validation_Allele21", "Verification_Status1", "Validation_Status", "Mutation_Status", "Sequencing_Phase1", "Sequence_Source1", "Validation_Method1", "Score1", "BAM_File1", "Sequencer", "t_alt_count", "t_ref_count", "n_alt_count", "n_ref_count"
+)
 
 # add entry ---------------------------------------------------------------
 
@@ -334,8 +346,7 @@ output$AddColMAFUI <- renderUI({
       selectInput(
         inputId = "SelColnameMAF",
         label = "Select pre-defined column(s). (Some of them are entity specific)",
-        #TODO
-        choices = c("TODO"),
+        choices = predefined_MAF_columns,
         multiple = TRUE
       )
     ))
@@ -359,20 +370,10 @@ observeEvent(input$ModalbuttonAddColMAF, {
       )
     } else {
       # prevent overwriting existing columns
-      
-      #TODO
       colsToAdd <-
         input$SelColnameMAF[!input$SelColnameMAF %in% names(loadedData$data_mutations_extended)]
 
       loadedData$data_mutations_extended[colsToAdd] <- list("")
-      # for (col in colsToAdd) {
-      #   loadedData$data_clinical_sample[1, col] <-
-      #     sampleCols[which(sampleCols$colname == col), "shortColname"]
-      #   loadedData$data_clinical_sample[2, col] <-
-      #     sampleCols[which(sampleCols$colname == col), "longColname"]
-      #   loadedData$data_clinical_sample[3, col] <-
-      #     sampleCols[which(sampleCols$colname == col), "typeof"]
-      # }
       removeModal()
     }
   } else if (input$AddColMAFMode == 2) {
@@ -387,7 +388,7 @@ observeEvent(input$ModalbuttonAddColMAF, {
                        duration = NULL
       )
     } else {
-      loadedData$data_mutations_extended %<>% mutate(!!(colname) := "")
+      loadedData$data_mutations_extended %<>% mutate(!!(input$colnameMAF) := "")
       removeModal()
     }
   }

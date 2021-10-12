@@ -61,7 +61,7 @@ mutationsTab <- tabItem(
                       )
             )
         ),
-        actionButton("AddPreview", "Add uploaded data", class = "btn-success")
+        actionButton("AddPreview", "Add uploaded data to existing mutation data", class = "btn-success")
       ),
       column(
         9,
