@@ -1,7 +1,7 @@
 Package: cbpManager
 Type: Package
 Title: Generate, manage, and edit data and metadata files suitable for the import in cBioPortal for Cancer Genomics
-Version: 1.1.2
+Version: 1.1.3
 Date: 2021-03-16
 Authors@R: c(
     person(given = "Arsenij", family = "Ustjanzew", email = "arsenij.ustjanzew@gmail.com", role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-1014-4521")),
