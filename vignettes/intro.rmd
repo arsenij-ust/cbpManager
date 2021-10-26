@@ -239,7 +239,7 @@ knitr::include_graphics(file.path("images/13.PNG"))
 
 ### Mutation data (MAF):
 
-The "Mutations" page offers the user the possibility to upload MAF files. If mutation data is already available, the content of the MAF file will be concatinated to the already existing data, taking into account the columns. The MAF file must meet certain requirements, i.e. contain specific columns (see [link](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5)). Similarly, the changes must be finalized by saving.
+The "Mutations" page offers the user the possibility to upload mutation annotation format (MAF) files. If the study already contains mutation data, the content of the uploaded MAF file will be concatenated to the already existing data by clicking on the `Add uploaded data to existing mutation data` button. Columns of the uploaded file, that are new and not present in the existing data, will be added. Columns with similar names between the uploaded file and the already existing mutation data will be merged together. The MAF file must meet certain requirements, i.e. contain specific columns (see [link](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5)). Similarly to the previous tabs, the user can add, edit, and delete single mutations, and add or delete columns of the table at the bottom of the page. As always, saving is required to make the changes permanent.
 
 ```{r, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path("images/14.PNG"))

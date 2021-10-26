@@ -3,6 +3,7 @@ element;intro
 #mutation_description;This box contains a description of the <b>Mutation</b> tab.
 #mutation_img;Here you can see an example image how the mutation data will look later in cBioPortal.
 #MAFdata;If the loaded study already has mutation data, it would be shown in this table.
-#chooseMAFDiv;Upload a MAF file to the study. This file will be concatenated to the existing mutation data. Please have a look at the description box for the correct MAF format! If the upload was successful, the new mutation data is added to the table on the right.
+#chooseMAFDiv;Upload a valid MAF file. This file will be concatenated to the existing mutation data. Please have a look at the description box for the correct MAF format! If the upload was successful, you can see the the uploaded data in a preview table. If you want to add the uploaded data to the existing one, click on the "Add uploaded data to existing mutation data".
+#maf_main; As in the previous tabs, you can interactively add, edit and remove single mutations and add or delete columns. Do not forget to click on the "Save" button to make your changes permanent. If you forgot to click on this button all changes in the table persist only for the current session. <br><b>Do not forget to use this button after you modified the data!</b>
 #saveMAF;Make the changes persistent by saving the file!
 #Thanks;Thank you for taking the <b>Mutation</b> tab tour of <code>cbpManager</code>!
