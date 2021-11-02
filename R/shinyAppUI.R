@@ -73,7 +73,7 @@ shinyAppUI <- dashboardPage(
       )
     ),
     uiOutput("ui_loaded_study_info"),
-    uiOutput("package_version"),
+    textOutput("package_version"),
     tags$head(
       tags$style("
       #package_version {

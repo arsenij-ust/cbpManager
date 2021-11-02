@@ -571,7 +571,4 @@ output$ui_loaded_study_info <- renderUI({
 })
 
 #UI of package version
-output$package_version <- renderUI({
-  renderText(paste("Version:",packageVersion("cbpManager")))
-})
-
+output$package_version <- renderText({paste("Version:", packageVersion("cbpManager"))})
