@@ -127,6 +127,9 @@ observeEvent(input$ModalbuttonAddSample, {
     if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
       loadedData$data_clinical_sample <-
         rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
+      
+      # change tracker
+      study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
     } else {
       message(
         "Number of input values does not match with number of columns. 
@@ -296,6 +299,10 @@ observeEvent(input$ModalbuttonEditSample, {
       loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
         editSampleValues[i]
     }
+    
+    # change tracker
+    study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+    
     removeModal()
   }
 })
@@ -338,6 +345,10 @@ observeEvent(input$ModalbuttonDeleteSample, {
 
   loadedData$data_clinical_sample <-
     loadedData$data_clinical_sample[-entry, , drop = FALSE]
+  
+  # change tracker
+  study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+  
   removeModal()
 })
 
@@ -440,6 +451,10 @@ observeEvent(input$ModalbuttonAddColSample, {
         loadedData$data_clinical_sample[3, col] <-
           sampleCols[which(sampleCols$colname == col), "typeof"]
       }
+      
+      # change tracker
+      study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }
   } else if (input$AddColSampleMode == 2) {
@@ -477,6 +492,10 @@ observeEvent(input$ModalbuttonAddColSample, {
         input$visLongNameSample
       loadedData$data_clinical_sample[3, colname] <-
         input$typeofPat
+      
+      # change tracker
+      study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }
   }
@@ -518,6 +537,10 @@ observeEvent(input$DeleteColumnSample, {
 observeEvent(input$ModalbuttonDeleteColSample, {
   loadedData$data_clinical_sample <-
     loadedData$data_clinical_sample[, !(names(loadedData$data_clinical_sample) %in% input$SelColnameSample), drop = FALSE]
+  
+  # change tracker
+  study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+  
   removeModal()
 })
 # save sample table ---------------------------------------------------------------
@@ -656,6 +679,9 @@ observeEvent(input$SaveDataSample,
       file.path(case_list_dir, "cases_all.txt.temp"),
       file.path(case_list_dir, "cases_all.txt")
     )
+    
+    # change tracker
+    study_tracker$df[2, "Saved"] <- as.character(icon("check-circle"))
 
     # logging
     if (!is.null(logDir)) {

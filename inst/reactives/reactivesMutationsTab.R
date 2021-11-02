@@ -49,6 +49,9 @@ observeEvent(input$chooseMAF, {
     } else {
       loadedData$data_mutations_extended <-
         dplyr::bind_rows(uploaded_data, loadedData$data_mutations_extended)
+      
+      # change tracker
+      study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
     }
   }
   
@@ -175,6 +178,9 @@ observeEvent(input$saveMAF, {
       file.path(study_dir, loadedData$studyID, "meta_mutations_extended.txt")
     )
   }
+  
+  # change tracker
+  study_tracker$df[3, "Saved"] <- as.character(icon("check-circle"))
 
   # logging
   if (!is.null(logDir)) {
