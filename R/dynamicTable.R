@@ -20,7 +20,7 @@ addColumn_UI <- function(id, label = "Add column") {
 #' @param session Shiny session
 #' @param data source data as data.frame
 #' @return reactive data.frame of modified source data
-addColumn_Server <- function(input, output, session, data) {
+addColumn_Server <- function(input, output, session, data, study_tracker) {
   observeEvent(input$AddColumn, {
     ns <- session$ns
     showModal(
@@ -50,8 +50,8 @@ addColumn_Server <- function(input, output, session, data) {
     ))
   })
 
-  params <- reactiveValues(df = NULL)
-
+  params <- reactiveValues(data = NULL, study_tracker = NULL)
+  reactive({params$study_tracker <- study_tracker()})
   observeEvent(input$ModalbuttonAddCol, {
     if (input$colname == "") {
       showNotification("Column name cannot be empty.",
@@ -65,13 +65,23 @@ addColumn_Server <- function(input, output, session, data) {
       )
     } else {
       colname <- create_name(input$colname)
-      params$df <- data() %>% dplyr::mutate(!!(colname) := "")
+      params$data <- data() %>% dplyr::mutate(!!(colname) := "")
+      
+      # change tracker
+      if(!is.null(study_tracker())){
+        print("check")
+        params$study_tracker <- study_tracker()
+        params$study_tracker[4, "Saved"] <- as.character(icon("check-circle"))
+      }
+      #study_tracker()[4, "Saved"] <- as.character(icon("check-circle"))
+      #params$study_tracker <- study_tracker()
+      
       removeModal()
     }
   })
 
   return(reactive({
-    params$df
+    params
   }))
 }
 # delete column ----------------------------------------------------------------

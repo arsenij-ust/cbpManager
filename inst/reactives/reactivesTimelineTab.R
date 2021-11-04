@@ -330,10 +330,13 @@ observe({
 treatment_addCol <- callModule(
   module = addColumn_Server,
   id = "Treatment",
-  data = reactive(loadedData$data_timeline_treatment)
+  data = reactive(loadedData$data_timeline_treatment),
+  study_tracker = reactive(study_tracker$df)
 )
 observe({
-  loadedData$data_timeline_treatment <- treatment_addCol()
+  loadedData$data_timeline_treatment <- treatment_addCol()$data
+  study_tracker$df <- treatment_addCol()$study_tracker
+  print(study_tracker$df)
 })
 
 # save treatment data ---------------------------------------------------------------
