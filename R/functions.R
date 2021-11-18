@@ -295,19 +295,25 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
 #'
 #' @param colname column name
 #' @param mode determines the inputId prefix of the UI-widget
+#' @param tab "Patient", "Sample" - The used tab; sets the html id prefix of the input
 #' @return A oncotree specific shiny UI-widget
 #' @examples 
 #' oncotree <- jsonlite::fromJSON(system.file("extdata", "oncotree.json", package = "cbpManager"))
 #' cancer_type <- unique(oncotree$mainType[which(!is.na(oncotree$mainType))])
 #' cbpManager:::generateOncotreeUIwidgets("CANCER_TYPE", "add")
 #' 
-generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
+generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit"), tab=c("Patient", "Sample")) {
   mode <- match.arg(mode)
+  tab <- match.arg(tab)
 
-  if (mode == "add") {
+  if (mode == "add" & tab == "Patient") {
     id_prefix <- "addPatientInput_"
-  } else if (mode == "edit") {
+  } else if (mode == "edit" & tab == "Patient") {
     id_prefix <- "editPatientInput_"
+  } else if (mode == "add" & tab == "Sample") {
+    id_prefix <- "addSampleInput_"
+  } else if (mode == "edit" & tab == "Sample") {
+    id_prefix <- "editSampleInput_"
   }
 
   if (colname == "CANCER_TYPE") {
@@ -348,14 +354,20 @@ generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
 #' @param session Shiny session
 #' @param row_last_clicked the index of the row last clicked in the oncotree_table
 #' @param mode determines the inputId prefix of the UI-widget
+#' @param tab "Patient", "Sample" - The used tab; sets the html id pr
 #' @return nothing to return
-updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "edit")) {
+updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "edit"), tab=c("Patient", "Sample")) {
   mode <- match.arg(mode)
+  tab <- match.arg(tab)
 
-  if (mode == "add") {
+  if (mode == "add" & tab == "Patient") {
     id_prefix <- "addPatientInput_"
-  } else if (mode == "edit") {
+  } else if (mode == "edit" & tab == "Patient") {
     id_prefix <- "editPatientInput_"
+  } else if (mode == "add" & tab == "Sample") {
+    id_prefix <- "addSampleInput_"
+  } else if (mode == "edit" & tab == "Sample") {
+    id_prefix <- "editSampleInput_"
   }
 
   updateSelectInput(session, paste0(id_prefix, "CANCER_TYPE"),

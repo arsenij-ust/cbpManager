@@ -67,6 +67,48 @@ output$AddSampleUIs <- renderUI({
   )
 })
 
+# output reactive UIs - oncotree specific
+output$AddOncotreeUIs_sample <- renderUI({
+  if (input$addoncotree_sample) {
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    colsToAdd <-
+      reqColumns[!reqColumns %in% names(loadedData$data_clinical_sample)]
+    fluidPage(fluidRow(
+      p(
+        "Search the tumor type for this patient and select the row in the following table:"
+      ),
+      DT::DTOutput("oncotree_tableModal"),
+      lapply(colsToAdd, function(colname) {
+        generateOncotreeUIwidgets(colname, mode = "add", tab = "Sample")
+      })
+    ))
+  }
+})
+
+observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
+  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "add", tab = "Sample")
+})
+
+output$oncotree_tableModal <- DT::renderDT({
+  columns_to_show <- c("code", "name", "mainType", "tissue")
+  DT::datatable(
+    oncotree[, columns_to_show],
+    selection = "single",
+    rownames = FALSE,
+    options = list(
+      scrollX = TRUE,
+      scrollY = TRUE,
+      pageLength = 5,
+      lengthMenu = c(5, 10, 15, 20)
+    )
+  )
+})
+
 # show modalDialog for new sample
 observeEvent(
   input$NewSample,
@@ -84,6 +126,13 @@ observeEvent(
         size = "m",
         title = "Add sample",
         uiOutput("AddSampleUIs"),
+        hr(),
+        h4("Add oncotree specific entries:"),
+        p(
+          "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', and 'CANCER_TYPE_DETAILED' does not exist yet, they will be added to the table."
+        ),
+        checkboxInput("addoncotree_sample", label = "Add oncotree", value = FALSE),
+        uiOutput("AddOncotreeUIs_sample"),
         easyClose = FALSE,
         footer = tagList(
           modalButton("Cancel"),
@@ -122,6 +171,44 @@ observeEvent(input$ModalbuttonAddSample, {
       type = "error",
       duration = NULL
     )
+  } else if (input$addoncotree_sample) {
+    # add missing columns
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    loadedData$data_clinical_sample <-
+      fncols(loadedData$data_clinical_sample, reqColumns)
+    
+    for (col in reqColumns) {
+      loadedData$data_clinical_sample[1, col] <-
+        sampleCols[which(sampleCols$colname == col), "shortColname"]
+      loadedData$data_clinical_patient[2, col] <-
+        sampleCols[which(sampleCols$colname == col), "longColname"]
+      loadedData$data_clinical_patient[3, col] <-
+        sampleCols[which(sampleCols$colname == col), "typeof"]
+    }
+    
+    # add new row
+    if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
+      loadedData$data_clinical_sample <-
+        rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
+    } else {
+      message(
+        "Number of input values does not match with number of columns. 
+        Please contact the support."
+      )
+      showNotification(
+        "Adding new row not possible. 
+        Number of input values does not match with number of columns. 
+        Please contact the support.",
+        type = "error",
+        duration = NULL
+      )
+    }
+    removeModal()
   } else {
     #check if rbind would work according to number of input items
     if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
@@ -161,6 +248,35 @@ output$EditSampleUIs <- renderUI({
     }
   )
 })
+
+
+# output reactive UIs - oncotree specific
+output$EditOncotreeUIs_sample <- renderUI({
+  if (input$addoncotree_sample) {
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    colsToAdd <-
+      reqColumns[!reqColumns %in% names(loadedData$data_clinical_sample)]
+    fluidPage(fluidRow(
+      p(
+        "Search the tumor type for this patient and select the row in the following table:"
+      ),
+      DT::DTOutput("oncotree_tableModal"),
+      lapply(colsToAdd, function(colname) {
+        generateOncotreeUIwidgets(colname, mode = "edit", tab = "Sample")
+      })
+    ))
+  }
+})
+
+observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
+  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "edit", tab = "Sample")
+})
+
 
 # output UI edit name
 output$EditNameSampleUIs <- renderUI({
@@ -244,6 +360,13 @@ observeEvent(input$EditSample,
         modalDialog(
           title = "Edit sample",
           uiOutput("EditSampleUIs"),
+          hr(),
+          h4("Add oncotree specific entries:"),
+          p(
+            "* If columns 'ONCOTREE_CODE', 'CANCER_TYPE', and 'CANCER_TYPE_DETAILED' does not exist yet, they will be added to the table."
+          ),
+          checkboxInput("addoncotree_sample", label = "Add oncotree", value = FALSE),
+          uiOutput("EditOncotreeUIs_sample"),
           easyClose = FALSE,
           footer = tagList(
             modalButton("Cancel"),
@@ -291,6 +414,29 @@ observeEvent(input$ModalbuttonEditSample, {
         type = "error",
         duration = NULL
       )
+  } else if (input$addoncotree_sample) {
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    loadedData$data_clinical_sample <-
+      fncols(loadedData$data_clinical_sample, reqColumns)
+    for (col in reqColumns) {
+      loadedData$data_clinical_sample[1, col] <-
+        sampleCols[which(sampleCols$colname == col), "shortColname"]
+      loadedData$data_clinical_sample[2, col] <-
+        sampleCols[which(sampleCols$colname == col), "longColname"]
+      loadedData$data_clinical_sample[3, col] <-
+        sampleCols[which(sampleCols$colname == col), "typeof"]
+    }
+    
+    for (i in colnames(loadedData$data_clinical_sample)) {
+      loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
+        editSampleValues[i]
+    }
+    removeModal()
   } else {
     for (i in colnames(loadedData$data_clinical_sample)) {
       loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-

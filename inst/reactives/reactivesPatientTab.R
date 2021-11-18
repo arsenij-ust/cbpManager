@@ -85,14 +85,14 @@ output$AddOncotreeUIs <- renderUI({
       ),
       DT::DTOutput("oncotree_tableModal"),
       lapply(colsToAdd, function(colname) {
-        generateOncotreeUIwidgets(colname, mode = "add")
+        generateOncotreeUIwidgets(colname, mode = "add", tab = "Patient")
       })
     ))
   }
 })
 
 observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
-  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "add")
+  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "add", tab = "Patient")
 })
 
 output$oncotree_tableModal <- DT::renderDT({
@@ -258,14 +258,14 @@ output$EditOncotreeUIs <- renderUI({
       ),
       DT::DTOutput("oncotree_tableModal"),
       lapply(colsToAdd, function(colname) {
-        generateOncotreeUIwidgets(colname, mode = "edit")
+        generateOncotreeUIwidgets(colname, mode = "edit", tab = "Patient")
       })
     ))
   }
 })
 
 observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
-  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "edit")
+  updateOncotreeUIwidgets(session, input$oncotree_tableModal_row_last_clicked, mode = "edit", tab = "Patient")
 })
 
 
@@ -406,11 +406,11 @@ observeEvent(input$ModalbuttonEditPatient, {
       fncols(loadedData$data_clinical_patient, reqColumns)
     for (col in reqColumns) {
       loadedData$data_clinical_patient[1, col] <-
-        sampleCols[which(patientCols$colname == col), "shortColname"]
+        patientCols[which(patientCols$colname == col), "shortColname"]
       loadedData$data_clinical_patient[2, col] <-
-        sampleCols[which(patientCols$colname == col), "longColname"]
+        patientCols[which(patientCols$colname == col), "longColname"]
       loadedData$data_clinical_patient[3, col] <-
-        sampleCols[which(patientCols$colname == col), "typeof"]
+        patientCols[which(patientCols$colname == col), "typeof"]
     }
     
     for (i in colnames(loadedData$data_clinical_patient)) {
