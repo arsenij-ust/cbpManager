@@ -589,6 +589,7 @@ output$ui_change_tracker <- DT::renderDT({
         options = list(
           dom = 't',
           ordering=FALSE,
+          columnDefs = list(list(className = 'dt-center', targets = "_all")),
           initComplete = DT::JS(
             "function(settings, json) {",
             "$(this.api().table().header()).css({'background-color': '#517fb9', 'color': '#fff'});",

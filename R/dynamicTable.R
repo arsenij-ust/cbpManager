@@ -20,7 +20,7 @@ addColumn_UI <- function(id, label = "Add column") {
 #' @param session Shiny session
 #' @param data source data as data.frame
 #' @return reactive data.frame of modified source data
-addColumn_Server <- function(input, output, session, data, study_tracker) {
+addColumn_Server <- function(input, output, session, data) {
   observeEvent(input$AddColumn, {
     ns <- session$ns
     showModal(
@@ -49,39 +49,29 @@ addColumn_Server <- function(input, output, session, data, study_tracker) {
       )
     ))
   })
-
-  params <- reactiveValues(data = NULL, study_tracker = NULL)
-  reactive({params$study_tracker <- study_tracker()})
+  
+  params <- reactiveValues(df = NULL)
+  
   observeEvent(input$ModalbuttonAddCol, {
     if (input$colname == "") {
       showNotification("Column name cannot be empty.",
-        type = "error",
-        duration = NULL
+                       type = "error",
+                       duration = NULL
       )
     } else if (toupper(input$colname) %in% colnames(data)) {
       showNotification("Column already exists.",
-        type = "error",
-        duration = NULL
+                       type = "error",
+                       duration = NULL
       )
     } else {
       colname <- create_name(input$colname)
-      params$data <- data() %>% dplyr::mutate(!!(colname) := "")
-      
-      # change tracker
-      if(!is.null(study_tracker())){
-        print("check")
-        params$study_tracker <- study_tracker()
-        params$study_tracker[4, "Saved"] <- as.character(icon("check-circle"))
-      }
-      #study_tracker()[4, "Saved"] <- as.character(icon("check-circle"))
-      #params$study_tracker <- study_tracker()
-      
+      params$df <- data() %>% dplyr::mutate(!!(colname) := "")
       removeModal()
     }
   })
-
+  
   return(reactive({
-    params
+    params$df
   }))
 }
 # delete column ----------------------------------------------------------------
@@ -689,6 +679,7 @@ saveTimeline_UI <- function(id, label = "Save") {
 #' @return nothing to return
 saveTimeline_Server <-
   function(input, output, session, data, study_id) {
+    params <- reactiveValues(check = FALSE)
     observeEvent(input$SaveTimeline, {
       if(is.null(study_id())){
         showNotification(
@@ -765,5 +756,10 @@ saveTimeline_Server <-
           modified_file = file.path(study_id(), meta_filename)
         )
       }
+      params$check <- runif(1)
     })
+    
+    return(reactive({
+      params$check
+    }))
   }

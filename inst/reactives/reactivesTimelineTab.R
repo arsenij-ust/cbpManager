@@ -265,7 +265,7 @@ observeEvent(input$datesSave, {
 # Data table output
 output$treatmentTable <- DT::renderDT({
   hidenColsTreatment <-
-    which(colnames(loadedData$data_timeline_surgery) %in% c("EVENT_TYPE")) - 1
+    which(colnames(loadedData$data_timeline_treatment) %in% c("EVENT_TYPE")) - 1
   DT::datatable(
     loadedData$data_timeline_treatment,
     selection = "single",
@@ -285,8 +285,10 @@ treatment_addRow <- callModule(
   patient_ids = reactive(patient_id_list$ids),
   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis)
 )
-observe({
+observeEvent(treatment_addRow(),{
   loadedData$data_timeline_treatment <- treatment_addRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # edit treatment entry ---------------------------------------------------------------
@@ -298,8 +300,10 @@ treatment_editRow <- callModule(
   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
   selected_row = reactive(input$treatmentTable_rows_selected)
 )
-observe({
+observeEvent(treatment_editRow(),{
   loadedData$data_timeline_treatment <- treatment_editRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # delete treatmemt entry ---------------------------------------------------------------
@@ -309,8 +313,10 @@ treatment_delRow <- callModule(
   data = reactive(loadedData$data_timeline_treatment),
   selected_row = reactive(input$treatmentTable_rows_selected)
 )
-observe({
+observeEvent(treatment_delRow(),{
   loadedData$data_timeline_treatment <- treatment_delRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # delete treatmemt column ---------------------------------------------------------------
@@ -321,8 +327,10 @@ treatment_delCol <- callModule(
   data = reactive(loadedData$data_timeline_treatment),
   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
 )
-observe({
+observeEvent(treatment_delCol(),{
   loadedData$data_timeline_treatment <- treatment_delCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # add treatmemt column ---------------------------------------------------------------
@@ -330,22 +338,28 @@ observe({
 treatment_addCol <- callModule(
   module = addColumn_Server,
   id = "Treatment",
-  data = reactive(loadedData$data_timeline_treatment),
-  study_tracker = reactive(study_tracker$df)
+  data = reactive(loadedData$data_timeline_treatment)
 )
-observe({
-  loadedData$data_timeline_treatment <- treatment_addCol()$data
-  study_tracker$df <- treatment_addCol()$study_tracker
-  print(study_tracker$df)
+observeEvent(treatment_addCol(),{
+  loadedData$data_timeline_treatment <- treatment_addCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # save treatment data ---------------------------------------------------------------
-callModule(
+
+treatment_save <- callModule(
   module = saveTimeline_Server,
   id = "Treatment",
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_treatment)
 )
+
+observeEvent(treatment_save(),{
+  # change tracker
+  check <- treatment_save()
+  study_tracker$df[4, "Saved"] <- as.character(icon("check-circle"))
+})
 
 # surgery timeline ---------------------------------------------------------------
 # Data table output
@@ -371,8 +385,10 @@ surgery_addRow <- callModule(
   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
   mode = "timepoint"
 )
-observe({
+observeEvent(surgery_addRow(),{
   loadedData$data_timeline_surgery <- surgery_addRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # edit surgery entry ---------------------------------------------------------------
@@ -385,8 +401,10 @@ surgery_editRow <- callModule(
   selected_row = reactive(input$surgeryTable_rows_selected),
   mode = "timepoint"
 )
-observe({
+observeEvent(surgery_editRow(),{
   loadedData$data_timeline_surgery <- surgery_editRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # delete surgery entry ---------------------------------------------------------------
@@ -396,8 +414,10 @@ surgery_delRow <- callModule(
   data = reactive(loadedData$data_timeline_surgery),
   selected_row = reactive(input$surgeryTable_rows_selected)
 )
-observe({
+observeEvent(surgery_delRow(),{
   loadedData$data_timeline_surgery <- surgery_delRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # delete surgery column ---------------------------------------------------------------
@@ -407,8 +427,10 @@ surgery_delCol <- callModule(
   data = reactive(loadedData$data_timeline_surgery),
   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
 )
-observe({
+observeEvent(surgery_delCol(),{
   loadedData$data_timeline_surgery <- surgery_delCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # add surgery column ---------------------------------------------------------------
@@ -417,17 +439,25 @@ surgery_addCol <- callModule(
   id = "Surgery",
   data = reactive(loadedData$data_timeline_surgery)
 )
-observe({
+observeEvent(surgery_addCol(),{
   loadedData$data_timeline_surgery <- surgery_addCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # save surgery data ---------------------------------------------------------------
-callModule(
+surgery_save <- callModule(
   module = saveTimeline_Server,
   id = "Surgery",
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_surgery)
 )
+
+observeEvent(surgery_save(),{
+  # change tracker
+  check <- surgery_save()
+  study_tracker$df[4, "Saved"] <- as.character(icon("check-circle"))
+})
 
 # status timeline ---------------------------------------------------------------
 # Data table output
@@ -453,8 +483,10 @@ status_addRow <- callModule(
   dates_first_diagnosis = reactive(loadedData$dates_first_diagnosis),
   mode = "timepoint"
 )
-observe({
+observeEvent(status_addRow(),{
   loadedData$data_timeline_status <- status_addRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # edit status entry ---------------------------------------------------------------
@@ -467,8 +499,10 @@ status_editRow <- callModule(
   selected_row = reactive(input$statusTable_rows_selected),
   mode = "timepoint"
 )
-observe({
+observeEvent(status_editRow(),{
   loadedData$data_timeline_status <- status_editRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # delete status entry ---------------------------------------------------------------
@@ -478,8 +512,10 @@ status_delRow <- callModule(
   data = reactive(loadedData$data_timeline_status),
   selected_row = reactive(input$statusTable_rows_selected)
 )
-observe({
+observeEvent(status_delRow(),{
   loadedData$data_timeline_status <- status_delRow()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # delete status column ---------------------------------------------------------------
@@ -489,8 +525,10 @@ status_delCol <- callModule(
   data = reactive(loadedData$data_timeline_status),
   exclude = c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE")
 )
-observe({
+observeEvent(status_delCol(),{
   loadedData$data_timeline_status <- status_delCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # add status column ---------------------------------------------------------------
@@ -499,17 +537,25 @@ status_addCol <- callModule(
   id = "Status",
   data = reactive(loadedData$data_timeline_status)
 )
-observe({
+observeEvent(status_addCol(),{
   loadedData$data_timeline_status <- status_addCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
 # save status data ---------------------------------------------------------------
-callModule(
+status_save <- callModule(
   module = saveTimeline_Server,
   id = "Status",
   study_id = reactive(loadedData$studyID),
   data = reactive(loadedData$data_timeline_status)
 )
+
+observeEvent(status_save(),{
+  # change tracker
+  check <- status_save()
+  study_tracker$df[4, "Saved"] <- as.character(icon("check-circle"))
+})
 
 # custom tracks ---------------------------------------------------------------
 # minimal data.frame of a timeline track
@@ -625,6 +671,8 @@ observeEvent(input$ct_ModalbuttonAddCol, {
   } else {
     ct_colname <- create_name(input$ct_colname)
     loadedData[[customTimelines$selectedTrack]] <- data %>% dplyr::mutate(!!(ct_colname) := "")
+    # change tracker
+    study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
     removeModal()
   }
 })
@@ -658,6 +706,8 @@ observeEvent(input$DeleteColumn_ct, {
 observeEvent(input$ct_ModalbuttonDeleteCol, {
   loadedData[[customTimelines$selectedTrack]] <-
     loadedData[[customTimelines$selectedTrack]][, !(names(loadedData[[customTimelines$selectedTrack]]) %in% input$ct_DelColname), drop = FALSE]
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
   removeModal()
 })
 
@@ -684,6 +734,8 @@ observeEvent(input$ct_ModalbuttonDeleteEntry, {
   entry <- input$Table_ct_rows_selected
 
   loadedData[[customTimelines$selectedTrack]] <- loadedData[[customTimelines$selectedTrack]][-entry, , drop = FALSE]
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
   removeModal()
 })
 
@@ -784,6 +836,8 @@ observeEvent(input$ct_ModalbuttonAdd, {
       addPatientValues$START_DATE <- start
       addPatientValues$STOP_DATE <- end
       loadedData[[customTimelines$selectedTrack]] <- plyr::rbind.fill(data, as.data.frame(addPatientValues))
+      # change tracker
+      study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
       removeModal()
     }
   }
@@ -896,6 +950,8 @@ observeEvent(input$ct_ModalbuttonEdit, {
       for (i in colnames(data)) {
         loadedData[[customTimelines$selectedTrack]][selected_row, i] <- editValues[i]
       }
+      # change tracker
+      study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
       removeModal()
     }
   }
@@ -955,5 +1011,9 @@ observeEvent(input$SaveTimeline_ct, {
     file.path(study_dir, loadedData$studyID, meta_filename_temp),
     file.path(study_dir, loadedData$studyID, meta_filename)
   )
+  
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("check-circle"))
+  
   showNotification("Data saved successfully!", type = "message", duration = 10)
 })
