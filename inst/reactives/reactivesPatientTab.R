@@ -383,7 +383,7 @@ observeEvent(input$ModalbuttonEditPatient, {
       type = "error",
       duration = NULL
     )
-  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editPatientValues["PATIENT_ID"])) {
+  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editPatientValues["PATIENT_ID"]) & (input$patientTable_rows_selected != 1 & input$patientTable_rows_selected != 2)) {
     showNotification(
       "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
       type = "error",
