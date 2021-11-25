@@ -268,7 +268,7 @@ observeEvent(input$ModalbuttonEditSample, {
                      type = "error",
                      duration = NULL
     )
-  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["PATIENT_ID"])) {
+  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["PATIENT_ID"]) & (input$sampleTable_rows_selected != 1 & input$sampleTable_rows_selected != 2)) {
     showNotification(
       "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
       type = "error",
@@ -279,13 +279,13 @@ observeEvent(input$ModalbuttonEditSample, {
                      type = "error",
                      duration = NULL
     )
-  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["SAMPLE_ID"])) {
+  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["SAMPLE_ID"]) & (input$sampleTable_rows_selected != 1 & input$sampleTable_rows_selected != 2)) {
     showNotification(
       "SAMPLE_ID allows only numbers, letters, points, underscores and hyphens.",
       type = "error",
       duration = NULL
     )
-  } else if (editSampleValues["SAMPLE_ID"] %in% loadedData$data_clinical_sample[- input$sampleTable_rows_selected, "SAMPLE_ID"]) {
+  } else if (editSampleValues["SAMPLE_ID"] %in% loadedData$data_clinical_sample[- input$sampleTable_rows_selected, "SAMPLE_ID"] & (input$sampleTable_rows_selected != 1 & input$sampleTable_rows_selected != 2)) {
       showNotification(
         "SAMPLE_ID already exists.",
         type = "error",
