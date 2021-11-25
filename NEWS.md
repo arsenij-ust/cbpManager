@@ -1,6 +1,6 @@
 # Bugfixes:
 
-* cbpManager 1.1.3 & cbpManager 1.0.3 (Oct 12, 2021):
+* cbpManager 1.2.1 & cbpManager 1.3.1 (Nov 11, 2021):
   - Show cbpManager version
   - Minor bugfixes
 
