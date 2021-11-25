@@ -12,21 +12,19 @@
   - Added notifications if no study is loaded but the user tries to push buttons
   - Resolved error when trying to add a new column in the Sample tab
 
-# cbpManager 0.1.1
+# New features cbpManager 1.3.2
 
-## New features
+* Oncotree functionality is now avaliable also in the sample tab 
+
+# New features cbpManager 0.1.1
 
 * 'Validation' tab allows to validate created files.
 * Improved usability by changing descriptions and adding interactive tours
 
-# cbpManager 0.1.0
-
-## New features
+# New features cbpManager 0.1.0
 
 * much of the functionality available, in a proof of concept format.
 
-# cbpManager 0.0.1
-
-## New features
+# New features cbpManager 0.0.1
 
 * backbone of the project started!
