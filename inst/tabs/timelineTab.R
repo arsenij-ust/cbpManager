@@ -138,8 +138,7 @@ timelineTab <- tabItem(
           choices = list(
             "timeline",
             "timepoint"
-          ),
-          selected = 1
+          )
         )
       ),
       div(
