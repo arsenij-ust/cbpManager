@@ -307,6 +307,37 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
         selected = selected
       ),
     ))
+  } else if (colname == "Mutation_Status" & tab == "Mutation") {
+    fluidRow(column(
+      width = 8,
+      selectizeInput(
+        inputId = paste0(id_prefix, colname),
+        label = paste0(colname, " (user text input allowed)"),
+        choices = c("None", "Somatic", "Germline", "LOH", "Wildtype"),
+        options = list(create = TRUE),
+        selected = selected
+      ),
+    ))
+  } else if (colname == "Verification_Status" & tab == "Mutation") {
+    fluidRow(column(
+      width = 8,
+      selectInput(
+        inputId = paste0(id_prefix, colname),
+        label = colname,
+        choices = c("NA", "Verified", "Unknown"),
+        selected = selected
+      ),
+    ))
+  } else if (colname == "Validation_Status" & tab == "Mutation") {
+    fluidRow(column(
+      width = 8,
+      selectInput(
+        inputId = paste0(id_prefix, colname),
+        label = colname,
+        choices = c("NA", "Valid", "Invalid", "Untested", "Inconclusive", "Redacted", "Unknown"),
+        selected = selected
+      ),
+    ))
   } else {
     fluidRow(column(
       width = 8,

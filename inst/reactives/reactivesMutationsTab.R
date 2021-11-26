@@ -24,6 +24,14 @@ observeEvent(input$tour_mutation, {
 # upload file ---------------------------------------------------------------
 upload <- reactiveValues(data = NULL)
 observeEvent(input$chooseMAF, {
+  if(is.null(loadedData$studyID)){
+    showNotification(
+      "Please load a study in the 'Study' tab first.",
+      type = "error",
+      duration = NULL
+    )
+    return(NULL)
+  }
   if(!grepl("\\.[txt|tsv|maf|MAF|csv]", input$chooseMAF$name)){
     showNotification(
       "The file format is not supported.
@@ -54,19 +62,103 @@ observeEvent(input$chooseMAF, {
 
 })
 
-observeEvent(input$AddPreview, {
-  loadedData$data_mutations_extended <- 
-    dplyr::bind_rows(upload$data, loadedData$data_mutations_extended)
+
+# output for adding the uploaded file to Mutation data
+output$AddUploadedMAFUI <- renderUI({
+  requiredCols <-
+    c(
+      "Hugo_Symbol",
+      "Tumor_Sample_Barcode",
+      "Variant_Classification",
+      "HGVSp_Short"
+    )
+  if (input$select_AddMAFMode == 2) {
+    fluidRow(column(
+      width = 8,
+      selectInput(
+        inputId = "SelColnameMAF",
+        label = "Select columns, that should be imported to the Mutation data? 
+        (The four required columns will be imported anyway.)",
+        choices = setdiff(
+          colnames(upload$data),
+          requiredCols),
+        multiple = TRUE
+      )
+    ))
+  }
+})
+
+# show modalDialog for adding the uploaded file to Mutation data
+observeEvent(
+  input$AddPreview,
+  {
+    if(is.null(loadedData$studyID)){
+      showNotification(
+        "Please load a study in the 'Study' tab first.",
+        type = "error",
+        duration = NULL
+      )
+      return(NULL)
+    }
+    showModal(
+      modalDialog(
+        size = "m",
+        title = "Import uploaded data to Mutaion data",
+        radioButtons("select_AddMAFMode", label = NULL,
+                     choices = list("Add all columns" = 1, "Add selected columns (+ required columns)" = 2)),
+        uiOutput("AddUploadedMAFUI"),
+        easyClose = FALSE,
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton("ModalbuttonAddUploadedMAF", "Add")
+        )
+      )
+    )
+  }
+)
+
+# check MAF data that should be added to the Mutation data and add all or selected columns
+observeEvent(input$ModalbuttonAddUploadedMAF, {
+  req_cols <- c(
+    "Hugo_Symbol",
+    "Tumor_Sample_Barcode",
+    "Variant_Classification",
+    "HGVSp_Short"
+  )
+
+  if (!all(upload$data$Tumor_Sample_Barcode %in% sample_id_df$ids$SAMPLE_ID)){
+    showNotification(
+      "One or more of the Tumor_Sample_Barcodes in the MAF file do not exist in the Sample data (SAMPLE_ID column). Please navigate to the Sample tab and add the respective Samples.",
+      type = "error",
+      duration = NULL
+    )
+  } else if (nrow(dplyr::inner_join(upload$data[,req_cols], loadedData$data_mutations_extended[,req_cols])) >= 1){
+    showNotification(
+      "One or more entries of the MAF file (based on the columns Hugo_Symbol, Tumor_Sample_Barcode, Variant_Classification, and HGVSp_Short) are already present in the Mutation data.",
+      type = "error",
+      duration = NULL
+    )
+  } else if (input$select_AddMAFMode == 1){
+    colOrder <- c(req_cols, setdiff(
+      colnames(upload$data),
+      req_cols))
+   loadedData$data_mutations_extended <-
+    dplyr::bind_rows(upload$data[,colOrder], loadedData$data_mutations_extended)
+   removeModal()
+  } else if (input$select_AddMAFMode == 2){
+    selCols <- c(req_cols, input$SelColnameMAF)
+    loadedData$data_mutations_extended <-
+      dplyr::bind_rows(upload$data[,selCols], loadedData$data_mutations_extended)
+    removeModal()
+  }
+
 })
 
 # show table ---------------------------------------------------------------
 output$previewMAF <- DT::renderDT({
-  #if(!is.na(uploadedMAF)){
   DT::datatable(upload$data,
     options = list(scrollX = TRUE)
   )
-  #}
-  
 })
 
 output$mafTable <- DT::renderDT({
@@ -134,6 +226,12 @@ observeEvent(
 )
 # validate inputs in modalDialog and add new sample to table
 observeEvent(input$ModalbuttonAddMAFentry, {
+  req_cols <- c(
+    "Hugo_Symbol",
+    "Tumor_Sample_Barcode",
+    "Variant_Classification",
+    "HGVSp_Short"
+  )
   all_reactive_inputs <- reactiveValuesToList(input)
   addMAFValues <-
     all_reactive_inputs[grep("addMutationInput_", names(all_reactive_inputs))]
@@ -159,11 +257,25 @@ observeEvent(input$ModalbuttonAddMAFentry, {
                      type = "error",
                      duration = NULL
     )
+  } else if (nrow(
+    dplyr::inner_join(
+      data.frame(
+        Tumor_Sample_Barcode=addMAFValues["Tumor_Sample_Barcode"],
+        Hugo_Symbol = addMAFValues["Hugo_Symbol"],
+        Variant_Classification = addMAFValues["Variant_Classification"],
+        HGVSp_Short = addMAFValues["HGVSp_Short"]
+      ), 
+      loadedData$data_mutations_extended[,req_cols])) >= 1){
+    showNotification(
+      "An entry with identical Hugo_Symbol, Tumor_Sample_Barcode, Variant_Classification, and HGVSp_Short is already present in the Mutation data.",
+      type = "error",
+      duration = NULL
+    )
   } else {
     #check if rbind would work according to number of input items
     if (all(colnames(loadedData$data_mutations_extended) %in% names(addMAFValues))) {
       loadedData$data_mutations_extended <-
-        rbind(loadedData$data_mutations_extended, addMAFValues[colnames(loadedData$data_mutations_extended)])
+        rbind(addMAFValues[colnames(loadedData$data_mutations_extended)], loadedData$data_mutations_extended)
     } else {
       message(
         "Number of input values does not match with number of columns.
