@@ -4,7 +4,12 @@
 \alias{updateOncotreeUIwidgets}
 \title{Updates UI-widgets for specific columns of oncotree entries}
 \usage{
-updateOncotreeUIwidgets(session, row_last_clicked, mode = c("add", "edit"))
+updateOncotreeUIwidgets(
+  session,
+  row_last_clicked,
+  mode = c("add", "edit"),
+  tab = c("Patient", "Sample")
+)
 }
 \arguments{
 \item{session}{Shiny session}
@@ -12,6 +17,8 @@ updateOncotreeUIwidgets(session, row_last_clicked, mode = c("add", "edit"))
 \item{row_last_clicked}{the index of the row last clicked in the oncotree_table}
 
 \item{mode}{determines the inputId prefix of the UI-widget}
+
+\item{tab}{"Patient", "Sample" - The used tab; sets the html id pr}
 }
 \value{
 nothing to return
