@@ -1,4 +1,10 @@
-**Load a valid Mutation Annotation Format (MAF) file.** This file is used in cBioPortal for the mutation panel (see image on the right.)
+**Add cBioPortal's mutation annotation data**
+
+**Add MAF file to mutation data** 
+
+* 1. Upload a valid mutation annotation format (MAF) file. 
+* 2. Check in the preview table appearing on the right of the upload widget if your uploaded data is correct. 
+* 3. If your uploaded data seems to be correct, press the button **Add uploaded data to existing mutation data** to concatenate the MAF file with already existing data. Note: Columns with the same column name will be merged together. Columns not present in the existing mutation data will be added to it.
 
 ---
 

@@ -45,26 +45,43 @@ mutationsTab <- tabItem(
     )
   ),
   fluidRow(
+    title = "Mutation data manager",
+    id = "chooseMAFDiv",
     width = 12,
     box(
       column(
         3,
         div(id = "chooseMAFDiv",
-          fileInput("chooseMAF", "Choose MAF File",
-            multiple = FALSE,
-            accept = c(
-              "text/tsv",
-              "text/tab-separated-values,text/plain",
-              ".tsv", ".txt", ".maf", ".MAF"
+            fileInput("chooseMAF", "Choose MAF File",
+                      multiple = FALSE,
+                      accept = c(
+                        "text/tsv",
+                        "text/tab-separated-values,text/plain",
+                        ".tsv", ".txt", ".maf", ".MAF"
+                      )
             )
-          )
         ),
-        actionButton("saveMAF", "Save MAF file", class = "btn-success")
+        actionButton("AddPreview", "Add uploaded data to existing mutation data", class = "btn-success")
       ),
       column(
         9,
-        DT::DTOutput("MAFdata")
+        DT::DTOutput("previewMAF")
       ),
+      width = 12
+    )
+  ),
+  fluidRow(
+    id = "maf_main",
+    width = 12,
+    box(
+      actionButton("NewMAFentry", "Add annotation", icon = icon("plus", lib = "glyphicon")),
+      actionButton("EditMAFentry", "Edit annotation", icon = icon("pencil", lib = "glyphicon")),
+      actionButton("DeleteMAFentry", "Delete annotation", icon = icon("remove", lib = "glyphicon")),
+      actionButton("AddColumnMAFentry", "Add column(s)", icon = icon("plus-sign", lib = "glyphicon")),
+      actionButton("DeleteColumnMAFentry", "Delete column(s)", icon = icon("minus-sign", lib = "glyphicon")),
+      actionButton("saveMAF", "Save", class = "btn-success", icon = icon("saved", lib = "glyphicon")),
+      br(), br(),
+      DT::DTOutput("mafTable"),
       width = 12
     )
   )
