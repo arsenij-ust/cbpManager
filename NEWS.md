@@ -19,6 +19,7 @@
 # New features cbpManager 1.3.2
 
 * Oncotree functionality is now avaliable also in the sample tab 
+* Major modifications of the Mutation tab. Mutation data is now editable.
 
 # New features cbpManager 0.1.1
 
