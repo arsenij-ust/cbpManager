@@ -122,11 +122,63 @@ observeEvent(input$ModalbuttonAddSample, {
       type = "error",
       duration = NULL
     )
+<<<<<<< HEAD
+=======
+  } else if (input$addoncotree_sample) {
+    # add missing columns
+    reqColumns <-
+      c(
+        "ONCOTREE_CODE",
+        "CANCER_TYPE",
+        "CANCER_TYPE_DETAILED"
+      )
+    loadedData$data_clinical_sample <-
+      fncols(loadedData$data_clinical_sample, reqColumns)
+    
+    for (col in reqColumns) {
+      loadedData$data_clinical_sample[1, col] <-
+        sampleCols[which(sampleCols$colname == col), "shortColname"]
+      loadedData$data_clinical_patient[2, col] <-
+        sampleCols[which(sampleCols$colname == col), "longColname"]
+      loadedData$data_clinical_patient[3, col] <-
+        sampleCols[which(sampleCols$colname == col), "typeof"]
+    }
+    
+    # add new row
+    if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
+      loadedData$data_clinical_sample <-
+        rbind(addSampleValues[colnames(loadedData$data_clinical_sample)], loadedData$data_clinical_sample)
+      print(loadedData$data_clinical_sample)
+      # reorder so the special rows are above the new added patient sample
+      special_rows_df <- loadedData$data_clinical_sample[which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      samples_without_spec_rows <- loadedData$data_clinical_sample[-which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      loadedData$data_clinical_sample <-
+        rbind(special_rows_df, samples_without_spec_rows)
+    } else {
+      message(
+        "Number of input values does not match with number of columns. 
+        Please contact the support."
+      )
+      showNotification(
+        "Adding new row not possible. 
+        Number of input values does not match with number of columns. 
+        Please contact the support.",
+        type = "error",
+        duration = NULL
+      )
+    }
+    removeModal()
+>>>>>>> d9faf03 (finished bugfixing of three special rows; new patients & samples are shown at the top of the respective tables)
   } else {
     #check if rbind would work according to number of input items
     if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
       loadedData$data_clinical_sample <-
-        rbind(loadedData$data_clinical_sample, addSampleValues[colnames(loadedData$data_clinical_sample)])
+        rbind(addSampleValues[colnames(loadedData$data_clinical_sample)], loadedData$data_clinical_sample)
+      # reorder so the special rows are above the new added patient sample
+      special_rows_df <- loadedData$data_clinical_sample[which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      samples_without_spec_rows <- loadedData$data_clinical_sample[-which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      loadedData$data_clinical_sample <-
+        rbind(special_rows_df, samples_without_spec_rows)
     } else {
       message(
         "Number of input values does not match with number of columns. 
@@ -165,7 +217,7 @@ output$EditSampleUIs <- renderUI({
 # output UI edit name
 output$EditNameSampleUIs <- renderUI({
   lapply(
-    colnames(loadedData$data_clinical_sample),
+    setdiff(colnames(loadedData$data_clinical_sample), c("PATIENT_ID", "SAMPLE_ID")),
     function(colname) {
       fluidRow(column(
         width = 8,
@@ -263,40 +315,81 @@ observeEvent(input$ModalbuttonEditSample, {
     all_reactive_inputs[grep("editSampleInput_", names(all_reactive_inputs))]
   names(editSampleValues) <-
     gsub("editSampleInput_", "", names(editSampleValues))
-  if (editSampleValues["PATIENT_ID"] == "") {
-    showNotification("PATIENT_ID cannot be empty.",
-                     type = "error",
-                     duration = NULL
-    )
-  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["PATIENT_ID"]) & (input$sampleTable_rows_selected != 1 & input$sampleTable_rows_selected != 2)) {
-    showNotification(
-      "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
-      type = "error",
-      duration = NULL
-    )
-  } else if (editSampleValues["SAMPLE_ID"] == "") {
-    showNotification("SAMPLE_ID cannot be empty.",
-                     type = "error",
-                     duration = NULL
-    )
-  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["SAMPLE_ID"]) & (input$sampleTable_rows_selected != 1 & input$sampleTable_rows_selected != 2)) {
-    showNotification(
-      "SAMPLE_ID allows only numbers, letters, points, underscores and hyphens.",
-      type = "error",
-      duration = NULL
-    )
-  } else if (editSampleValues["SAMPLE_ID"] %in% loadedData$data_clinical_sample[- input$sampleTable_rows_selected, "SAMPLE_ID"] & (input$sampleTable_rows_selected != 1 & input$sampleTable_rows_selected != 2)) {
-      showNotification(
-        "SAMPLE_ID already exists.",
-        type = "error",
-        duration = NULL
-      )
-  } else {
+  # edit special rows
+  if (input$sampleTable_rows_selected == 1 | input$sampleTable_rows_selected == 2) {
+    if (input$sampleTable_rows_selected == 1) {
+      editSampleValues["PATIENT_ID"] <- "Patient Identifier"
+      editSampleValues["SAMPLE_ID"] <- "Sample Identifier"
+    } else if (input$sampleTable_rows_selected == 2) {
+      editSampleValues["PATIENT_ID"] <- "Patient identifier"
+      editSampleValues["SAMPLE_ID"] <- "Sample Identifier"
+    }
+    
     for (i in colnames(loadedData$data_clinical_sample)) {
       loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
         editSampleValues[i]
     }
     removeModal()
+  } else {
+    # edit data rows
+    if (editSampleValues["PATIENT_ID"] == "") {
+      showNotification("PATIENT_ID cannot be empty.",
+                       type = "error",
+                       duration = NULL
+      )
+    } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["PATIENT_ID"])) {
+      showNotification(
+        "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
+        type = "error",
+        duration = NULL
+      )
+    } else if (editSampleValues["SAMPLE_ID"] == "") {
+      showNotification("SAMPLE_ID cannot be empty.",
+                       type = "error",
+                       duration = NULL
+      )
+    } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editSampleValues["SAMPLE_ID"])) {
+      showNotification(
+        "SAMPLE_ID allows only numbers, letters, points, underscores and hyphens.",
+        type = "error",
+        duration = NULL
+      )
+    } else if (editSampleValues["SAMPLE_ID"] %in% loadedData$data_clinical_sample[- input$sampleTable_rows_selected, "SAMPLE_ID"]) {
+      showNotification(
+        "SAMPLE_ID already exists.",
+        type = "error",
+        duration = NULL
+      )
+    } else if (input$addoncotree_sample) {
+      reqColumns <-
+        c(
+          "ONCOTREE_CODE",
+          "CANCER_TYPE",
+          "CANCER_TYPE_DETAILED"
+        )
+      loadedData$data_clinical_sample <-
+        fncols(loadedData$data_clinical_sample, reqColumns)
+      for (col in reqColumns) {
+        loadedData$data_clinical_sample[1, col] <-
+          sampleCols[which(sampleCols$colname == col), "shortColname"]
+        loadedData$data_clinical_sample[2, col] <-
+          sampleCols[which(sampleCols$colname == col), "longColname"]
+        loadedData$data_clinical_sample[3, col] <-
+          sampleCols[which(sampleCols$colname == col), "typeof"]
+      }
+      
+      for (i in colnames(loadedData$data_clinical_sample)) {
+        loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
+          editSampleValues[i]
+      }
+      removeModal()
+    } else {
+      for (i in colnames(loadedData$data_clinical_sample)) {
+        loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
+          editSampleValues[i]
+      }
+      removeModal()
+    }  
   }
 })
 

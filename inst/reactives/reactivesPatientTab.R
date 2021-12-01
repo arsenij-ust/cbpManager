@@ -188,11 +188,11 @@ observeEvent(input$ModalbuttonAddPatient, {
     if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
       loadedData$data_clinical_patient <-
       rbind(addPatientValues[colnames(loadedData$data_clinical_patient)], loadedData$data_clinical_patient)
-      # reorder so the special columns are above the new added patient
-      special_cols <- c("Patient Identifier", "Patient identifier", "STRING")
-      neworder <- c(special_cols, setdiff(loadedData$data_clinical_patient$PATIENT_ID, special_cols))
-      loadedData$data_clinical_patient %<>%
-        dplyr::slice(match(neworder, PATIENT_ID))
+      # reorder so the special rows are above the new added patient
+      special_rows_df <- loadedData$data_clinical_patient[which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      samples_without_spec_rows <- loadedData$data_clinical_patient[-which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      loadedData$data_clinical_patient <-
+        rbind(special_rows_df, samples_without_spec_rows)
     } else {
       message(
         "Number of input values does not match with number of columns. 
@@ -211,11 +211,11 @@ observeEvent(input$ModalbuttonAddPatient, {
     if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
       loadedData$data_clinical_patient <-
       rbind(addPatientValues[colnames(loadedData$data_clinical_patient)], loadedData$data_clinical_patient)
-      # reorder so the special columns are above the new added patient
-      special_cols <- c("Patient Identifier", "Patient identifier", "STRING")
-      neworder <- c(special_cols, setdiff(loadedData$data_clinical_patient$PATIENT_ID, special_cols))
-      loadedData$data_clinical_patient %<>%
-        dplyr::slice(match(neworder, PATIENT_ID))
+      # reorder so the special rows are above the new added patient
+      special_rows_df <- loadedData$data_clinical_patient[which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      samples_without_spec_rows <- loadedData$data_clinical_patient[-which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
+      loadedData$data_clinical_patient <-
+        rbind(special_rows_df, samples_without_spec_rows)
     } else {
       message(
         "Number of input values does not match with number of columns. 
@@ -283,7 +283,6 @@ observe(if (!is.null(input$oncotree_tableModal_row_last_clicked)) {
 output$EditNamePatUIs <- renderUI({
   lapply(
     setdiff(colnames(loadedData$data_clinical_patient), "PATIENT_ID"),
-    #colnames(loadedData$data_clinical_patient),
     function(colname) {
       fluidRow(column(
         width = 8,
@@ -389,61 +388,13 @@ observeEvent(input$ModalbuttonEditPatient, {
     all_reactive_inputs[grep("editPatientInput_", names(all_reactive_inputs))]
   names(editPatientValues) <-
     gsub("editPatientInput_", "", names(editPatientValues))
-  if (editPatientValues["PATIENT_ID"] == "") {
-    showNotification("PATIENT_ID cannot be empty.",
-      type = "error",
-      duration = NULL
-    )
-  } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editPatientValues["PATIENT_ID"]) & (input$patientTable_rows_selected != 1 & input$patientTable_rows_selected != 2)) {
-    showNotification(
-      "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
-      type = "error",
-      duration = NULL
-    )
-  } else if (editPatientValues["PATIENT_ID"] %in% loadedData$data_clinical_patient[- input$patientTable_rows_selected, "PATIENT_ID"]) {
-    showNotification(
-      "PATIENT_ID already exists.",
-      type = "error",
-      duration = NULL
-    )
-  } else if (!is.null(input$addoncotree)) {
-    if(input$addoncotree){
-      reqColumns <-
-      c(
-        "ONCOTREE_CODE",
-        "CANCER_TYPE",
-        "CANCER_TYPE_DETAILED"
-      )
-      loadedData$data_clinical_patient <-
-        fncols(loadedData$data_clinical_patient, reqColumns)
-      for (col in reqColumns) {
-        loadedData$data_clinical_patient[1, col] <-
-          patientCols[which(patientCols$colname == col), "shortColname"]
-        loadedData$data_clinical_patient[2, col] <-
-          patientCols[which(patientCols$colname == col), "longColname"]
-        loadedData$data_clinical_patient[3, col] <-
-          patientCols[which(patientCols$colname == col), "typeof"]
-      }
-      
-      for (i in colnames(loadedData$data_clinical_patient)) {
-        loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
-          editPatientValues[i]
-      }
-      removeModal()
-    } else {
-      if (input$patientTable_rows_selected == 1 | input$patientTable_rows_selected == 2) {
-        editPatientValues["PATIENT_ID"] <- "Patient Identifier"
-      } 
-      
-      for (i in colnames(loadedData$data_clinical_patient)) {
-        loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
-          editPatientValues[i]
-      }
-      removeModal()
-    }
-  } else {
-    if (input$patientTable_rows_selected == 1 | input$patientTable_rows_selected == 2) {
+  
+  # edit special rows
+  if (input$patientTable_rows_selected == 1 | input$patientTable_rows_selected == 2) {
+    if (input$patientTable_rows_selected == 1) {
       editPatientValues["PATIENT_ID"] <- "Patient Identifier"
+    } else if (input$patientTable_rows_selected == 2) {
+      editPatientValues["PATIENT_ID"] <- "Patient identifier"
     } 
     
     for (i in colnames(loadedData$data_clinical_patient)) {
@@ -451,6 +402,55 @@ observeEvent(input$ModalbuttonEditPatient, {
         editPatientValues[i]
     }
     removeModal()
+  } else {
+    # edit data rows
+    if (editPatientValues["PATIENT_ID"] == "") {
+      showNotification("PATIENT_ID cannot be empty.",
+                       type = "error",
+                       duration = NULL
+      )
+    } else if (!grepl("^[a-zA-Z0-9\\.\\_\\-]*$", editPatientValues["PATIENT_ID"])) {
+      showNotification(
+        "PATIENT_ID allows only numbers, letters, points, underscores and hyphens.",
+        type = "error",
+        duration = NULL
+      )
+    } else if (editPatientValues["PATIENT_ID"] %in% loadedData$data_clinical_patient[- input$patientTable_rows_selected, "PATIENT_ID"]) {
+      showNotification(
+        "PATIENT_ID already exists.",
+        type = "error",
+        duration = NULL
+      )
+    } else if(input$addoncotree){
+        reqColumns <-
+          c(
+            "ONCOTREE_CODE",
+            "CANCER_TYPE",
+            "CANCER_TYPE_DETAILED"
+          )
+        loadedData$data_clinical_patient <-
+          fncols(loadedData$data_clinical_patient, reqColumns)
+        for (col in reqColumns) {
+          loadedData$data_clinical_patient[1, col] <-
+            patientCols[which(patientCols$colname == col), "shortColname"]
+          loadedData$data_clinical_patient[2, col] <-
+            patientCols[which(patientCols$colname == col), "longColname"]
+          loadedData$data_clinical_patient[3, col] <-
+            patientCols[which(patientCols$colname == col), "typeof"]
+        }
+        
+        for (i in colnames(loadedData$data_clinical_patient)) {
+          loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
+            editPatientValues[i]
+        }
+        removeModal()
+    } else {
+      for (i in colnames(loadedData$data_clinical_patient)) {
+        loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
+          editPatientValues[i]
+      }
+      removeModal()
+    }
   }
 })
 
