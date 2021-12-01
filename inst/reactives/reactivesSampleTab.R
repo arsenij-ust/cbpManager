@@ -122,53 +122,6 @@ observeEvent(input$ModalbuttonAddSample, {
       type = "error",
       duration = NULL
     )
-<<<<<<< HEAD
-=======
-  } else if (input$addoncotree_sample) {
-    # add missing columns
-    reqColumns <-
-      c(
-        "ONCOTREE_CODE",
-        "CANCER_TYPE",
-        "CANCER_TYPE_DETAILED"
-      )
-    loadedData$data_clinical_sample <-
-      fncols(loadedData$data_clinical_sample, reqColumns)
-    
-    for (col in reqColumns) {
-      loadedData$data_clinical_sample[1, col] <-
-        sampleCols[which(sampleCols$colname == col), "shortColname"]
-      loadedData$data_clinical_patient[2, col] <-
-        sampleCols[which(sampleCols$colname == col), "longColname"]
-      loadedData$data_clinical_patient[3, col] <-
-        sampleCols[which(sampleCols$colname == col), "typeof"]
-    }
-    
-    # add new row
-    if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
-      loadedData$data_clinical_sample <-
-        rbind(addSampleValues[colnames(loadedData$data_clinical_sample)], loadedData$data_clinical_sample)
-      print(loadedData$data_clinical_sample)
-      # reorder so the special rows are above the new added patient sample
-      special_rows_df <- loadedData$data_clinical_sample[which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
-      samples_without_spec_rows <- loadedData$data_clinical_sample[-which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
-      loadedData$data_clinical_sample <-
-        rbind(special_rows_df, samples_without_spec_rows)
-    } else {
-      message(
-        "Number of input values does not match with number of columns. 
-        Please contact the support."
-      )
-      showNotification(
-        "Adding new row not possible. 
-        Number of input values does not match with number of columns. 
-        Please contact the support.",
-        type = "error",
-        duration = NULL
-      )
-    }
-    removeModal()
->>>>>>> d9faf03 (finished bugfixing of three special rows; new patients & samples are shown at the top of the respective tables)
   } else {
     #check if rbind would work according to number of input items
     if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
@@ -360,29 +313,6 @@ observeEvent(input$ModalbuttonEditSample, {
         type = "error",
         duration = NULL
       )
-    } else if (input$addoncotree_sample) {
-      reqColumns <-
-        c(
-          "ONCOTREE_CODE",
-          "CANCER_TYPE",
-          "CANCER_TYPE_DETAILED"
-        )
-      loadedData$data_clinical_sample <-
-        fncols(loadedData$data_clinical_sample, reqColumns)
-      for (col in reqColumns) {
-        loadedData$data_clinical_sample[1, col] <-
-          sampleCols[which(sampleCols$colname == col), "shortColname"]
-        loadedData$data_clinical_sample[2, col] <-
-          sampleCols[which(sampleCols$colname == col), "longColname"]
-        loadedData$data_clinical_sample[3, col] <-
-          sampleCols[which(sampleCols$colname == col), "typeof"]
-      }
-      
-      for (i in colnames(loadedData$data_clinical_sample)) {
-        loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
-          editSampleValues[i]
-      }
-      removeModal()
     } else {
       for (i in colnames(loadedData$data_clinical_sample)) {
         loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
