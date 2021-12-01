@@ -676,7 +676,7 @@ saveTimeline_UI <- function(id, label = "Save") {
 #' @param session Shiny session
 #' @param data source data as data.frame
 #' @param study_id the current study ID
-#' @return nothing to return
+#' @return boolean value; TRUE if function was used.
 saveTimeline_Server <-
   function(input, output, session, data, study_id) {
     params <- reactiveValues(check = FALSE)

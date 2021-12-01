@@ -195,12 +195,14 @@ observeEvent(input$ModalbuttonAddSample, {
     if (all(colnames(loadedData$data_clinical_sample) %in% names(addSampleValues))) {
       loadedData$data_clinical_sample <-
         rbind(addSampleValues[colnames(loadedData$data_clinical_sample)], loadedData$data_clinical_sample)
-      print(loadedData$data_clinical_sample)
       # reorder so the special rows are above the new added patient sample
       special_rows_df <- loadedData$data_clinical_sample[which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
       samples_without_spec_rows <- loadedData$data_clinical_sample[-which(loadedData$data_clinical_sample$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
       loadedData$data_clinical_sample <-
         rbind(special_rows_df, samples_without_spec_rows)
+      
+      # change tracker
+      study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
     } else {
       message(
         "Number of input values does not match with number of columns. 
@@ -472,12 +474,20 @@ observeEvent(input$ModalbuttonEditSample, {
         loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
           editSampleValues[i]
       }
+      
+      # change tracker
+      study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     } else {
       for (i in colnames(loadedData$data_clinical_sample)) {
         loadedData$data_clinical_sample[input$sampleTable_rows_selected, i] <-
           editSampleValues[i]
       }
+      
+      # change tracker
+      study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }  
   }

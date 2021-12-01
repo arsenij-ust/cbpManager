@@ -453,6 +453,10 @@ observeEvent(input$ModalbuttonEditPatient, {
           loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
             editPatientValues[i]
         }
+        
+        # change tracker
+        study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+        
         removeModal()
     } else {
       for (i in colnames(loadedData$data_clinical_patient)) {
