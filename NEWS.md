@@ -3,6 +3,7 @@
 * cbpManager 1.2.2 & cbpManager 1.3.2 (Nov 11, 2021):
   - Fixed crash when trying to add a custom timeline track without selecting the type of the track.
   - Fixed Error preventing editing first 3 special rows of patient and sample tab table
+  - New added patients & samples are now at the top of the patient & sample tab tables.
 
 * cbpManager 1.2.1 & cbpManager 1.3.1 (Nov 11, 2021):
   - Show cbpManager version
