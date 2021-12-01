@@ -4,12 +4,18 @@
 \alias{generateOncotreeUIwidgets}
 \title{Create shiny UI-widget for specific columns of oncotree entries}
 \usage{
-generateOncotreeUIwidgets(colname, mode = c("add", "edit"))
+generateOncotreeUIwidgets(
+  colname,
+  mode = c("add", "edit"),
+  tab = c("Patient", "Sample")
+)
 }
 \arguments{
 \item{colname}{column name}
 
 \item{mode}{determines the inputId prefix of the UI-widget}
+
+\item{tab}{"Patient", "Sample" - The used tab; sets the html id prefix of the input}
 }
 \value{
 A oncotree specific shiny UI-widget

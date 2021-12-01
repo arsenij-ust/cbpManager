@@ -1,6 +1,11 @@
 # Bugfixes:
 
-* cbpManager 1.1.3 & cbpManager 1.0.3 (Oct 12, 2021):
+* cbpManager 1.2.2 & cbpManager 1.3.2 (Nov 11, 2021):
+  - Fixed crash when trying to add a custom timeline track without selecting the type of the track.
+  - Fixed Error preventing editing first 3 special rows of patient and sample tab table
+  - New added patients & samples are now at the top of the patient & sample tab tables.
+
+* cbpManager 1.2.1 & cbpManager 1.3.1 (Nov 11, 2021):
   - Show cbpManager version
   - Minor bugfixes
 
@@ -12,21 +17,20 @@
   - Added notifications if no study is loaded but the user tries to push buttons
   - Resolved error when trying to add a new column in the Sample tab
 
-# cbpManager 0.1.1
+# New features cbpManager 1.3.2
 
-## New features
+* Oncotree functionality is now avaliable also in the sample tab.
+* Major modifications of the Mutation tab. Mutation data is now editable.
+
+# New features cbpManager 0.1.1
 
 * 'Validation' tab allows to validate created files.
 * Improved usability by changing descriptions and adding interactive tours
 
-# cbpManager 0.1.0
-
-## New features
+# New features cbpManager 0.1.0
 
 * much of the functionality available, in a proof of concept format.
 
-# cbpManager 0.0.1
-
-## New features
+# New features cbpManager 0.0.1
 
 * backbone of the project started!

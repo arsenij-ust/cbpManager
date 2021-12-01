@@ -119,7 +119,7 @@ create_name <- function(x, toupper = TRUE) {
 #' Generate UI input widget
 #'
 #' @param colname A character string - the name of the column, that will be the label of the input
-#' @param mode "add" or "edit" - wether to use existing values or not
+#' @param mode "add" or "edit" - whether to use existing values or not
 #' @param tab "Patient", "Sample" - The used tab; sets the html id prefix of the input
 #' @param data A data.frame.
 #' @param selected_row A number indicating the row number of the selected row in the data.frame.
@@ -128,7 +128,7 @@ create_name <- function(x, toupper = TRUE) {
 #' @examples 
 #' cbpManager:::generateUIwidgets(colname = "attribute", mode = "add", tab = "Patient")
 #' 
-generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient", "Sample"), data = NULL, selected_row = NULL, patientIDs = NULL) {
+generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient", "Sample", "Mutation"), data = NULL, selected_row = NULL, patientIDs = NULL, sampleIDs = NULL) {
   mode <- match.arg(mode)
   tab <- match.arg(tab)
 
@@ -141,15 +141,43 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
     numvalue <- 0
     textvalue <- numvalue <- ""
     selected <- 1
+  } else if (mode == "add" & tab == "Mutation") {
+    id_prefix <- "addMutationInput_"
+    numvalue <- 0
+    textvalue <- numvalue <- ""
+    selected <- 1
   } else if (mode == "edit" & tab == "Patient") {
     id_prefix <- "editPatientInput_"
     numvalue <- selected <- textvalue <- data[selected_row, colname]
   } else if (mode == "edit" & tab == "Sample") {
     id_prefix <- "editSampleInput_"
     numvalue <- selected <- textvalue <- data[selected_row, colname]
+  } else if (mode == "edit" & tab == "Mutation") {
+    id_prefix <- "editMutationInput_"
+    numvalue <- selected <- textvalue <- data[selected_row, colname]
   }
 
   if (colname == "PATIENT_ID" & tab == "Sample") {
+    fluidRow(column(
+      width = 8,
+      selectInput(
+        inputId = paste0(id_prefix, colname),
+        label = colname,
+        choices = patientIDs,
+        selected = selected
+      ),
+    ))
+  } else if (colname == "Tumor_Sample_Barcode" & tab == "Mutation") {
+    fluidRow(column(
+      width = 8,
+      selectInput(
+        inputId = paste0(id_prefix, colname),
+        label = colname,
+        choices = sampleIDs,
+        selected = selected
+      ),
+    ))
+  }  else if (colname == "Variant_Classification" & tab == "Mutation") {
     fluidRow(column(
       width = 8,
       selectInput(
@@ -279,6 +307,37 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
         selected = selected
       ),
     ))
+  } else if (colname == "Mutation_Status" & tab == "Mutation") {
+    fluidRow(column(
+      width = 8,
+      selectizeInput(
+        inputId = paste0(id_prefix, colname),
+        label = paste0(colname, " (user text input allowed)"),
+        choices = c("None", "Somatic", "Germline", "LOH", "Wildtype"),
+        options = list(create = TRUE),
+        selected = selected
+      ),
+    ))
+  } else if (colname == "Verification_Status" & tab == "Mutation") {
+    fluidRow(column(
+      width = 8,
+      selectInput(
+        inputId = paste0(id_prefix, colname),
+        label = colname,
+        choices = c("NA", "Verified", "Unknown"),
+        selected = selected
+      ),
+    ))
+  } else if (colname == "Validation_Status" & tab == "Mutation") {
+    fluidRow(column(
+      width = 8,
+      selectInput(
+        inputId = paste0(id_prefix, colname),
+        label = colname,
+        choices = c("NA", "Valid", "Invalid", "Untested", "Inconclusive", "Redacted", "Unknown"),
+        selected = selected
+      ),
+    ))
   } else {
     fluidRow(column(
       width = 8,
@@ -295,19 +354,25 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
 #'
 #' @param colname column name
 #' @param mode determines the inputId prefix of the UI-widget
+#' @param tab "Patient", "Sample" - The used tab; sets the html id prefix of the input
 #' @return A oncotree specific shiny UI-widget
 #' @examples 
 #' oncotree <- jsonlite::fromJSON(system.file("extdata", "oncotree.json", package = "cbpManager"))
 #' cancer_type <- unique(oncotree$mainType[which(!is.na(oncotree$mainType))])
 #' cbpManager:::generateOncotreeUIwidgets("CANCER_TYPE", "add")
 #' 
-generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
+generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit"), tab=c("Patient", "Sample")) {
   mode <- match.arg(mode)
+  tab <- match.arg(tab)
 
-  if (mode == "add") {
+  if (mode == "add" & tab == "Patient") {
     id_prefix <- "addPatientInput_"
-  } else if (mode == "edit") {
+  } else if (mode == "edit" & tab == "Patient") {
     id_prefix <- "editPatientInput_"
+  } else if (mode == "add" & tab == "Sample") {
+    id_prefix <- "addSampleInput_"
+  } else if (mode == "edit" & tab == "Sample") {
+    id_prefix <- "editSampleInput_"
   }
 
   if (colname == "CANCER_TYPE") {
@@ -348,14 +413,20 @@ generateOncotreeUIwidgets <- function(colname, mode = c("add", "edit")) {
 #' @param session Shiny session
 #' @param row_last_clicked the index of the row last clicked in the oncotree_table
 #' @param mode determines the inputId prefix of the UI-widget
+#' @param tab "Patient", "Sample" - The used tab; sets the html id pr
 #' @return nothing to return
-updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "edit")) {
+updateOncotreeUIwidgets <- function(session, row_last_clicked, mode = c("add", "edit"), tab=c("Patient", "Sample")) {
   mode <- match.arg(mode)
+  tab <- match.arg(tab)
 
-  if (mode == "add") {
+  if (mode == "add" & tab == "Patient") {
     id_prefix <- "addPatientInput_"
-  } else if (mode == "edit") {
+  } else if (mode == "edit" & tab == "Patient") {
     id_prefix <- "editPatientInput_"
+  } else if (mode == "add" & tab == "Sample") {
+    id_prefix <- "addSampleInput_"
+  } else if (mode == "edit" & tab == "Sample") {
+    id_prefix <- "editSampleInput_"
   }
 
   updateSelectInput(session, paste0(id_prefix, "CANCER_TYPE"),
