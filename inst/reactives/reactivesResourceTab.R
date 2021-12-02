@@ -75,7 +75,8 @@ rcDefinition_delRow <- callModule(
   study_data = reactive(loadedData$data_resource_study),
   mode="recursive"
 )
-observeEvent(rcDefinition_delRow(),{
+
+observeEvent(rcDefinition_delRow()$df,{
   loadedData$data_resource_definition <- rcDefinition_delRow()$df
   loadedData$data_resource_sample <- rcDefinition_delRow()$sample
   loadedData$data_resource_patient <- rcDefinition_delRow()$patient
