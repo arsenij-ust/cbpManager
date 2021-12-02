@@ -168,13 +168,13 @@ output$EditPatientDateUI <- renderUI({
 
 # Validate edited values and add them to data.frame
 observeEvent(input$ModalbuttonEditDate, {
-  req(input$AddPatientIDDate, input$AddPatientDate)
-  if (input$AddPatientIDDate == "") {
+  req(input$EditPatientIDDate, input$EditPatientDate)
+  if (input$EditPatientIDDate == "") {
     showNotification("PATIENT_ID cannot be empty.",
       type = "error",
       duration = NULL
     )
-  } else if (is.null(input$AddPatientDate)) {
+  } else if (is.null(input$EditPatientDate)) {
     showNotification("Date cannot be empty.",
       type = "error",
       duration = NULL

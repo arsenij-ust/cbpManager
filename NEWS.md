@@ -5,6 +5,7 @@
   - Fixed Error preventing editing first 3 special rows of patient and sample tab table.
   - New added patients & samples are now at the top of the patient & sample tab tables.
   - Fixed bug preventing editing of treatment timeline data when TREATMENT_TYPE or SUBTYPE were not provided.
+  - Fixed bug preventing editing the date of first diagnosis of a patient.
 
 * cbpManager 1.2.1 & cbpManager 1.3.1 (Nov 11, 2021):
   - Show cbpManager version
