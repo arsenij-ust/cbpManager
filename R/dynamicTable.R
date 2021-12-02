@@ -516,8 +516,10 @@ editRow_Server <-
             }
           } else if (colname == "TREATMENT_TYPE") {
             treatment_value <- data()[selected_row(), colname]
-            req(treatment_value)
-            if(grepl(" \\+ ", treatment_value)) treatment_value <- unlist(strsplit(treatment_value, " \\+ "))
+            if(rlang::is_empty(treatment_value)) treatment_value <- ""
+            if(grepl(" \\+ ", treatment_value)){
+              treatment_value <- unlist(strsplit(treatment_value, " \\+ "))
+            }
             fluidRow(column(
               width = 8,
               selectInput(
@@ -525,13 +527,15 @@ editRow_Server <-
                 multiple = TRUE,
                 label = paste(colname, "*Select multiple items for combination therapy"),
                 choices = c("Medical Therapy", "Radiation Therapy", "Non-surgical Local Treamtent"),
-                selected = data()[selected_row(), colname]
+                selected = treatment_value
               ),
             ))
           } else if (colname == "SUBTYPE") {
             subtype_value <- data()[selected_row(), colname]
-            req(subtype_value)
-            if(grepl(" \\+ ", subtype_value)) subtype_value <- unlist(strsplit(subtype_value, " \\+ "))
+            if(rlang::is_empty(subtype_value)) subtype_value <- ""
+            if(grepl(" \\+ ", subtype_value)){
+              subtype_value <- unlist(strsplit(subtype_value, " \\+ "))
+            } 
             fluidRow(column(
               width = 8,
               selectInput(
@@ -552,15 +556,15 @@ editRow_Server <-
                 selected = subtype_value
               ),
             ))
-          } else {
+          }else {
             fluidRow(column(
-              width = 8,
-              textInput(
-                inputId = ns(colname),
-                label = colname,
-                value = data()[selected_row(), colname]
-              ),
-            ))
+                  width = 8,
+                  textInput(
+                    inputId = ns(colname),
+                    label = colname,
+                    value = data()[selected_row(), colname]
+                  ),
+                ))
           }
         }
       )
@@ -573,6 +577,18 @@ editRow_Server <-
       editValues <-
         all_reactive_inputs[names(all_reactive_inputs) %in% names(data())]
       editValues$EVENT_TYPE <- toupper(gsub("-", "", session$ns("")))
+      if ("SUBTYPE" %in% names(editValues)) {
+        if(is.null(editValues[["SUBTYPE"]])) editValues[["SUBTYPE"]] <- ""
+        if(length(editValues[["SUBTYPE"]])>1){
+          editValues[["SUBTYPE"]] <- paste(editValues[["SUBTYPE"]], collapse = " + ")
+        }
+      }
+      if ("TREATMENT_TYPE" %in% names(editValues)) {
+        if(is.null(editValues[["TREATMENT_TYPE"]])) editValues[["TREATMENT_TYPE"]] <- ""
+        if(length(editValues[["TREATMENT_TYPE"]])>1){
+          editValues[["TREATMENT_TYPE"]] <- paste(editValues[["TREATMENT_TYPE"]], collapse = " + ")
+        }
+      }
       if (editValues["PATIENT_ID"] == "") {
         showNotification("'Patient ID' is requiered.",
           type = "error",
@@ -585,19 +601,6 @@ editRow_Server <-
           duration = NULL
         )
       } else {
-        if ("SUBTYPE" %in% names(editValues)) {
-          if(is.null(editValues[["SUBTYPE"]])) editValues[["SUBTYPE"]] <- ""
-          if(length(editValues[["SUBTYPE"]])>1){
-            editValues[["SUBTYPE"]] <- paste(editValues[["SUBTYPE"]], collapse = " + ")
-          }
-        }
-        if ("TREATMENT_TYPE" %in% names(editValues)) {
-          if(is.null(editValues[["TREATMENT_TYPE"]])) editValues[["TREATMENT_TYPE"]] <- ""
-          if(length(editValues[["TREATMENT_TYPE"]])>1){
-            editValues[["TREATMENT_TYPE"]] <- paste(editValues[["TREATMENT_TYPE"]], collapse = " + ")
-          }
-        }
-        
         diagnosisDate <-
           dates_first_diagnosis()[which(dates_first_diagnosis()$PATIENT_ID == editValues["PATIENT_ID"]), "DATE"]
         if (mode == "timeline") {
