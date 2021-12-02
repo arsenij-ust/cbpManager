@@ -112,6 +112,10 @@ observeEvent(input$ModalbuttonAddDate, {
           DATE = as.character(input$AddPatientDate)
         )
       )
+    
+    # change tracker
+    study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
+    
     removeModal()
   }
 })
@@ -183,6 +187,10 @@ observeEvent(input$ModalbuttonEditDate, {
     loadedData$dates_first_diagnosis[which(loadedData$dates_first_diagnosis$PATIENT_ID ==
       input$EditPatientIDDate), "DATE"] <-
       as.character(input$EditPatientDate)
+    
+    # change tracker
+    study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
+    
     removeModal()
   }
 })
@@ -221,6 +229,10 @@ observeEvent(input$ModalbuttonDeleteDate, {
   entry <- input$dateTable_rows_selected
   loadedData$dates_first_diagnosis <-
     loadedData$dates_first_diagnosis[-entry, , drop = FALSE]
+  
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
+  
   removeModal()
 })
 
@@ -259,6 +271,10 @@ observeEvent(input$datesSave, {
     type = "message",
     duration = 10
   )
+  
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("check-circle"))
+  
 })
 
 # treatment timeline ---------------------------------------------------------------

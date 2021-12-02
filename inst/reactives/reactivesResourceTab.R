@@ -85,7 +85,7 @@ observeEvent(rcDefinition_delRow(),{
 })
 
 # save Resource definition data ---------------------------------------------------------------
-callModule(
+rcDefinition_save <- callModule(
   module = saveResource_Server,
   id = "Define_rc",
   study_id = reactive(loadedData$studyID),
@@ -94,6 +94,12 @@ callModule(
   meta_filename = "meta_resource_definition.txt",
   resource_type = "DEFINITION"
 )
+observeEvent(rcDefinition_save(),{
+  # change tracker
+  check <- rcDefinition_save()
+  study_tracker$df[5, "Saved"] <- as.character(icon("check-circle"))
+})
+
 
 # Resource study ---------------------------------------------------------------
 output$rcStudyTable <- DT::renderDT({
@@ -154,7 +160,7 @@ observeEvent(rcStudy_delRow(),{
 })
 
 # save Resource study data ---------------------------------------------------------------
-callModule(
+rcStudy_save <- callModule(
   module = saveResource_Server,
   id = "Study_rc",
   study_id = reactive(loadedData$studyID),
@@ -163,6 +169,11 @@ callModule(
   meta_filename = "meta_resource_study.txt",
   resource_type = "STUDY"
 )
+observeEvent(rcStudy_save(),{
+  # change tracker
+  check <- rcStudy_save()
+  study_tracker$df[5, "Saved"] <- as.character(icon("check-circle"))
+})
 
 # Resource patient ---------------------------------------------------------------
 output$rcPatientTable <- DT::renderDT({
@@ -223,7 +234,7 @@ observeEvent(rcPatient_delRow(),{
 })
 
 # save Resource patient data ---------------------------------------------------------------
-callModule(
+rcPatient_save <- callModule(
   module = saveResource_Server,
   id = "Patients_rc",
   study_id = reactive(loadedData$studyID),
@@ -232,6 +243,11 @@ callModule(
   meta_filename = "meta_resource_patient.txt",
   resource_type = "PATIENT"
 )
+observeEvent(rcPatient_save(),{
+  # change tracker
+  check <- rcPatient_save()
+  study_tracker$df[5, "Saved"] <- as.character(icon("check-circle"))
+})
 
 # Resource sample ---------------------------------------------------------------
 output$rcSampleTable <- DT::renderDT({
