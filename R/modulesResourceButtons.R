@@ -651,7 +651,7 @@ saveResource_UI <- function(id, label = "Save") {
 #' @param resource_type The type of the resource.
 #' Can be "definition", "sample", "patient", "study"
 #'
-#' @return nothing to return
+#' @return boolean value; TRUE if function was used.
 saveResource_Server <-
   function(input,
            output,
@@ -662,6 +662,7 @@ saveResource_Server <-
            meta_filename,
            resource_type = c("SAMPLE", "DEFINITION", "PATIENT", "STUDY")) {
     resource_type <- match.arg(resource_type)
+    params <- reactiveValues(check = FALSE)
     observeEvent(input$SaveResource, {
       if(is.null(study_id())){
         showNotification(
@@ -733,5 +734,9 @@ saveResource_Server <-
         outdir = study_dir,
         modified_file = file.path(study_id(), meta_filename)
       )
+      params$check <- runif(1)
     })
+    return(reactive({
+      params$check
+    }))
   }
