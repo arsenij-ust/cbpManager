@@ -338,6 +338,9 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
         selected = selected
       ),
     ))
+  } else if (colname %in% names(config$COLUMNS)) {
+    # generate column UI based on config
+    config_colUI(colname, id_prefix, data = NULL, mode = mode, selected_row = selected_row, textvalue = textvalue)
   } else {
     fluidRow(column(
       width = 8,
@@ -604,4 +607,244 @@ One or more of the necessary packages were not installed.
 Please try reinstalling cbpManager and basilisk or contact the support at https://github.com/arsenij-ust/cbpManager/issues")
     }
   })
+}
+
+#' Function to generate an HTML Shiny input widget string based on the definition of the config file.
+#'
+#' @param colname The column name.
+#' @param id_prefix ID for the input widget generated in function 'generateUIwidgets'.
+#' @param data Data.frame
+#' @param mode "add" or "edit" - whether to use existing values or not.
+#' @param selected_row The selected row of 'data'.
+#' @return A column specific shiny UI-widget (HTML string)
+#' @examples 
+#' cbpManager:::writeLogfile(tempdir(), "data_clinical_patient.txt")
+#' 
+config_colUI <- function(colname, id_prefix, data = NULL, mode = c("add", "edit"), selected_row = NULL, textvalue = NULL) {
+  
+  #config <- yaml::read_yaml("inst/extdata/cbpManager_config.yml")
+    
+  inputwidget <- config$COLUMNS[colname][[colname]]$inputwidget
+  
+  if(inputwidget == "numericInput"){
+    # custom numericInput -----
+    # validate provided attributes
+    label <- config$COLUMNS[colname][[colname]]$label
+    value <- config$COLUMNS[colname][[colname]]$value
+    min <- config$COLUMNS[colname][[colname]]$min
+    max <- config$COLUMNS[colname][[colname]]$max
+    step <- config$COLUMNS[colname][[colname]]$step
+    
+    if(is.null(label)){
+      label <- colname
+    } else {
+      label <- paste0(colname, " (", label, ")")
+    }
+    if(is.null(value)) value <- 0
+    if(mode == "add"){
+      value <- value
+    } else if (mode == "edit"){
+      value <- as.numeric(textvalue)
+    }
+    if(is.null(min)) min <- NA
+    if(is.null(max)) max <- NA
+    if(is.null(step)) step <- NA
+    
+    # generate html input widget
+    fluidRow(column(
+      width = 8,
+      shiny::numericInput(
+        inputId = paste0(id_prefix, colname),
+        label = label,
+        value = value,
+        min = min,
+        max = max,
+        step = step
+      )
+    ))
+
+  } else if (inputwidget == "selectInput"){
+    # custom selectInput -----
+    # validate provided attributes
+    label <- config$COLUMNS[colname][[colname]]$label
+    choices <- config$COLUMNS[colname][[colname]]$choices
+    selected <- config$COLUMNS[colname][[colname]]$selected
+    multiple <- config$COLUMNS[colname][[colname]]$multiple
+    
+    if(is.null(label)){
+      label <- colname
+    } else {
+      label <- paste0(colname, " (", label, ")")
+    }
+    if(is.null(choices)){
+      warning(paste0("No choices provided for selectInput of ",colname,". textInput is applied."))
+      fluidRow(column(
+        width = 8,
+        textInput(
+          inputId = paste0(id_prefix, colname),
+          label = label,
+          value = textvalue
+        )
+      ))
+    } else {
+      if(mode == "add"){
+        selected <- NULL
+      } else if (mode == "edit"){
+        selected <- textvalue
+      }
+      if(is.null(multiple)) multiple <- FALSE else multiple <- TRUE
+
+      # generate html input widget
+      fluidRow(column(
+        width = 8,
+        shiny::selectInput(
+          inputId = paste0(id_prefix, colname),
+          label = label,
+          choices = choices,
+          selected = selected,
+          multiple = multiple
+        )
+      ))
+    }
+    
+  } else if (inputwidget == "dateInput"){
+    # custom dateInput -----
+    # validate provided attributes
+    label <- config$COLUMNS[colname][[colname]]$label
+    value <- config$COLUMNS[colname][[colname]]$value
+    min <- config$COLUMNS[colname][[colname]]$min
+    max <- config$COLUMNS[colname][[colname]]$max
+    language <- config$COLUMNS[colname][[colname]]$language
+    
+    if(is.null(label)){
+      label <- colname
+    } else {
+      label <- paste0(colname, " (", label, ")")
+    }
+    if(mode == "add"){
+      value <- value
+    } else if (mode == "edit"){
+      value <- textvalue
+    }
+    if(is.null(language)) language <- "en"
+    
+    # generate html input widget
+    fluidRow(column(
+      width = 8,
+      shiny::dateInput(
+        inputId = paste0(id_prefix, colname),
+        label = label,
+        value = value,
+        min = min,
+        max = max,
+        language = language
+      )
+    ))
+  } else if (inputwidget == "dateRangeInput"){
+    # custom dateRangeInput -----
+    # validate provided attributes
+    label <- config$COLUMNS[colname][[colname]]$label
+    start <- config$COLUMNS[colname][[colname]]$start
+    end <- config$COLUMNS[colname][[colname]]$end
+    min <- config$COLUMNS[colname][[colname]]$min
+    max <- config$COLUMNS[colname][[colname]]$max
+    language <- config$COLUMNS[colname][[colname]]$language
+    separator	<- config$COLUMNS[colname][[colname]]$separator
+    
+    if(is.null(label)){
+      label <- colname
+    } else {
+      label <- paste0(colname, " (", label, ")")
+    }
+    if(mode == "add"){
+      value <- value
+    } else if (mode == "edit"){
+      value <- textvalue
+    }
+    if(is.null(separator)) separator <- " to "
+    if(is.null(language)) language <- "en"
+    
+    # generate html input widget
+    fluidRow(column(
+      width = 8,
+      shiny::dateRangeInput(
+        inputId = paste0(id_prefix, colname),
+        label = label,
+        start = start,
+        end = end,
+        min = min,
+        max = max,
+        separator = separator,
+        language = language
+      )
+    ))
+  } else if (inputwidget == "textAreaInput"){
+    # custom textAreaInput -----
+    # validate provided attributes
+    label <- config$COLUMNS[colname][[colname]]$label
+    value <- config$COLUMNS[colname][[colname]]$value
+    height <- config$COLUMNS[colname][[colname]]$height
+    
+    if(is.null(label)){
+      label <- colname
+    } else {
+      label <- paste0(colname, " (", label, ")")
+    }
+    if(is.null(value)) value <- ""
+    if(mode == "add"){
+      value <- value
+    } else if (mode == "edit"){
+      value <- textvalue
+    }
+    
+    # generate html input widget
+    fluidRow(column(
+      width = 8,
+      shiny::textAreaInput(
+        inputId = paste0(id_prefix, colname),
+        label = label,
+        value = value,
+        height = height
+      )
+    ))
+  } else if (inputwidget == "textInput"){
+    # custom textInput -----
+    # validate provided attributes
+    label <- config$COLUMNS[colname][[colname]]$label
+    value <- config$COLUMNS[colname][[colname]]$value
+    placeholder <- config$COLUMNS[colname][[colname]]$placeholder
+    
+    if(is.null(label)){
+      label <- colname
+    } else {
+      label <- paste0(colname, " (", label, ")")
+    }
+    if(is.null(value)) value <- ""
+    if(mode == "add"){
+      value <- value
+    } else if (mode == "edit"){
+      value <- textvalue
+    }
+    
+    # generate html input widget
+    fluidRow(column(
+      width = 8,
+      shiny::textInput(
+        inputId = paste0(id_prefix, colname),
+        label = label,
+        value = value,
+        placeholder = placeholder
+      )
+    ))
+  } else {
+    warning(paste0("Provided inputwidget for column ", colname, " not valid. textInput is applied."))
+    fluidRow(column(
+      width = 8,
+      textInput(
+        inputId = paste0(id_prefix, colname),
+        label = colname,
+        value = textvalue
+      )
+    ))
+  }
 }

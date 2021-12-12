@@ -9,6 +9,7 @@
 #' \code{host} or \code{port}.
 #' @param logDir Path where a logfile should be saved. If NULL, logs are
 #' not stored
+#' @param configFile Path and file to a YAML file containing definitions for column UIs.
 #' @param returnAppObj Logical value, whether to return the app object if set to
 #' TRUE. Default behavior: directly runs the app (FALSE)
 #'
@@ -23,6 +24,7 @@
 cbpManager <- function(
                       studyDir = NULL,
                       logDir = NULL,
+                      configFile = NULL,
                       returnAppObj = FALSE,
                       ...) {
 
@@ -33,6 +35,7 @@ cbpManager <- function(
   cbpManager.options <<- list(
     "studyDir" = studyDir,
     "logDir" = logDir,
+    "configFile" = configFile,
     "cbpManager_root" = system.file(package = "cbpManager")
   )
 

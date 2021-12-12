@@ -60,12 +60,60 @@ output$patientTable <- DT::renderDT({
 
 # output reactive UIs per column
 output$AddPatientUIs <- renderUI({
-  lapply(
-    colnames(loadedData$data_clinical_patient),
-    function(colname) {
-      generateUIwidgets(colname, mode = "add", tab = "Patient")
+  
+  if(!is.null(config$UI_GROUPS)){
+    
+    UI_list <- list()
+    cols_in_groups <- c()
+    for(group in names(config$UI_GROUPS)){
+      
+      # TODO validate group attributes
+      
+      cg <- intersect(config$UI_GROUPS[[group]]$columns, colnames(loadedData$data_clinical_patient))
+      
+      print(group)
+      print(cg)
+      
+      if(!rlang::is_empty(cg)){
+        col_group_list <- lapply(
+          cg, function(c) {
+            generateUIwidgets(c, mode = "add", tab = "Patient")
+          }
+        )
+        
+        box_UI <- box(
+          width = 12,
+          title = config$UI_GROUPS[[group]]$title,
+          collapsible = TRUE,
+          collapsed = config$UI_GROUPS[[group]]$collapsed,
+          solidHeader = TRUE,
+          col_group_list
+        )
+        
+        UI_list[[length(UI_list) + 1]] <- box_UI
+        cols_in_groups <- c(cols_in_groups, cg)
+      }
     }
-  )
+    
+    # columns not in groups
+    cols_not_in_groups <- setdiff(colnames(loadedData$data_clinical_patient), cols_in_groups)
+    remaining_cols_UIs <- lapply(
+      cols_not_in_groups, function(c) {
+        generateUIwidgets(c, mode = "add", tab = "Patient")
+      }
+    )
+    UI_list[[length(UI_list) + 1]] <- remaining_cols_UIs
+    
+    return(UI_list)
+
+  } else {
+    lapply(
+      colnames(loadedData$data_clinical_patient),
+      function(colname) {
+        generateUIwidgets(colname, mode = "add", tab = "Patient")
+      }
+    )
+  }
 })
 
 # output reactive UIs - oncotree specific

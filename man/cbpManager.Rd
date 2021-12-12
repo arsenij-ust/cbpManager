@@ -4,13 +4,21 @@
 \alias{cbpManager}
 \title{Launch cbpManager}
 \usage{
-cbpManager(studyDir = NULL, logDir = NULL, returnAppObj = FALSE, ...)
+cbpManager(
+  studyDir = NULL,
+  logDir = NULL,
+  configFile = NULL,
+  returnAppObj = FALSE,
+  ...
+)
 }
 \arguments{
 \item{studyDir}{Path to study folder containing studies of cBioPortal.}
 
 \item{logDir}{Path where a logfile should be saved. If NULL, logs are
 not stored}
+
+\item{configFile}{Path and file to a YAML file containing definitions for column UIs.}
 
 \item{returnAppObj}{Logical value, whether to return the app object if set to
 TRUE. Default behavior: directly runs the app (FALSE)}

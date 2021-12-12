@@ -54,6 +54,19 @@ shinyAppServer <- function(input, output, session) {
     logDir <<- NULL
   }
   
+  ## take path from 'cbpManager.options' if it is set
+  if (
+    exists("cbpManager.options") &&
+    !is.null(cbpManager.options[["configFile"]]) &&
+    file.exists(cbpManager.options[["configFile"]])
+  ) {
+    config <<- yaml::read_yaml(cbpManager.options$configFile)
+    
+    ## if none of the above apply, get path of example study dir
+  } else {
+    config <<- yaml::read_yaml(system.file(file.path("extdata", "cbpManager_config.yml"), package = "cbpManager"))
+  }
+  
   # Modal dialog for Session info button
   observeEvent(input$openSessionInfo, {
     showModal(

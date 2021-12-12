@@ -1,0 +1,114 @@
+# Define columns under the section COLUMNS
+# Each column definition should have a dictionary containing inputwidget, and allowed arguments with respective values.
+
+# Below you find implemented inputwidgets and their attributes (obligatory attributes = *):
+
+# dateInput
+  #   value: The starting date. (yyyy-mm-dd format)
+  #   label: Optional, short description (is displayed in brackets after the column name).
+  #   min: The minimum allowed date. (yyyy-mm-dd format)
+  #   max: The maximum allowed date. (yyyy-mm-dd format)
+  #   language: Default is "en". Other valid values include "ar", "az", "bg", "bs", "ca", "cs", "cy", "da", "de", "el", "en-AU", "en-GB", "eo", "es", "et", "eu", "fa", "fi", "fo", "fr-CH", "fr", "gl", "he", "hr", "hu", "hy", "id", "is", "it-CH", "it", "ja", "ka", "kh", "kk", "ko", "kr", "lt", "lv", "me", "mk", "mn", "ms", "nb", "nl-BE", "nl", "no", "pl", "pt-BR", "pt", "ro", "rs-latin", "rs", "ru", "sk", "sl", "sq", "sr-latin", "sr", "sv", "sw", "th", "tr", "uk", "vi", "zh-CN", and "zh-TW".
+
+# dateRangeInput
+  #   label: Optional, short description (is displayed in brackets after the column name).
+  #   start: The initial start date. (yyyy-mm-dd format). If NULL (the default), will use the current date in the client's time zone.
+  #   end: The initial start date. (yyyy-mm-dd format). If NULL (the default), will use the current date in the client's time zone.
+  #   min: The minimum allowed date. (yyyy-mm-dd format)
+  #   max: The maximum allowed date. (yyyy-mm-dd format)
+  #   separator: String to display between the start and end input boxes. (Default: " to ")
+  #   language: Default is "en". Other valid values include "ar", "az", "bg", "bs", "ca", "cs", "cy", "da", "de", "el", "en-AU", "en-GB", "eo", "es", "et", "eu", "fa", "fi", "fo", "fr-CH", "fr", "gl", "he", "hr", "hu", "hy", "id", "is", "it-CH", "it", "ja", "ka", "kh", "kk", "ko", "kr", "lt", "lv", "me", "mk", "mn", "ms", "nb", "nl-BE", "nl", "no", "pl", "pt-BR", "pt", "ro", "rs-latin", "rs", "ru", "sk", "sl", "sq", "sr-latin", "sr", "sv", "sw", "th", "tr", "uk", "vi", "zh-CN", and "zh-TW".
+
+# selectInput
+  #   label: Optional, short description (is displayed in brackets after the column name).
+  # * choices: List of values to select from.
+  #   selected: The initially selected value (or multiple values if multiple = TRUE). If not specified then defaults to the first value for single-select lists and no values for multiple select lists.
+  #   multiple: Is selection of multiple items allowed? (true / false) Default: false
+
+# numericInput
+  #   label: Optional, short description (is displayed in brackets after the column name).
+  # * value: Initial value.
+  #   min: Minimum allowed value
+  #   max: Maximum allowed value
+  #   step: Interval to use when stepping between min and max.
+
+# textInput
+  #   label: Optional, short description (is displayed in brackets after the column name).
+  #   value: Initial value.
+  #   placeholder: A character string giving the user a hint as to what can be entered into the control. Internet Explorer 8 and 9 do not support this option.
+  
+# textAreaInput
+  #   label: Optional, short description (is displayed in brackets after the column name).
+  #   value: Initial value.
+  #   height: The height of the input, e.g. '400px', or '100%
+
+
+# Group several columns in collapsable UI sections.
+# Below you find attributes of a defined group (obligatory attributes = *):
+
+#   <GROUP_NAME>
+#     collapsed: If 'true', start collapsed. (Default = true)
+#   * title: Title of the box.
+#     footer: Optional footer text.
+#     status: The status of the box determines the box's background color/ border. 
+#             (Valid statuses:
+#             - "primary" -> Blue (sometimes dark blue)
+#             - "success" -> Green
+#             - "info" -> Blue
+#             - "warning" -> Orange
+#             - "danger" -> Red)
+#   * columns: list of column names that should be grouped together.
+
+# Example for grouping:
+# UI_GROUPS:
+#   Group1:
+#     collapsed: true
+#     title: Group title 1
+#     columns:
+#     - ALTER_MTB
+#     - GESCHLECHT
+#   Group2:
+#     collapsed: true
+#     title: Group title 2
+#     status: primary
+#     columns:
+#     - DATUM_ERSTDIAGNOSE
+#     - TNM_INITIAL
+
+
+---
+UI_GROUPS:
+  Group1:
+    collapsed: true
+    title: Allgemeines
+    columns:
+    - PATIENT_ID
+    - ALTER_MTB
+    - GESCHLECHT
+  Group2:
+    collapsed: true
+    title: Onkologische Diagnosen
+    columns:
+    - DATUM_ERSTDIAGNOSE
+    - TNM_INITIAL
+
+COLUMNS:
+  ALTER_MTB: 
+    inputwidget: numericInput
+    label: Alter in Jahren bei Einschluss ins MTB
+    value: 1
+  GESCHLECHT:
+    inputwidget: selectInput
+    label: biologisches Geschlecht
+    selected: U
+    choices:
+    - M
+    - W
+    - S
+    - U
+  DATUM_ERSTDIAGNOSE:
+    inputwidget: dateInput
+    label: Datum Erstdiagnose der im MTB untersuchten Tumorentität
+  TNM_INITIAL:
+    inputwidget: textInput
+    label: TNM zum Zeitpunkt der Erstdiagnose
