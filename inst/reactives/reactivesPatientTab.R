@@ -234,13 +234,16 @@ observeEvent(input$ModalbuttonAddPatient, {
     
     # add new row
     if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
-      loadedData$data_clinical_patient <-
-      rbind(addPatientValues[colnames(loadedData$data_clinical_patient)], loadedData$data_clinical_patient)
+      loadedData$data_clinical_patient <- 
+        rbind(addPatientValues[colnames(loadedData$data_clinical_patient)], loadedData$data_clinical_patient)
       # reorder so the special rows are above the new added patient
       special_rows_df <- loadedData$data_clinical_patient[which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
       samples_without_spec_rows <- loadedData$data_clinical_patient[-which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
       loadedData$data_clinical_patient <-
         rbind(special_rows_df, samples_without_spec_rows)
+      
+      # change tracker
+      study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
     } else {
       message(
         "Number of input values does not match with number of columns. 
@@ -258,12 +261,15 @@ observeEvent(input$ModalbuttonAddPatient, {
   } else {
     if (all(colnames(loadedData$data_clinical_patient) %in% names(addPatientValues))) {
       loadedData$data_clinical_patient <-
-      rbind(addPatientValues[colnames(loadedData$data_clinical_patient)], loadedData$data_clinical_patient)
+        rbind(addPatientValues[colnames(loadedData$data_clinical_patient)], loadedData$data_clinical_patient)
       # reorder so the special rows are above the new added patient
       special_rows_df <- loadedData$data_clinical_patient[which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
       samples_without_spec_rows <- loadedData$data_clinical_patient[-which(loadedData$data_clinical_patient$PATIENT_ID %in% c("Patient Identifier", "Patient identifier", "STRING")),]
       loadedData$data_clinical_patient <-
         rbind(special_rows_df, samples_without_spec_rows)
+      
+      # change tracker
+      study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
     } else {
       message(
         "Number of input values does not match with number of columns. 
@@ -449,6 +455,10 @@ observeEvent(input$ModalbuttonEditPatient, {
       loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
         editPatientValues[i]
     }
+    
+    # change tracker
+    study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+    
     removeModal()
   } else {
     # edit data rows
@@ -491,14 +501,26 @@ observeEvent(input$ModalbuttonEditPatient, {
           loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
             editPatientValues[i]
         }
+        
+        # change tracker
+        study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+        
         removeModal()
     } else {
       for (i in colnames(loadedData$data_clinical_patient)) {
         loadedData$data_clinical_patient[input$patientTable_rows_selected, i] <-
           editPatientValues[i]
       }
+      
+      # change tracker
+      study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }
+    # change tracker
+    study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+    
+    removeModal()
   }
 })
 
@@ -668,6 +690,10 @@ observeEvent(input$ModalbuttonImportPatient, {
         }
       }
     }
+    
+    # change tracker
+    study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+    
     removeModal()
   }
 })
@@ -710,6 +736,10 @@ observeEvent(input$ModalbuttonDeletePatient, {
 
   loadedData$data_clinical_patient <-
     loadedData$data_clinical_patient[-entry, , drop = FALSE]
+  
+  # change tracker
+  study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+  
   removeModal()
 })
 
@@ -814,6 +844,10 @@ observeEvent(input$ModalbuttonAddColPatient, {
         loadedData$data_clinical_patient[3, col] <-
           patientCols[which(patientCols$colname == col), "typeof"]
       }
+      
+      # change tracker
+      study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }
   } else if (input$AddColPatientMode == 2) {
@@ -846,6 +880,10 @@ observeEvent(input$ModalbuttonAddColPatient, {
         input$visLongNamePat
       loadedData$data_clinical_patient[3, colname] <-
         input$typeofPat
+      
+      # change tracker
+      study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }
   }
@@ -884,6 +922,10 @@ observeEvent(input$DeleteColumnPatient, {
 observeEvent(input$ModalbuttonDeleteColPatient, {
   loadedData$data_clinical_patient <-
     loadedData$data_clinical_patient[, !(names(loadedData$data_clinical_patient) %in% input$DelColnamePat), drop = FALSE]
+  
+  # change tracker
+  study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+  
   removeModal()
 })
 
@@ -969,6 +1011,9 @@ observeEvent(input$SaveDataPatient,
       ),
       file.path(study_dir, loadedData$studyID, "meta_clinical_patient.txt")
     )
+    
+    # change tracker
+    study_tracker$df[1, "Saved"] <- as.character(icon("check-circle"))
 
     # logging
     if (!is.null(logDir)) {

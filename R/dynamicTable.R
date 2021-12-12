@@ -49,19 +49,19 @@ addColumn_Server <- function(input, output, session, data) {
       )
     ))
   })
-
+  
   params <- reactiveValues(df = NULL)
-
+  
   observeEvent(input$ModalbuttonAddCol, {
     if (input$colname == "") {
       showNotification("Column name cannot be empty.",
-        type = "error",
-        duration = NULL
+                       type = "error",
+                       duration = NULL
       )
     } else if (toupper(input$colname) %in% colnames(data)) {
       showNotification("Column already exists.",
-        type = "error",
-        duration = NULL
+                       type = "error",
+                       duration = NULL
       )
     } else {
       colname <- create_name(input$colname)
@@ -69,7 +69,7 @@ addColumn_Server <- function(input, output, session, data) {
       removeModal()
     }
   })
-
+  
   return(reactive({
     params$df
   }))
@@ -679,9 +679,10 @@ saveTimeline_UI <- function(id, label = "Save") {
 #' @param session Shiny session
 #' @param data source data as data.frame
 #' @param study_id the current study ID
-#' @return nothing to return
+#' @return boolean value; TRUE if function was used.
 saveTimeline_Server <-
   function(input, output, session, data, study_id) {
+    params <- reactiveValues(check = FALSE)
     observeEvent(input$SaveTimeline, {
       if(is.null(study_id())){
         showNotification(
@@ -758,5 +759,10 @@ saveTimeline_Server <-
           modified_file = file.path(study_id(), meta_filename)
         )
       }
+      params$check <- runif(1)
     })
+    
+    return(reactive({
+      params$check
+    }))
   }

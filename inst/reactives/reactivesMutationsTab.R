@@ -144,11 +144,19 @@ observeEvent(input$ModalbuttonAddUploadedMAF, {
       req_cols))
    loadedData$data_mutations_extended <-
     dplyr::bind_rows(upload$data[,colOrder], loadedData$data_mutations_extended)
+   
+   # change tracker
+   study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+   
    removeModal()
   } else if (input$select_AddMAFMode == 2){
     selCols <- c(req_cols, input$SelColnameMAF)
     loadedData$data_mutations_extended <-
       dplyr::bind_rows(upload$data[,selCols], loadedData$data_mutations_extended)
+    
+    # change tracker
+    study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+    
     removeModal()
   }
 
@@ -276,6 +284,10 @@ observeEvent(input$ModalbuttonAddMAFentry, {
     if (all(colnames(loadedData$data_mutations_extended) %in% names(addMAFValues))) {
       loadedData$data_mutations_extended <-
         rbind(addMAFValues[colnames(loadedData$data_mutations_extended)], loadedData$data_mutations_extended)
+      
+      # change tracker
+      study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+      
     } else {
       message(
         "Number of input values does not match with number of columns.
@@ -374,6 +386,10 @@ observeEvent(input$ModalbuttonEditMAF, {
       loadedData$data_mutations_extended[input$mafTable_rows_selected, i] <-
         editMAFValues[i]
     }
+    
+    # change tracker
+    study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+    
     removeModal()
   }
 })
@@ -409,6 +425,10 @@ observeEvent(input$ModalbuttonDeleteMAFentry, {
 
   loadedData$data_mutations_extended <-
     loadedData$data_mutations_extended[-entry, , drop = FALSE]
+  
+  # change tracker
+  study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+  
   removeModal()
 })
 
@@ -486,6 +506,10 @@ observeEvent(input$ModalbuttonAddColMAF, {
         input$SelColnameMAF[!input$SelColnameMAF %in% names(loadedData$data_mutations_extended)]
 
       loadedData$data_mutations_extended[colsToAdd] <- list("")
+      
+      # change tracker
+      study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }
   } else if (input$AddColMAFMode == 2) {
@@ -501,6 +525,10 @@ observeEvent(input$ModalbuttonAddColMAF, {
       )
     } else {
       loadedData$data_mutations_extended %<>% mutate(!!(input$colnameMAF) := "")
+      
+      # change tracker
+      study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+      
       removeModal()
     }
   }
@@ -542,6 +570,10 @@ observeEvent(input$DeleteColumnMAFentry, {
 observeEvent(input$ModalbuttonDeleteColMAF, {
   loadedData$data_mutations_extended <-
     loadedData$data_mutations_extended[, !(names(loadedData$data_mutations_extended) %in% input$SelColnameMAF), drop = FALSE]
+  
+  # change tracker
+  study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+  
   removeModal()
 })
 
@@ -657,6 +689,9 @@ observeEvent(input$saveMAF, {
       file.path(study_dir, loadedData$studyID, "meta_mutations_extended.txt")
     )
   }
+  
+  # change tracker
+  study_tracker$df[3, "Saved"] <- as.character(icon("check-circle"))
 
   # logging
   if (!is.null(logDir)) {
