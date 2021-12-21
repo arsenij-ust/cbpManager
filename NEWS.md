@@ -23,6 +23,7 @@
 
 * Oncotree functionality is now avaliable also in the sample tab.
 * Major modifications of the Mutation tab. Mutation data is now editable.
+* Change tracker: The change tracker reminds you to use the save button if some new changes were done in one of the tabs.
 
 # New features cbpManager 0.1.1
 
