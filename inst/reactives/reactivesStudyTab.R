@@ -593,6 +593,7 @@ output$ui_change_tracker <- DT::renderDT({
           initComplete = DT::JS(
             "function(settings, json) {",
             "$(this.api().table().header()).css({'background-color': '#517fb9', 'color': '#fff'});",
+            "$(this.api().table().body()).css({'background-color': 'white', 'color': '#517fb9'});",
             "}")
         )
       )
