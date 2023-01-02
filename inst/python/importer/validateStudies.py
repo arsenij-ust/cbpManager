@@ -33,7 +33,7 @@ def main(args):
                 list_studies.append(os.path.join(root_dir, study_dir))
 
     # When both root directory and list of studies are given, create list of study files
-    if root_dir is not None and studies is not None:
+    if root_dir is not None and studies is not None and os.path.dirname != "normals":
         list_studies = [os.path.join(root_dir, study) for study in list_studies]
 
     # Get current date and time to write to logfilename
@@ -82,10 +82,6 @@ def main(args):
         # Append argument for strict mode when supplied by user
         if args.strict_maf_checks is not False:
             validator_args.append('-m')
-
-        # Append argument for maximum reported line numbers and encountered values in HTML
-        if args.max_reported_values != 3:
-            validator_args.append('-a %s' % args.max_reported_values)
 
         # When HTML file is required, create html file name and add to arguments for validateData
         if output_folder is not None:
@@ -180,13 +176,6 @@ def interface(args=None):
                         action='store_true', default=False,
                         help='Option to enable strict mode for validator when '
                              'validating mutation data')
-    parser.add_argument('-a', '--max_reported_values', required=False,
-                        type=int, default = 3,
-                        help='Cutoff in HTML report for the maximum number of line numbers '
-                             'and values encountered to report for each message. '
-                             'For example, set this to a high number to '
-                             'report all genes that could not be loaded, instead '
-                             'of reporting "GeneA, GeneB, GeneC, 213 more"')
 
     args = parser.parse_args(args)
 

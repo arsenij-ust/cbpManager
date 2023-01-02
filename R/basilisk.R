@@ -9,6 +9,7 @@
 #'
 #' @name ValidationDependencies
 .validation_dependencies <- c(
+  "python==3.9",
   "requests==2.24.0",
   "pyyaml==5.4.1",
   "jinja2==2.11.2",
