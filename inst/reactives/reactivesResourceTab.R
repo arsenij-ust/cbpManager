@@ -25,9 +25,7 @@ output$rcDefinitionTable <- DT::renderDT({
     loadedData$data_resource_definition,
     selection = "single",
     rownames = FALSE,
-    options = list(pageLength = 25, columnDefs = list(list(
-      visible = FALSE
-    )))
+    options = list(pageLength = 25)
   )
 })
 
@@ -108,9 +106,7 @@ output$rcStudyTable <- DT::renderDT({
     loadedData$data_resource_study,
     selection = "single",
     rownames = FALSE,
-    options = list(pageLength = 25, columnDefs = list(list(
-      visible = FALSE
-    )))
+    options = list(pageLength = 25)
   )
 })
 
@@ -182,9 +178,7 @@ output$rcPatientTable <- DT::renderDT({
     loadedData$data_resource_patient,
     selection = "single",
     rownames = FALSE,
-    options = list(pageLength = 25, columnDefs = list(list(
-      visible = FALSE
-    )))
+    options = list(pageLength = 25)
   )
 })
 
@@ -256,9 +250,7 @@ output$rcSampleTable <- DT::renderDT({
     loadedData$data_resource_sample,
     selection = "single",
     rownames = FALSE,
-    options = list(pageLength = 25, columnDefs = list(list(
-      visible = FALSE
-    )))
+    options = list(pageLength = 25)
   )
 })
 
