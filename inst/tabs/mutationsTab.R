@@ -76,7 +76,7 @@ mutationsTab <- tabItem(
     box(
       actionButton("NewMAFentry", "Add annotation", icon = icon("plus", lib = "glyphicon")),
       actionButton("EditMAFentry", "Edit annotation", icon = icon("pencil", lib = "glyphicon")),
-      actionButton("DeleteMAFentry", "Delete annotation", icon = icon("remove", lib = "glyphicon")),
+      # actionButton("DeleteMAFentry", "Delete annotation", icon = icon("remove", lib = "glyphicon")),
       actionButton("AddColumnMAFentry", "Add column(s)", icon = icon("plus-sign", lib = "glyphicon")),
       actionButton("DeleteColumnMAFentry", "Delete column(s)", icon = icon("minus-sign", lib = "glyphicon")),
       actionButton("saveMAF", "Save", class = "btn-success", icon = icon("saved", lib = "glyphicon")),

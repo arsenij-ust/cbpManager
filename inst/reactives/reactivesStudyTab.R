@@ -276,6 +276,8 @@ observeEvent(input$upload, {
   )
   loadedData$data_mutations_filename <- "data_mutations_extended.txt"
   loadedData$data_mutations_extended <- data.frame(
+    cbpID = character(),
+    Delete = character(),
     Hugo_Symbol = character(),
     Tumor_Sample_Barcode = character(),
     Variant_Classification = character(),
@@ -412,6 +414,19 @@ observeEvent(input$upload, {
         fill = FALSE
       )
     loadedData$data_mutations_extended <- data_mutations_extended
+    
+    # generate unique hash ID
+    loadedData$data_mutations_extended$cbpID <- apply(loadedData$data_mutations_extended, 1, function (x) paste0(x, collapse = ";") %>% digest::digest(algo="md5"))
+    
+    # add bin icon
+    loadedData$data_mutations_extended$Delete <- sapply(loadedData$data_mutations_extended$cbpID, function(x) as.character(actionLink(
+      inputId=paste0("deleteTR_", x),
+      label="",
+      onclick = 'Shiny.setInputValue("deleteAnnotation", this.id, {priority: \"event\"})',
+      icon("trash-can", class = "fa-solid")
+    )))
+    # reorder columns
+    loadedData$data_mutations_extended <- loadedData$data_mutations_extended %>% dplyr::select(cbpID, Delete, everything())
   }
 
   # read data_timeline_treatment ---------------------------------------------------------------

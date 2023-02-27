@@ -67,7 +67,7 @@ sampleTab <- tabItem(
       title = "Sample manager",
       actionButton("NewSample", "Add sample", icon = icon("plus", lib = "glyphicon")),
       actionButton("EditSample", "Edit sample", icon = icon("pencil", lib = "glyphicon")),
-      actionButton("DeleteSample", "Delete sample", icon = icon("remove", lib = "glyphicon")),
+      actionButton("DeleteSample", "Delete sample(s)", icon = icon("remove", lib = "glyphicon")),
       actionButton("AddColumnSample", "Add column(s)", icon = icon("plus-sign", lib = "glyphicon")),
       actionButton("DeleteColumnSample", "Delete column(s)", icon = icon("minus-sign", lib = "glyphicon")),
       actionButton("SaveDataSample", "Save", class = "btn-success", icon = icon("saved", lib = "glyphicon")),

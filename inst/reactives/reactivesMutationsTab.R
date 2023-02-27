@@ -125,6 +125,18 @@ observeEvent(input$ModalbuttonAddUploadedMAF, {
     "Variant_Classification",
     "HGVSp_Short"
   )
+  
+  uploaded_data <- upload$data
+  # add cbpID and bin icon
+  uploaded_data$cbpID <- apply(uploaded_data, 1, function (x) paste0(x, collapse = ";") %>% digest::digest(algo="md5"))
+  uploaded_data$Delete <- sapply(uploaded_data$cbpID, function(x) as.character(actionLink(
+    inputId=paste0("deleteTR_", x),
+    label="",
+    onclick = 'Shiny.setInputValue("deleteAnnotation", this.id, {priority: \"event\"})',
+    icon("trash-can", class = "fa-solid")
+  )))
+  # reorder columns
+  uploaded_data <- uploaded_data %>% dplyr::select(cbpID, Delete, everything())
 
   if (!all(upload$data$Tumor_Sample_Barcode %in% sample_id_df$ids$SAMPLE_ID)){
     showNotification(
@@ -139,20 +151,20 @@ observeEvent(input$ModalbuttonAddUploadedMAF, {
       duration = NULL
     )
   } else if (input$select_AddMAFMode == 1){
-    colOrder <- c(req_cols, setdiff(
+    colOrder <- c("cbpID", "Delete", req_cols, setdiff(
       colnames(upload$data),
       req_cols))
    loadedData$data_mutations_extended <-
-    dplyr::bind_rows(upload$data[,colOrder], loadedData$data_mutations_extended)
+    dplyr::bind_rows(uploaded_data[,colOrder], loadedData$data_mutations_extended)
    
    # change tracker
    study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
    
    removeModal()
   } else if (input$select_AddMAFMode == 2){
-    selCols <- c(req_cols, input$SelColnameMAF)
+    selCols <- c("cbpID", "Delete", req_cols, input$SelColnameMAF)
     loadedData$data_mutations_extended <-
-      dplyr::bind_rows(upload$data[,selCols], loadedData$data_mutations_extended)
+      dplyr::bind_rows(uploaded_data[,selCols], loadedData$data_mutations_extended)
     
     # change tracker
     study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
@@ -175,9 +187,11 @@ output$mafTable <- DT::renderDT({
       loadedData$data_mutations_extended,
       selection = "single",
       rownames = FALSE,
+      escape = FALSE,
       options = list(
         pageLength = 15,
-        scrollX = TRUE
+        scrollX = TRUE,
+        columnDefs = list(list(visible=FALSE, targets=c(0)))
       )
     )
   }
@@ -245,6 +259,15 @@ observeEvent(input$ModalbuttonAddMAFentry, {
     all_reactive_inputs[grep("addMutationInput_", names(all_reactive_inputs))]
   names(addMAFValues) <-
     gsub("addMutationInput_", "", names(addMAFValues))
+  
+  id <- digest::digest(paste0(unlist(addMAFValues), collapse = ";"), algo="md5")
+  addMAFValues$cbpID <- id
+  addMAFValues$Delete <- as.character(actionLink(
+    inputId=paste0("deleteTR_", id),
+    label="",
+    onclick = 'Shiny.setInputValue("deleteAnnotation", this.id, {priority: \"event\"})',
+    icon("trash-can", class = "fa-solid")
+  ))
   if (addMAFValues["Tumor_Sample_Barcode"] == "") {
     showNotification("Tumor_Sample_Barcode cannot be empty.",
                      type = "error",
@@ -361,6 +384,16 @@ observeEvent(input$ModalbuttonEditMAF, {
     all_reactive_inputs[grep("editMutationInput_", names(all_reactive_inputs))]
   names(editMAFValues) <-
     gsub("editMutationInput_", "", names(editMAFValues))
+  
+  id <- digest::digest(paste0(unlist(editMAFValues), collapse = ";"), algo="md5")
+  editMAFValues$cbpID <- id
+  editMAFValues$Delete <- as.character(actionLink(
+    inputId=paste0("deleteTR_", id),
+    label="",
+    onclick = 'Shiny.setInputValue("deleteAnnotation", this.id, {priority: \"event\"})',
+    icon("trash-can", class = "fa-solid")
+  ))
+  # print(editMAFValues)
   if (editMAFValues["Tumor_Sample_Barcode"] == "") {
     showNotification("Tumor_Sample_Barcode cannot be empty.",
                      type = "error",
@@ -395,42 +428,18 @@ observeEvent(input$ModalbuttonEditMAF, {
 })
 
 # delete entry ---------------------------------------------------------------
-observeEvent(input$DeleteMAFentry, {
-  if(is.null(loadedData$studyID)){
-    showNotification(
-      "Please load a study in the 'Study' tab first.",
-      type = "error",
-      duration = NULL
-    )
-    return(NULL)
-  }
-  if (is.null(input$mafTable_rows_selected)) {
-    showNotification("Please select a row", type = "warning", duration = NULL)
-  } else {
-    showModal(
-      modalDialog(
-        "Do you want to delete the selected mutation annotation?",
-        title = "Delete",
-        easyClose = FALSE,
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton("ModalbuttonDeleteMAFentry", "Delete")
-        )
-      )
-    )
-  }
-})
-observeEvent(input$ModalbuttonDeleteMAFentry, {
-  entry <- input$mafTable_rows_selected
 
+observeEvent(input$deleteAnnotation, {
+  # print(input$deleteAnnotation)
+  id <- unlist(strsplit(input$deleteAnnotation, "_"))[[2]]
+  
   loadedData$data_mutations_extended <-
-    loadedData$data_mutations_extended[-entry, , drop = FALSE]
+    loadedData$data_mutations_extended[-which(loadedData$data_mutations_extended$cbpID == id), , drop = FALSE]
   
   # change tracker
   study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
-  
-  removeModal()
 })
+
 
 # # add column ---------------------------------------------------------------
 # ModalDialog for adding a column
@@ -554,7 +563,7 @@ observeEvent(input$DeleteColumnMAFentry, {
           label = "Select column(s) for deletion:",
           choices = setdiff(
             colnames(loadedData$data_mutations_extended),
-            c("Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification", "HGVSp_Short")
+            c("Delete","cbpID","Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification", "HGVSp_Short")
           ),
           multiple = TRUE
         )
@@ -588,7 +597,7 @@ observeEvent(input$saveMAF, {
   }
   req(loadedData$studyID, loadedData$data_mutations_extended, loadedData$data_mutations_filename)
   write.table(
-    loadedData$data_mutations_extended,
+    loadedData$data_mutations_extended[,-which(colnames(loadedData$data_mutations_extended) %in% c("cbpID", "Delete"))],
     file.path(study_dir, loadedData$studyID, paste0(loadedData$data_mutations_filename, ".temp")),
     append = FALSE,
     sep = "\t",

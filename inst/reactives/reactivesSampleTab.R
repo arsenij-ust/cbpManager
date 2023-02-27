@@ -503,40 +503,41 @@ observeEvent(input$DeleteSample, {
     )
     return(NULL)
   }
-  if (is.null(input$sampleTable_rows_selected)) {
-    showNotification("Please select a row", type = "warning", duration = NULL)
-  } else if (input$sampleTable_rows_selected == 1 |
-    input$sampleTable_rows_selected == 2 |
-    input$sampleTable_rows_selected == 3) {
-    showNotification("Selected row cannot be deleted",
-      type = "error",
-      duration = NULL
-    )
-  } else {
-    showModal(
-      modalDialog(
-        "Do you want to delete the selected sample entry?",
-        title = "Delete",
-        easyClose = FALSE,
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton("ModalbuttonDeleteSample", "Delete")
+  if(nrow(loadedData$data_clinical_sample) > 3) sampleIDs <- loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample),"SAMPLE_ID"] else sampleIDs <- ""
+  showModal(
+    modalDialog(
+      title = "Delete sample(s)",
+      fluidRow(column(
+        width = 8,
+        selectInput(
+          inputId = "DelRownameSample",
+          label = "Select Sample ID(s) for deletion:",
+          choices = sampleIDs,
+          multiple = TRUE
         )
+      )),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonDeleteRowSample", "Delete sample(s)")
       )
     )
-  }
+  )
 })
-observeEvent(input$ModalbuttonDeleteSample, {
-  entry <- input$sampleTable_rows_selected
-
-  loadedData$data_clinical_sample <-
-    loadedData$data_clinical_sample[-entry, , drop = FALSE]
-  
-  # change tracker
-  study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+observeEvent(input$ModalbuttonDeleteRowSample, {
+  if(!all(is.empty(input$DelRownameSample))){
+    
+    loadedData$data_clinical_sample <-
+      loadedData$data_clinical_sample[-which(loadedData$data_clinical_sample$SAMPLE_ID %in% input$DelRownameSample),, drop = FALSE]
+    
+    # change tracker
+    study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+    
+  }
   
   removeModal()
 })
+
 
 # add column ---------------------------------------------------------------
 # ModalDialog for adding a column

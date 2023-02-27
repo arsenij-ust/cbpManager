@@ -338,6 +338,8 @@ generateUIwidgets <- function(colname, mode = c("add", "edit"), tab = c("Patient
         selected = selected
       ),
     ))
+  } else if (colname %in% c("Delete", "cbpID") & tab == "Mutation") {
+    return()
   } else {
     fluidRow(column(
       width = 8,

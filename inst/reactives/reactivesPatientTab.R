@@ -660,38 +660,38 @@ observeEvent(input$DeletePatient, {
     )
     return(NULL)
   }
-  if (is.null(input$patientTable_rows_selected)) {
-    showNotification("Please select a row", type = "warning", duration = NULL)
-  } else if (input$patientTable_rows_selected == 1 |
-    input$patientTable_rows_selected == 2 |
-    input$patientTable_rows_selected == 3) {
-    showNotification("Selected row cannot be deleted",
-      type = "error",
-      duration = NULL
-    )
-  } else {
-    showModal(
-      modalDialog(
-        "Do you want to delete the selected patient entry?",
-        title = "Delete",
-        easyClose = FALSE,
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton("ModalbuttonDeletePatient", "Delete")
+  if(nrow(loadedData$data_clinical_patient) > 3) patIDs <- loadedData$data_clinical_patient[4:nrow(loadedData$data_clinical_patient),"PATIENT_ID"] else patIDs <- ""
+  showModal(
+    modalDialog(
+      title = "Delete patients(s)",
+      fluidRow(column(
+        width = 8,
+        selectInput(
+          inputId = "DelRownamePat",
+          label = "Select Patient ID(s) for deletion:",
+          choices = patIDs,
+          multiple = TRUE
         )
+      )),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonDeleteRowPatient", "Delete patient(s)")
       )
     )
-  }
+  )
 })
-observeEvent(input$ModalbuttonDeletePatient, {
-  entry <- input$patientTable_rows_selected
+observeEvent(input$ModalbuttonDeleteRowPatient, {
+  if(!all(is.empty(input$DelRownamePat))){
+    
+    loadedData$data_clinical_patient <-
+      loadedData$data_clinical_patient[-which(loadedData$data_clinical_patient$PATIENT_ID %in% input$DelRownamePat),, drop = FALSE]
+    
+    # change tracker
+    study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+    
+  }
 
-  loadedData$data_clinical_patient <-
-    loadedData$data_clinical_patient[-entry, , drop = FALSE]
-  
-  # change tracker
-  study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
-  
   removeModal()
 })
 
