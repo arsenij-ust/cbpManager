@@ -362,6 +362,19 @@ observeEvent(treatment_addCol(),{
   study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
+# edit treatmemt column ---------------------------------------------------------------
+
+treatment_editCol <- callModule(
+  module = editColumn_Server,
+  id = "Treatment",
+  data = reactive(loadedData$data_timeline_treatment)
+)
+observeEvent(treatment_editCol(),{
+  loadedData$data_timeline_treatment <- treatment_editCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
+})
+
 # save treatment data ---------------------------------------------------------------
 
 treatment_save <- callModule(
@@ -461,6 +474,20 @@ observeEvent(surgery_addCol(),{
   study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
 
+# edit surgery column ---------------------------------------------------------------
+
+surgery_editCol <- callModule(
+  module = editColumn_Server,
+  id = "Surgery",
+  data = reactive(loadedData$data_timeline_surgery)
+)
+observeEvent(surgery_editCol(),{
+  loadedData$data_timeline_surgery <- surgery_editCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
+})
+
+
 # save surgery data ---------------------------------------------------------------
 surgery_save <- callModule(
   module = saveTimeline_Server,
@@ -555,6 +582,19 @@ status_addCol <- callModule(
 )
 observeEvent(status_addCol(),{
   loadedData$data_timeline_status <- status_addCol()
+  # change tracker
+  study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
+})
+
+# edit status column ---------------------------------------------------------------
+
+status_editCol <- callModule(
+  module = editColumn_Server,
+  id = "Status",
+  data = reactive(loadedData$data_timeline_status)
+)
+observeEvent(status_editCol(),{
+  loadedData$data_timeline_status <- status_editCol()
   # change tracker
   study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
 })
@@ -687,6 +727,77 @@ observeEvent(input$ct_ModalbuttonAddCol, {
   } else {
     ct_colname <- create_name(input$ct_colname)
     loadedData[[customTimelines$selectedTrack]] <- data %>% dplyr::mutate(!!(ct_colname) := "")
+    # change tracker
+    study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
+    removeModal()
+  }
+})
+
+# edit custom column ---------------------------------------------------------------
+observeEvent(input$EditColumn_ct, {
+  req(customTimelines$selectedTrack)
+  showModal(
+    modalDialog(
+      title = "Edit column",
+      fluidRow(column(
+        width = 8,
+        selectInput(
+          inputId = "EditSelColname_ct",
+          label = "Select column you want to change:",
+          choices = c("", colnames(loadedData[[customTimelines$selectedTrack]])[-which(colnames(loadedData[[customTimelines$selectedTrack]]) %in% c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE"))]),
+          multiple = FALSE
+        )
+      )),
+      uiOutput("ct_EditCol_UI"),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ct_ModalbuttonEditCol", "Edit column")
+      )
+    )
+  )
+})
+
+output$ct_EditCol_UI <- renderUI({
+  if(!is.empty(input$EditSelColname_ct)){
+    fluidRow(column(
+      width = 8,
+      textInput(
+        inputId = "ct_colname",
+        label = "New column name:",
+        value = input$EditSelColname_ct
+      )
+    ))
+  }
+})
+
+observeEvent(input$ct_ModalbuttonEditCol, {
+  data <- loadedData[[customTimelines$selectedTrack]]
+  
+  if (!is.empty(input$ct_colname)) {
+    new_colname <- create_name(input$ct_colname)
+  }
+  
+  if (is.empty(input$EditSelColname_ct)) {
+    showNotification("Please select a column.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$ct_colname)) {
+    showNotification("Column name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (input$ct_colname %in% colnames(data)[-which(colnames(data) == input$EditSelColname_ct)]) {
+    
+    showNotification("Column name already exists.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else {
+    names(data)[names(data) == input$EditSelColname_ct] <- new_colname
+    loadedData[[customTimelines$selectedTrack]] <- data
+
     # change tracker
     study_tracker$df[4, "Saved"] <- as.character(icon("exclamation-circle"))
     removeModal()

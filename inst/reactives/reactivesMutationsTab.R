@@ -534,6 +534,88 @@ observeEvent(input$ModalbuttonAddColMAF, {
   }
 })
 
+# edit column  ---------------------------------------------------------------
+# ModalDialog for adding a column
+observeEvent(input$EditColumnMAFentry,
+             {
+               if(is.null(loadedData$studyID)){
+                 showNotification(
+                   "Please load a study in the 'Study' tab first.",
+                   type = "error",
+                   duration = NULL
+                 )
+                 return(NULL)
+               }
+               showModal(
+                 modalDialog(
+                   title = "Edit a column",
+                   fluidRow(column(
+                     width = 8,
+                     selectInput(
+                       inputId = "EditSelColnameMAFentry",
+                       label = "Select column you want to change:",
+                       choices = c("", colnames(loadedData$data_mutations_extended)[-which(colnames(loadedData$data_mutations_extended) %in% c("Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification", "HGVSp_Short"))]),
+                       multiple = FALSE
+                     )
+                   )),
+                   uiOutput("EditColMAFentryUI"),
+                   easyClose = FALSE,
+                   footer = tagList(
+                     modalButton("Cancel"),
+                     actionButton("ModalbuttonEditColMAFentry", "Edit column")
+                   )
+                 )
+               )
+             },
+             ignoreInit = TRUE
+)
+# output UI to select column that should be deleted
+output$EditColMAFentryUI <- renderUI({
+  # Choose pre-defined columns
+  if(!is.empty(input$EditSelColnameMAFentry)){
+    fluidRow(column(
+      width = 8,
+      textInput(
+        inputId = "colnameMAFentry",
+        label = "New column name:",
+        value = input$EditSelColnameMAFentry
+        # placeholder = "e.g. ATTRIBUTE"
+      )
+    ))
+  }
+})
+
+observeEvent(input$ModalbuttonEditColMAFentry, {
+  
+  if (is.empty(input$EditSelColnameMAFentry)) {
+    showNotification("Please select a column.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$colnameMAFentry)) {
+    showNotification("Column name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (input$colnameMAFentry %in% colnames(loadedData$data_mutations_extended)[-which(colnames(loadedData$data_mutations_extended) == input$EditSelColnameMAFentry)]) {
+    
+    showNotification("Column name already exists.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else {
+    new_name <- gsub(" ", "_", input$colnameMAFentry)
+    names(loadedData$data_mutations_extended)[names(loadedData$data_mutations_extended) == input$EditSelColnameMAFentry] <- new_name
+    
+    # change tracker
+    study_tracker$df[3, "Saved"] <- as.character(icon("exclamation-circle"))
+    
+    removeModal()
+  }
+  
+})
+
+
 # delete column ---------------------------------------------------------------
 observeEvent(input$DeleteColumnMAFentry, {
   if(is.null(loadedData$studyID)){
@@ -554,7 +636,7 @@ observeEvent(input$DeleteColumnMAFentry, {
           label = "Select column(s) for deletion:",
           choices = setdiff(
             colnames(loadedData$data_mutations_extended),
-            c("Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification", "HGVSp_Short")
+            c("cbpID", "Delete", "Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification", "HGVSp_Short")
           ),
           multiple = TRUE
         )

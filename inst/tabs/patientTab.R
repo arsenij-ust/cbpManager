@@ -49,6 +49,7 @@ patientTab <- tabItem(
       actionButton("ImportPatient", "Import patient", icon = icon("save", lib = "glyphicon")),
       actionButton("DeletePatient", "Delete patient", icon = icon("remove", lib = "glyphicon")),
       actionButton("AddColumnPatient", "Add column(s)", icon = icon("plus-sign", lib = "glyphicon")),
+      actionButton("EditColumnPatient", "Edit column", icon = icon("th-list", lib = "glyphicon")),
       actionButton("DeleteColumnPatient", "Delete column(s)", icon = icon("minus-sign", lib = "glyphicon")),
       actionButton("SaveDataPatient", "Save", class = "btn-success", icon = icon("saved", lib = "glyphicon")),
       br(), br(),

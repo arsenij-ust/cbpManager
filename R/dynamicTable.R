@@ -74,6 +74,118 @@ addColumn_Server <- function(input, output, session, data) {
     params$df
   }))
 }
+
+# edit column -------------------------------------------------------------------
+
+#' UI elements of module for editing a column
+#'
+#' @param id module id
+#' @param label label of the button
+#' @return UI module
+editColumn_UI <- function(id, label = "Edit column") {
+  # `NS(id)` returns a namespace function, which was save as `ns` and will
+  # invoke later.
+  ns <- NS(id)
+  
+  actionButton(ns("EditColumn"), label, icon = icon("th-list", lib = "glyphicon"))
+}
+
+#' Server logic of module for editing a column
+#'
+#' @param input Shiny input
+#' @param output Shiny output
+#' @param session Shiny session
+#' @param data source data as data.frame
+#' @return reactive data.frame of modified source data
+editColumn_Server <- function(input, output, session, data) {
+  observeEvent(input$EditColumn, {
+    ns <- session$ns
+    showModal(
+      modalDialog(
+        title = "Edit column",
+        fluidRow(column(
+          width = 8,
+          selectInput(
+            inputId = ns("EditColSel"),
+            label = "Select column you want to change:",
+            choices = c("", colnames(data())[-which(colnames(data()) %in% c("PATIENT_ID", "START_DATE", "STOP_DATE", "EVENT_TYPE"))]),
+            multiple = FALSE
+          )
+        )),
+        uiOutput(ns("EditCol")),
+        # uiOutput(ns("EditCol")),
+        easyClose = FALSE,
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(
+            ns("ModalbuttonEditCol"), "Edit column"
+          )
+        )
+      )
+    )
+  })
+  
+  output$EditCol <- renderUI({
+    ns <- session$ns
+    # Choose pre-defined columns
+    if(!is.empty(input$EditColSel)){
+      fluidRow(column(
+        width = 8,
+        textInput(
+          inputId = ns("colname"),
+          label = "New column name:",
+          value = input$EditColSel
+          # placeholder = "e.g. ATTRIBUTE"
+        )
+      ))
+    }
+    # fluidRow(column(
+    #   width = 8,
+    #   textInput(
+    #     inputId = ns("colname"),
+    #     label = "Column name:",
+    #     placeholder = "e.g. ATTRIBUTE"
+    #   )
+    # ))
+  })
+  
+  params <- reactiveValues(df = NULL)
+  
+  observeEvent(input$ModalbuttonEditCol, {
+    
+    if (!is.empty(input$colname)) {
+      new_colname <- create_name(input$colname)
+    }
+    if (is.empty(input$colname)) {
+      showNotification("New column name cannot be empty.",
+                       type = "error",
+                       duration = NULL
+      )
+    } else if (new_colname %in% colnames(data())) {
+      showNotification("Column already exists.",
+                       type = "error",
+                       duration = NULL
+      )
+    } else if (new_colname %in% colnames(data())[-which(colnames(data()) == input$EditColSel)]) {
+      
+      showNotification("Column name already exists.",
+                       type = "error",
+                       duration = NULL
+      )
+    } else {
+
+      params$df <- data()
+      colnames(params$df)[colnames(params$df) == input$EditColSel] <- new_colname
+
+      removeModal()
+    }
+  })
+  
+  return(reactive({
+    params$df
+  }))
+}
+
 # delete column ----------------------------------------------------------------
 
 #' UI elements of module for deleting a column

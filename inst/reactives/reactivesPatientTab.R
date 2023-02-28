@@ -841,6 +841,122 @@ observeEvent(input$ModalbuttonAddColPatient, {
   }
 })
 
+# edit column  ---------------------------------------------------------------
+# ModalDialog for adding a column
+observeEvent(input$EditColumnPatient,
+             {
+               if(is.null(loadedData$studyID)){
+                 showNotification(
+                   "Please load a study in the 'Study' tab first.",
+                   type = "error",
+                   duration = NULL
+                 )
+                 return(NULL)
+               }
+               showModal(
+                 modalDialog(
+                   title = "Edit a column",
+                   fluidRow(column(
+                     width = 8,
+                     selectInput(
+                       inputId = "EditSelColnamePat",
+                       label = "Select column you want to change:",
+                       choices = c("", colnames(loadedData$data_clinical_patient)[which(colnames(loadedData$data_clinical_patient) != "PATIENT_ID")]),
+                       multiple = FALSE
+                     )
+                   )),
+                   uiOutput("EditColPatientUI"),
+                   easyClose = FALSE,
+                   footer = tagList(
+                     modalButton("Cancel"),
+                     actionButton("ModalbuttonEditColPatient", "Edit column")
+                   )
+                 )
+               )
+             },
+             ignoreInit = TRUE
+)
+# output UI to select column that should be deleted
+output$EditColPatientUI <- renderUI({
+  # Choose pre-defined columns
+  if(!is.empty(input$EditSelColnamePat)){
+    fluidRow(column(
+      width = 8,
+      textInput(
+        inputId = "colnamePat",
+        label = "Column name:",
+        value = input$EditSelColnamePat
+        # placeholder = "e.g. ATTRIBUTE"
+      ),
+      textInput(
+        inputId = "visShortNamePat",
+        label = "Short name (visible in cBioPortal):",
+        value = loadedData$data_clinical_patient[1,input$EditSelColnamePat]
+        # placeholder = "e.g. Attr."
+      ),
+      textInput(
+        inputId = "visLongNamePat",
+        label = "Long name (visible in cBioPortal):",
+        # placeholder = "e.g. Attribute of patient"
+        value = loadedData$data_clinical_patient[2,input$EditSelColnamePat]
+      ),
+      selectInput(
+        inputId = "typeofPat",
+        label = "Data type:",
+        choices = c("STRING", "NUMBER", "BOOLEAN"),
+        selected = loadedData$data_clinical_patient[3,input$EditSelColnamePat]
+      )
+    ))
+  }
+})
+
+observeEvent(input$ModalbuttonEditColPatient, {
+  
+  if (is.empty(input$EditSelColnamePat)) {
+    showNotification("Please select a column.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$colnamePat)) {
+    showNotification("Column name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$visShortNamePat)) {
+    showNotification("Short name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$visLongNamePat)) {
+    showNotification("Long name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (toupper(input$colnamePat) %in% colnames(loadedData$data_clinical_patient)[-which(colnames(loadedData$data_clinical_patient) == input$EditSelColnamePat)]) {
+    
+    showNotification("Column name already exists.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else {
+    loadedData$data_clinical_patient[1, input$EditSelColnamePat] <-
+      input$visShortNamePat
+    loadedData$data_clinical_patient[2, input$EditSelColnamePat] <-
+      input$visLongNamePat
+    loadedData$data_clinical_patient[3, input$EditSelColnamePat] <-
+      input$typeofPat
+    new_name <- toupper(input$colnamePat)
+    new_name <- gsub(" ", "_", new_name)
+    names(loadedData$data_clinical_patient)[names(loadedData$data_clinical_patient) == input$EditSelColnamePat] <- new_name
+
+    # change tracker
+    study_tracker$df[1, "Saved"] <- as.character(icon("exclamation-circle"))
+
+    removeModal()
+  }
+  
+})
+
 # delete column  ---------------------------------------------------------------
 observeEvent(input$DeleteColumnPatient, {
   if(is.null(loadedData$studyID)){

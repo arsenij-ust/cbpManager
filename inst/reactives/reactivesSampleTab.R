@@ -503,40 +503,41 @@ observeEvent(input$DeleteSample, {
     )
     return(NULL)
   }
-  if (is.null(input$sampleTable_rows_selected)) {
-    showNotification("Please select a row", type = "warning", duration = NULL)
-  } else if (input$sampleTable_rows_selected == 1 |
-    input$sampleTable_rows_selected == 2 |
-    input$sampleTable_rows_selected == 3) {
-    showNotification("Selected row cannot be deleted",
-      type = "error",
-      duration = NULL
-    )
-  } else {
-    showModal(
-      modalDialog(
-        "Do you want to delete the selected sample entry?",
-        title = "Delete",
-        easyClose = FALSE,
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton("ModalbuttonDeleteSample", "Delete")
+  if(nrow(loadedData$data_clinical_sample) > 3) sampleIDs <- loadedData$data_clinical_sample[4:nrow(loadedData$data_clinical_sample),"SAMPLE_ID"] else sampleIDs <- ""
+  showModal(
+    modalDialog(
+      title = "Delete sample(s)",
+      fluidRow(column(
+        width = 8,
+        selectInput(
+          inputId = "DelRownameSample",
+          label = "Select Sample ID(s) for deletion:",
+          choices = sampleIDs,
+          multiple = TRUE
         )
+      )),
+      easyClose = FALSE,
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ModalbuttonDeleteRowSample", "Delete sample(s)")
       )
     )
-  }
+  )
 })
-observeEvent(input$ModalbuttonDeleteSample, {
-  entry <- input$sampleTable_rows_selected
-
-  loadedData$data_clinical_sample <-
-    loadedData$data_clinical_sample[-entry, , drop = FALSE]
-  
-  # change tracker
-  study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+observeEvent(input$ModalbuttonDeleteRowSample, {
+  if(!all(is.empty(input$DelRownameSample))){
+    
+    loadedData$data_clinical_sample <-
+      loadedData$data_clinical_sample[-which(loadedData$data_clinical_sample$SAMPLE_ID %in% input$DelRownameSample),, drop = FALSE]
+    
+    # change tracker
+    study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+    
+  }
   
   removeModal()
 })
+
 
 # add column ---------------------------------------------------------------
 # ModalDialog for adding a column
@@ -685,6 +686,123 @@ observeEvent(input$ModalbuttonAddColSample, {
       removeModal()
     }
   }
+})
+
+# edit column  ---------------------------------------------------------------
+# ModalDialog for adding a column
+observeEvent(input$EditColumnSample,
+             {
+               if(is.null(loadedData$studyID)){
+                 showNotification(
+                   "Please load a study in the 'Study' tab first.",
+                   type = "error",
+                   duration = NULL
+                 )
+                 return(NULL)
+               }
+               showModal(
+                 modalDialog(
+                   title = "Edit a column",
+                   fluidRow(column(
+                     width = 8,
+                     selectInput(
+                       inputId = "EditSelColnameSample",
+                       label = "Select column you want to change:",
+                       choices = c("", colnames(loadedData$data_clinical_sample)[-which(colnames(loadedData$data_clinical_sample) %in% c("PATIENT_ID", "SAMPLE_ID"))]),
+                       multiple = FALSE
+                     )
+                   )),
+                   uiOutput("EditColSampleUI"),
+                   easyClose = FALSE,
+                   footer = tagList(
+                     modalButton("Cancel"),
+                     actionButton("ModalbuttonEditColSample", "Edit column")
+                   )
+                 )
+               )
+             },
+             ignoreInit = TRUE
+)
+# output UI to select column that should be deleted
+output$EditColSampleUI <- renderUI({
+  # Choose pre-defined columns
+  if(!is.empty(input$EditSelColnameSample)){
+    fluidRow(column(
+      width = 8,
+      textInput(
+        inputId = "colnameSample",
+        label = "Column name:",
+        value = input$EditSelColnameSample
+        # placeholder = "e.g. ATTRIBUTE"
+      ),
+      textInput(
+        inputId = "visShortNameSample",
+        label = "Short name (visible in cBioPortal):",
+        value = loadedData$data_clinical_sample[1,input$EditSelColnameSample]
+        # placeholder = "e.g. Attr."
+      ),
+      textInput(
+        inputId = "visLongNameSample",
+        label = "Long name (visible in cBioPortal):",
+        # placeholder = "e.g. Attribute of patient"
+        value = loadedData$data_clinical_sample[2,input$EditSelColnameSample]
+      ),
+      selectInput(
+        inputId = "typeofSample",
+        label = "Data type:",
+        choices = c("STRING", "NUMBER", "BOOLEAN"),
+        selected = loadedData$data_clinical_sample[3,input$EditSelColnameSample]
+      )
+    ))
+  }
+})
+
+observeEvent(input$ModalbuttonEditColSample, {
+  
+  if (is.empty(input$EditSelColnameSample)) {
+    showNotification("Please select a column.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$colnameSample)) {
+    showNotification("Column name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$visShortNameSample)) {
+    showNotification("Short name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (is.empty(input$visLongNameSample)) {
+    showNotification("Long name cannot be empty.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else if (toupper(input$colnameSample) %in% colnames(loadedData$data_clinical_sample)[-which(colnames(loadedData$data_clinical_sample) == input$EditSelColnameSample)]) {
+    
+    showNotification("Column name already exists.",
+                     type = "error",
+                     duration = NULL
+    )
+  } else {
+    loadedData$data_clinical_sample[1, input$EditSelColnameSample] <-
+      input$visShortNameSample
+    loadedData$data_clinical_sample[2, input$EditSelColnameSample] <-
+      input$visLongNameSample
+    loadedData$data_clinical_sample[3, input$EditSelColnameSample] <-
+      input$typeofSample
+    
+    new_name <- toupper(input$colnameSample)
+    new_name <- gsub(" ", "_", new_name)
+    names(loadedData$data_clinical_sample)[names(loadedData$data_clinical_sample) == input$EditSelColnameSample] <- new_name
+    
+    # change tracker
+    study_tracker$df[2, "Saved"] <- as.character(icon("exclamation-circle"))
+    
+    removeModal()
+  }
+  
 })
 
 # delete column ---------------------------------------------------------------
