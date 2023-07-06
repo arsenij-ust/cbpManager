@@ -589,8 +589,10 @@ writeLogfile <- function(outdir, modified_file, log_filename = "cbpManager_logfi
 #' @return Nothing to return
 #'
 #' @examples
+#' \dontrun{
 #' setupConda_cbpManager()
-#'
+#' }
+#' 
 #' @export setupConda_cbpManager
 setupConda_cbpManager <- function() {
   proc <- basiliskStart(env_validation)
