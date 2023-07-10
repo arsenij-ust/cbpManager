@@ -10,6 +10,7 @@ The R package cbpManager provides an R Shiny application that facilitates the ge
 - Editing of patient data (data_clinical_patient.txt)
 - Editing of sample data (data_clinical_sample.txt)
 - Adding MAF files (internally these are concatenated to the data_mutations_extended.txt file)
+- Edit mutation annotation data
 - Edit timeline tracks (surgery, status, treatment)
 - Creation and editing of user-defined timeline tracks
 → The functionality of the application is extended on a regular basis (long-term goal is to cover most of the cBioPortal's format specifications)
@@ -89,4 +90,4 @@ Feel free to dive in! [Open an issue](https://github.com/arsenij-ust/cbpManager/
 
 ## License
 
-[MIT](LICENSE)
+[AGPL-3](LICENSE)

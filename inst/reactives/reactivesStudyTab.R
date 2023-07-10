@@ -570,5 +570,36 @@ output$ui_loaded_study_info <- renderUI({
   }
 })
 
+study_tracker <- reactiveValues()
+
+study_tracker$df <- data.frame(
+  Data=c("Patient data", "Sample data", "Mutation data", "Timeline data", "Resource data"),
+  Saved=c(as.character(icon("check-circle")))
+)
+
+# UI of change tracker
+output$ui_change_tracker <- DT::renderDT({
+  #all_study_files <- list.files(file.path(study_dir, loadedData$studyID))
+  if(!is.null(loadedData$studyID)){
+      DT::datatable(
+        study_tracker$df,
+        escape = FALSE,
+        rownames= FALSE,
+        selection = "none",
+        options = list(
+          dom = 't',
+          ordering=FALSE,
+          columnDefs = list(list(className = 'dt-center', targets = "_all")),
+          initComplete = DT::JS(
+            "function(settings, json) {",
+            "$(this.api().table().header()).css({'background-color': '#517fb9', 'color': '#fff'});",
+            "$(this.api().table().body()).css({'background-color': 'white', 'color': '#517fb9'});",
+            "}")
+        )
+      )
+    
+  }
+})
+
 #UI of package version
 output$package_version <- renderText({paste("Version:", packageVersion("cbpManager"))})

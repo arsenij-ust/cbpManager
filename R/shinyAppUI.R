@@ -73,6 +73,9 @@ shinyAppUI <- dashboardPage(
       )
     ),
     uiOutput("ui_loaded_study_info"),
+    div(style = "width: 230px; padding-left:15px; padding-right:15px", DT::DTOutput("ui_change_tracker")),
+    tags$style(".fa-check-circle {color:#00a65a}"),
+    tags$style(".fa-exclamation-circle {color:#e74c3c}"),
     textOutput("package_version"),
     tags$head(
       tags$style("

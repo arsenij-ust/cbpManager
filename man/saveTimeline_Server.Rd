@@ -18,7 +18,7 @@ saveTimeline_Server(input, output, session, data, study_id)
 \item{study_id}{the current study ID}
 }
 \value{
-nothing to return
+boolean value; TRUE if function was used.
 }
 \description{
 Server logic of module for saving the source data

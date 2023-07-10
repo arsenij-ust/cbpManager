@@ -75,7 +75,7 @@ use read.table as follows: read.table(file, sep='\t', colClasses = 'character', 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cbpManager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@ use read.table as follows: read.table(file, sep='\t', colClasses = 'character', 
     <p>This function takes a file object (from read.table), removes the # symbol,
 sets the 5th row as the column names of the data.frame
 and removes the rows containing the priority, data type and column name.
-use read.table as follows: <code><a href='https://rdrr.io/r/utils/read.table.html'>read.table(file, sep='\t', colClasses = 'character', comment.char = '')</a></code></p>
+use read.table as follows: <code>read.table(file, sep='\t', colClasses = 'character', comment.char = '')</code></p>
     </div>
 
     <pre class="usage"><span class='fu'>cBioPortalToDataFrame</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
@@ -153,6 +153,19 @@ use read.table as follows: <code><a href='https://rdrr.io/r/utils/read.table.htm
 
     <p>data.frame</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
+<span class='r-in'>        V1<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#attr_1"</span>, <span class='st'>"#attribute 1"</span>, <span class='st'>"#STRING"</span>, <span class='st'>"#1"</span>, <span class='st'>"ATTRIBUTE_1"</span>, <span class='st'>"value_1"</span><span class='op'>)</span>, </span>
+<span class='r-in'>        V2<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"attr_2"</span>, <span class='st'>"attribute 2"</span>, <span class='st'>"STRING"</span>, <span class='st'>"1"</span>, <span class='st'>"ATTRIBUTE_2"</span>, <span class='st'>"value_2"</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>cbpManager</span><span class='fu'>:::</span><span class='fu'>cBioPortalToDataFrame</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ATTRIBUTE_1 ATTRIBUTE_2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      attr_1      attr_2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 attribute 1 attribute 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      STRING      STRING</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     value_1     value_2</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
