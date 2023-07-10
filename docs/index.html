@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">cbpManager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
@@ -99,15 +99,15 @@
 <li>Editing of sample data (data_clinical_sample.txt)</li>
 <li>Adding MAF files (internally these are concatenated to the data_mutations_extended.txt file)</li>
 <li>Edit timeline tracks (surgery, status, treatment)</li>
-<li>Creation and editing of user-defined timeline tracks → The functionality of the application is extended on a regular basis (long-term goal is to cover most of the cBioPortals format specifications)</li>
+<li>Creation and editing of user-defined timeline tracks → The functionality of the application is extended on a regular basis (long-term goal is to cover most of the cBioPortal’s format specifications)</li>
 </ul>
 <p><img src="articles/images/start.png" align="right" width="100%"></p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<pre><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("arsenij-ust/cbpManager")
-</a></code></pre>
+<pre><code>remotes::install_github("arsenij-ust/cbpManager")
+</code></pre>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -117,10 +117,10 @@
 <pre><code><a href="reference/cbpManager.html">cbpManager::cbpManager()</a></code></pre>
 <p>The installation was successful if the application starts working.</p>
 <p>A study to be loaded in cBioPortal can basically consist of a directory where all the data files are located (see <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading#preparing-study-data">here</a>). It is common to store the single study directories in one directory called e.g. “study”. If you already have a cBioPortal instance installed and such a folder containing study subfolders, you should provide the path when starting the application. Optionally, you can provide a directory path where a logfile will be created.:</p>
-<pre><code><a href="reference/cbpManager.html">cbpManager::cbpManager(
+<pre><code>cbpManager::cbpManager(
   studyDir="path/to/study", 
   logDir="path/to/logingDirectory"
-)</a></code></pre>
+)</code></pre>
 <p>Now you can select your already existing studies in the dropdown menu.</p>
 <p>Optionally you can provide further parameters to <code><a href="reference/cbpManager.html">cbpManager::cbpManager()</a></code> function that are used by <code><a href="https://rdrr.io/pkg/shiny/man/runApp.html">shiny::runApp</a></code>, e.g. <code>host</code> or <code>port</code>.</p>
 <div id="file-naming-convention" class="section level3">
@@ -166,7 +166,7 @@
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Feel free to dive in! <a href="https://gitlab.miracum.org/mainz/cbpmanager/-/issues">Open an issue</a> or submit PRs.</p>
+<p>Feel free to dive in! <a href="https://github.com/arsenij-ust/cbpManager/issues">Open an issue</a> or submit PRs.</p>
 </div>
 <div id="license" class="section level2">
 <h2 class="hasAnchor">
@@ -180,6 +180,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/cbpManager">https://​www.bioconductor.org/​packages/​cbpManager</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/arsenij-ust/cbpManager/">https://​github.com/​arsenij-ust/​cbpManager/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/arsenij-ust/cbpManager/issues">https://​github.com/​arsenij-ust/​cbpManager/​issues</a>

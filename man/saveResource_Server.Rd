@@ -34,7 +34,7 @@ saveResource_Server(
 Can be "definition", "sample", "patient", "study"}
 }
 \value{
-nothing to return
+boolean value; TRUE if function was used.
 }
 \description{
 Server logic of module for saving the resource data

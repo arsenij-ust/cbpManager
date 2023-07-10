@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cbpManager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
 
       
 
-      </header><script src="intro_files/header-attrs-2.7/header-attrs.js"></script><link href="intro_files/font-awesome-5.1.0/css/all.css" rel="stylesheet">
+      </header><script src="intro_files/header-attrs-2.11/header-attrs.js"></script><link href="intro_files/font-awesome-5.1.0/css/all.css" rel="stylesheet">
 <link href="intro_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
@@ -89,7 +89,7 @@
                   <a class="author_email" href="mailto:#"></a><a href="mailto:arsenij.ustjanzew@gmail.com" class="email">arsenij.ustjanzew@gmail.com</a>
       
                   
-            <h4 class="date">19 April 2021</h4>
+            <h4 class="date">21 Dezember 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/arsenij-ust/cbpManager/blob/master/vignettes/intro.rmd"><code>vignettes/intro.rmd</code></a></small>
       <div class="hidden name"><code>intro.rmd</code></div>
@@ -98,7 +98,7 @@
 
     
     
-<p><br><strong>Authors</strong>: Arsenij Ustjanzew [aut, cre, cph] (<a href="https://orcid.org/0000-0002-1014-4521" class="uri">https://orcid.org/0000-0002-1014-4521</a>), Federico Marini [aut] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 0.99.1<br><strong>Compiled date</strong>: 2021-04-19<br><strong>License</strong>: AGPL-3 + file LICENSE<br></p>
+<p><br><strong>Authors</strong>: Arsenij Ustjanzew [aut, cre, cph] (<a href="https://orcid.org/0000-0002-1014-4521" class="uri">https://orcid.org/0000-0002-1014-4521</a>), Federico Marini [aut] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 1.3.2<br><strong>Compiled date</strong>: 2021-12-21<br><strong>License</strong>: AGPL-3 + file LICENSE<br></p>
 <p><img src="images/logo.png" align="center" width="150px"></p>
 <div id="introduction-and-scope" class="section level1">
 <h1 class="hasAnchor">
@@ -116,17 +116,17 @@
 <h3 class="hasAnchor">
 <a href="#installation-of-the-r-package" class="anchor"></a>Installation of the R package</h3>
 <p>The package can be installed with the <em><a href="https://CRAN.R-project.org/package=remotes">remotes</a></em> library:</p>
-<pre><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("arsenij-ust/cbpManager")
-</a></code></pre>
+<pre><code>remotes::install_github("arsenij-ust/cbpManager")
+</code></pre>
 <p>cbpManager will use the <code>validateData.py</code> script from cBioPortal for Cancer Genomics inside of the application, which allows the user to validate the created files. Therefore, a conda environment will be installed. To prevent long loading times during the application usage, we can setup the conda environment with the function <code><a href="../reference/setupConda_cbpManager.html">cbpManager::setupConda_cbpManager()</a></code> before launch.</p>
 <p>After successful installation, the application is started with the following command (a browser window/ RStudio viewer with the application should open):</p>
 <pre><code><a href="../reference/cbpManager.html">cbpManager::cbpManager()</a></code></pre>
 <p>The installation was successful if the application starts working.</p>
 <p>A study to be loaded in cBioPortal can basically consist of a directory where all the data files are located (see <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading#preparing-study-data">here</a>). It is common to store the single study directories in one directory called e.g. “study”. If you already have a cBioPortal instance installed and such a folder containing study subfolders, you should provide the path when starting the application:</p>
-<pre><code><a href="../reference/cbpManager.html">cbpManager::cbpManager(
+<pre><code>cbpManager::cbpManager(
   studyDir="path/to/study", 
   logDir="path/to/logingDirectory"
-)</a></code></pre>
+)</code></pre>
 <p>Now you can select your already existing studies in the dropdown menu.</p>
 <p>Optionally, you can provide further parameters to <code><a href="../reference/cbpManager.html">cbpManager::cbpManager()</a></code> function that are used by <code><a href="https://rdrr.io/pkg/shiny/man/runApp.html">shiny::runApp</a></code>, e.g. <code>host</code> or <code>port</code>.</p>
 <p><strong>Attention</strong>: If you do not pass a path to the application before starting it, the “study” directory in the installed R package will be used by default. If the package is reinstalled at a later time, all studies and files in the folder will be lost. Thus it is advisable to always pass a path (e.g. of the working directory).</p>
@@ -251,7 +251,7 @@
 <div id="mutation-data-maf" class="section level3">
 <h3 class="hasAnchor">
 <a href="#mutation-data-maf" class="anchor"></a>Mutation data (MAF):</h3>
-<p>The “Mutations” page offers the user the possibility to upload MAF files. If mutation data is already available, the content of the MAF file will be concatinated to the already existing data, taking into account the columns. The MAF file must meet certain requirements, i.e. contain specific columns (see <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5">link</a>). Similarly, the changes must be finalized by saving.</p>
+<p>The “Mutations” page offers the user the possibility to upload mutation annotation format (MAF) files. If the study already contains mutation data, the content of the uploaded MAF file will be concatenated to the already existing data by clicking on the <code>Add uploaded data to existing mutation data</code> button. Columns of the uploaded file, that are new and not present in the existing data, will be added. Columns with similar names between the uploaded file and the already existing mutation data will be merged together. The MAF file must meet certain requirements, i.e. contain specific columns (see <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5">link</a>). Similarly to the previous tabs, the user can add, edit, and delete single mutations, and add or delete columns of the table at the bottom of the page. As always, saving is required to make the changes permanent.</p>
 <p><img src="images/14.PNG" width="100%"></p>
 </div>
 <div id="editing-timelines" class="section level3">
@@ -297,7 +297,7 @@
 <a href="#session-info" class="anchor"></a>Session Info</h1>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.0.4 (2021-02-15)</span>
+<span class="co">#&gt; R version 4.1.0 (2021-05-18)</span>
 <span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span>
 <span class="co">#&gt; Running under: Windows 10 x64 (build 19042)</span>
 <span class="co">#&gt; </span>
@@ -312,21 +312,21 @@
 <span class="co">#&gt; [1] base</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] BiocStyle_2.18.1</span>
+<span class="co">#&gt; [1] BiocStyle_2.22.0</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] knitr_1.31          magrittr_2.0.1      grDevices_4.0.4    </span>
-<span class="co">#&gt;  [4] R6_2.5.0            ragg_1.1.1          rlang_0.4.10       </span>
-<span class="co">#&gt;  [7] fastmap_1.1.0       stringr_1.4.0       highr_0.8          </span>
-<span class="co">#&gt; [10] tools_4.0.4         utils_4.0.4         xfun_0.21          </span>
-<span class="co">#&gt; [13] jquerylib_0.1.3     htmltools_0.5.1.1   stats_4.0.4        </span>
-<span class="co">#&gt; [16] systemfonts_1.0.1   yaml_2.2.1          rprojroot_2.0.2    </span>
-<span class="co">#&gt; [19] digest_0.6.27       pkgdown_1.6.1       crayon_1.4.1       </span>
-<span class="co">#&gt; [22] textshaping_0.3.2   BiocManager_1.30.10 sass_0.3.1         </span>
-<span class="co">#&gt; [25] graphics_4.0.4      fs_1.5.0            memoise_2.0.0      </span>
-<span class="co">#&gt; [28] cachem_1.0.4        evaluate_0.14       rmarkdown_2.7      </span>
-<span class="co">#&gt; [31] stringi_1.5.3       compiler_4.0.4      bslib_0.2.4        </span>
-<span class="co">#&gt; [34] methods_4.0.4       desc_1.3.0          jsonlite_1.7.2</span></code></pre></div>
+<span class="co">#&gt;  [1] knitr_1.36          magrittr_2.0.1      grDevices_4.1.0    </span>
+<span class="co">#&gt;  [4] R6_2.5.1            ragg_1.2.0          rlang_0.4.11       </span>
+<span class="co">#&gt;  [7] fastmap_1.1.0       stringr_1.4.0       highr_0.9          </span>
+<span class="co">#&gt; [10] tools_4.1.0         utils_4.1.0         xfun_0.27          </span>
+<span class="co">#&gt; [13] jquerylib_0.1.4     htmltools_0.5.2     stats_4.1.0        </span>
+<span class="co">#&gt; [16] systemfonts_1.0.3   yaml_2.2.1          rprojroot_2.0.2    </span>
+<span class="co">#&gt; [19] digest_0.6.27       pkgdown_1.6.1       crayon_1.4.2       </span>
+<span class="co">#&gt; [22] textshaping_0.3.6   BiocManager_1.30.16 sass_0.4.0         </span>
+<span class="co">#&gt; [25] graphics_4.1.0      fs_1.5.0            memoise_2.0.0      </span>
+<span class="co">#&gt; [28] cachem_1.0.6        evaluate_0.14       rmarkdown_2.11     </span>
+<span class="co">#&gt; [31] stringi_1.7.4       compiler_4.1.0      bslib_0.3.1        </span>
+<span class="co">#&gt; [34] methods_4.1.0       desc_1.4.0          jsonlite_1.7.2</span></code></pre></div>
 </div>
   </div>
 
