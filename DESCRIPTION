@@ -35,6 +35,7 @@ Imports:
     shinyBS,
     shinycssloaders,
     rintrojs,
+    rlang,
     markdown
 Suggests: 
     knitr,
@@ -52,6 +53,5 @@ Collate:
     'cbpManager.R'
     'shinyAppServer.R'
     'shinyAppUI.R'
-    'zzz.R'
 biocViews: ImmunoOncology, DataImport, DataRepresentation, GUI, ThirdPartyClient, Preprocessing, Visualization
 Config/testthat/edition: 3
