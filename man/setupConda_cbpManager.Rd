@@ -13,6 +13,8 @@ Nothing to return
 Install conda environment with basilisk before launching the app
 }
 \examples{
+\dontrun{
 setupConda_cbpManager()
+}
 
 }
