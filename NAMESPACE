@@ -2,7 +2,6 @@
 
 export(cbpManager)
 export(setupConda_cbpManager)
-import(crosstalk)
 importFrom(DT,DTOutput)
 importFrom(DT,datatable)
 importFrom(DT,formatStyle)
