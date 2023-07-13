@@ -28,7 +28,6 @@
 #' @importFrom reticulate import source_python
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom rlang is_empty
-#' @import crosstalk
 #'
 #' @name cbpManager-pkg
 #' @docType package
