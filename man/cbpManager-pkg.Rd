@@ -2,11 +2,20 @@
 % Please edit documentation in R/cbpManager-pkg.R
 \docType{package}
 \name{cbpManager-pkg}
+\alias{cbpManager-package}
 \alias{cbpManager-pkg}
 \title{cbpManager}
 \description{
 `cbpManager` is an R package that provides an interactive Shiny-based
  graphical user interface for...
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://arsenij-ust.github.io/cbpManager/index.html}
+  \item Report bugs at \url{https://github.com/arsenij-ust/cbpManager/issues}
+}
+
 }
 \author{
 Arsenij Ustjanzew \email{arsenij.ustjanzew@gmail.com}
