@@ -30,5 +30,5 @@
 #' @importFrom rlang is_empty
 #'
 #' @name cbpManager-pkg
-#' docType package
+#' @docType package
 "_PACKAGE"
