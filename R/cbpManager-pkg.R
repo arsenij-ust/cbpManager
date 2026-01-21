@@ -31,4 +31,4 @@
 #'
 #' @name cbpManager-pkg
 #' @docType package
-NULL
+"_PACKAGE"
